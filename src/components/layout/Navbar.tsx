@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, Heart, Phone } from "lucide-react";
@@ -17,8 +16,12 @@ const Navbar = () => {
         <div className="flex justify-between items-center py-4 md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">
             <Link to="/" className="flex items-center">
-              <Heart className="h-8 w-8 text-health-red-dark" />
-              <span className="ml-2 text-xl font-bold text-foreground">Garrison Health</span>
+              <img 
+                src="/garrison-health-logo.png" 
+                alt="Garrison Health Logo" 
+                className="h-10 w-10 mr-2" 
+              />
+              <span className="text-xl font-bold text-foreground">Garrison Health</span>
             </Link>
           </div>
           

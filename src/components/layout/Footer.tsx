@@ -1,4 +1,3 @@
-
 import { Heart, Mail, Phone, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -9,9 +8,14 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-1">
             <div className="flex items-center">
-              <Heart className="h-8 w-8 text-health-red-dark" />
-              <span className="ml-2 text-xl font-bold">Garrison Health</span>
+              <img 
+                src="/garrison-health-logo.png" 
+                alt="Garrison Health Logo" 
+                className="h-10 w-10 mr-2" 
+              />
+              <span className="text-xl font-bold">Garrison Health</span>
             </div>
+            
             <p className="mt-4 text-sm">
               Providing reliable medical information and healthcare services to improve the health and wellbeing of our community.
             </p>
