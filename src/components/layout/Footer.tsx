@@ -8,12 +8,8 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-1">
             <div className="flex items-center">
-              <img 
-                src="/garrison-health-logo.png" 
-                alt="Garrison Health Logo" 
-                className="h-10 w-10 mr-2" 
-              />
-              <span className="text-xl font-bold">Garrison Health</span>
+              <Heart className="h-8 w-8 text-health-red-dark" />
+              <span className="ml-2 text-xl font-bold">Garrison Health</span>
             </div>
             
             <p className="mt-4 text-sm">
@@ -82,15 +78,9 @@ const Footer = () => {
                 </a>
               </li>
               <li className="flex items-center">
-                <Phone className="h-5 w-5 mr-2 flex-shrink-0 text-health-red" />
-                <a href="tel:+256756530349" className="text-sm hover:text-primary transition-colors">
-                  +256 756 530 349
-                </a>
-              </li>
-              <li className="flex items-center">
                 <Mail className="h-5 w-5 mr-2 flex-shrink-0 text-health-red" />
-                <a href="mailto:info@garrisonhealth.com" className="text-sm hover:text-primary transition-colors">
-                  info@garrisonhealth.com
+                <a href="mailto:garrisonhealth147@gmail.com" className="text-sm hover:text-primary transition-colors">
+                  garrisonhealth147@gmail.com
                 </a>
               </li>
             </ul>

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
@@ -37,11 +36,6 @@ const ContactInfo = () => {
                 +256 761 281 222
               </a>
             </p>
-            <p className="text-muted-foreground mt-1">
-              <a href="tel:+256756530349" className="hover:text-primary transition-colors">
-                +256 756 530 349
-              </a>
-            </p>
           </div>
         </div>
       </HealthCard>
@@ -56,8 +50,8 @@ const ContactInfo = () => {
           <div>
             <h3 className="text-lg font-semibold mb-2">Email</h3>
             <p className="text-muted-foreground">
-              <a href="mailto:info@garrisonhealth.com" className="hover:text-primary transition-colors">
-                info@garrisonhealth.com
+              <a href="mailto:garrisonhealth147@gmail.com" className="hover:text-primary transition-colors">
+                garrisonhealth147@gmail.com
               </a>
             </p>
           </div>
@@ -249,20 +243,13 @@ const Contact = () => {
           <p className="text-lg text-muted-foreground mb-8 max-w-3xl mx-auto">
             For urgent inquiries, please call us directly at:
           </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
+          <div className="flex justify-center">
             <a 
               href="tel:+256761281222" 
               className="inline-flex items-center justify-center px-6 py-3 bg-health-red-light text-health-red-dark font-semibold rounded-md hover:bg-health-red transition-colors"
             >
               <Phone className="mr-2 h-5 w-5" />
               +256 761 281 222
-            </a>
-            <a 
-              href="tel:+256756530349" 
-              className="inline-flex items-center justify-center px-6 py-3 bg-health-red-light text-health-red-dark font-semibold rounded-md hover:bg-health-red transition-colors"
-            >
-              <Phone className="mr-2 h-5 w-5" />
-              +256 756 530 349
             </a>
           </div>
         </div>
