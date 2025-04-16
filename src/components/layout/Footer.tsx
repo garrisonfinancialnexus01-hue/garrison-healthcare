@@ -78,6 +78,12 @@ const Footer = () => {
                 </a>
               </li>
               <li className="flex items-center">
+                <Phone className="h-5 w-5 mr-2 flex-shrink-0 text-health-red" />
+                <a href="tel:+256756530349" className="text-sm hover:text-primary transition-colors">
+                  +256 756 530 349
+                </a>
+              </li>
+              <li className="flex items-center">
                 <Mail className="h-5 w-5 mr-2 flex-shrink-0 text-health-red" />
                 <a href="mailto:info@garrisonhealth.com" className="text-sm hover:text-primary transition-colors">
                   info@garrisonhealth.com

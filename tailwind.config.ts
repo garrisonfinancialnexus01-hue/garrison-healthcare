@@ -63,16 +63,16 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// New color palette with teal and pale red
+				// New color palette with teal and red
 				"health-green": {
 					light: "#E0F2F1", // Pale Teal
 					DEFAULT: "#4DB6AC", // Teal
 					dark: "#00796B"    // Dark Teal
 				},
 				"health-red": {
-					light: "#FFE5E5", // Pale Red
-					DEFAULT: "#FFC4C4", // Soft Red
-					dark: "#FF9B9B"    // Darker Pale Red
+					light: "#FFEBEE", // Light Red
+					DEFAULT: "#EF5350", // Red
+					dark: "#C62828"    // Dark Red
 				},
 			},
 			borderRadius: {

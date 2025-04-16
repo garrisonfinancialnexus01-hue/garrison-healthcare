@@ -14,8 +14,8 @@
     --primary: 175 50% 47%; /* Teal primary color */
     --primary-foreground: 180 100% 98%;
 
-    --secondary: 0 70% 90%; /* Pale red secondary color */
-    --secondary-foreground: 0 50% 30%;
+    --secondary: 0 85% 60%; /* Red secondary color */
+    --secondary-foreground: 0 0% 98%;
 
     --muted: 180 30% 96%; /* Very light teal */
     --muted-foreground: 180 10% 45%;
@@ -23,7 +23,7 @@
     --accent: 180 30% 96%; /* Light teal accent */
     --accent-foreground: 180 10% 10%;
 
-    --destructive: 0 84% 80%; /* Soft red for destructive actions */
+    --destructive: 0 85% 60%; /* Red for destructive actions */
     --destructive-foreground: 0 0% 98%;
 
     --border: 180 20% 90%; /* Teal border */
