@@ -1,0 +1,82 @@
+
+import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import HealthCard from "../ui/HealthCard";
+import { Button } from "@/components/ui/button";
+
+const featuredArticles = [
+  {
+    id: 1,
+    title: "Understanding Diabetes: Symptoms, Causes, and Management",
+    excerpt: "Learn about the different types of diabetes, common symptoms, and effective management strategies.",
+    image: "/placeholder.svg",
+    date: "April 12, 2025",
+    slug: "understanding-diabetes"
+  },
+  {
+    id: 2,
+    title: "The Importance of Mental Health: Breaking the Stigma",
+    excerpt: "Discover why mental health is as important as physical health and how to seek help when needed.",
+    image: "/placeholder.svg",
+    date: "April 10, 2025",
+    slug: "importance-of-mental-health"
+  },
+  {
+    id: 3,
+    title: "COVID-19 Vaccines: Facts and Myths",
+    excerpt: "Get accurate information about COVID-19 vaccines, their effectiveness, and common misconceptions.",
+    image: "/placeholder.svg",
+    date: "April 8, 2025",
+    slug: "covid-vaccines-facts-myths"
+  }
+];
+
+const FeaturedArticles = () => {
+  return (
+    <section className="py-16 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <h2 className="section-title">Latest Health Articles</h2>
+          <p className="mt-4 text-muted-foreground">
+            Stay informed with our latest articles on health topics
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {featuredArticles.map((article) => (
+            <HealthCard key={article.id} className="flex flex-col h-full">
+              <img
+                src={article.image}
+                alt={article.title}
+                className="w-full h-48 object-cover rounded-md mb-4"
+              />
+              <div className="flex-grow">
+                <p className="text-sm text-muted-foreground mb-2">{article.date}</p>
+                <h3 className="text-xl font-semibold mb-2">
+                  <Link to={`/articles/${article.slug}`} className="hover:text-primary transition-colors">
+                    {article.title}
+                  </Link>
+                </h3>
+                <p className="text-muted-foreground mb-4">{article.excerpt}</p>
+              </div>
+              <Link 
+                to={`/articles/${article.slug}`}
+                className="inline-flex items-center text-health-red-dark hover:text-health-red transition-colors font-medium"
+              >
+                Read more <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </HealthCard>
+          ))}
+        </div>
+        
+        <div className="mt-12 text-center">
+          <Button asChild className="health-btn-primary px-6 py-3">
+            <Link to="/articles">View All Articles</Link>
+          </Button>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default FeaturedArticles;
