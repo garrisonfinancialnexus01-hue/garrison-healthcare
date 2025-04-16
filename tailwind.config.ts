@@ -63,16 +63,16 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// Custom Garrison Health colors
+				// New color palette with teal and pale red
 				"health-green": {
-					light: "#E5F5E0",
-					DEFAULT: "#C6E5BC",
-					dark: "#8FB785"
+					light: "#E0F2F1", // Pale Teal
+					DEFAULT: "#4DB6AC", // Teal
+					dark: "#00796B"    // Dark Teal
 				},
 				"health-red": {
-					light: "#FFE5E5",
-					DEFAULT: "#FFBDBD",
-					dark: "#FF9B9B"
+					light: "#FFE5E5", // Pale Red
+					DEFAULT: "#FFC4C4", // Soft Red
+					dark: "#FF9B9B"    // Darker Pale Red
 				},
 			},
 			borderRadius: {
