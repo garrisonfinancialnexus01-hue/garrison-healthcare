@@ -12,6 +12,21 @@ import {
   CarouselNext,
   CarouselPrevious
 } from "@/components/ui/carousel";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { 
   Heart, 
   Stethoscope, 
@@ -21,7 +36,9 @@ import {
   Video, 
   Globe, 
   MessageCircle,
-  Image
+  Image,
+  ChevronDown,
+  ImageIcon
 } from "lucide-react";
 
 const services = [
@@ -39,16 +56,29 @@ const services = [
     ],
     gallery: [
       {
-        src: "https://images.unsplash.com/photo-1615729947596-a598e5de0ab3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
-        alt: "Healthcare information resources"
+        src: "https://images.unsplash.com/photo-1615729947596-a598e5de0ab3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+        alt: "Healthcare information resources",
+        hdSrc: "https://images.unsplash.com/photo-1615729947596-a598e5de0ab3?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
       },
       {
-        src: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
-        alt: "Digital health information"
+        src: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+        alt: "Digital health information",
+        hdSrc: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
       },
       {
-        src: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
-        alt: "Medical reference materials"
+        src: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+        alt: "Medical reference materials",
+        hdSrc: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
+      },
+      {
+        src: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+        alt: "Health guides and publications",
+        hdSrc: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
+      },
+      {
+        src: "https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+        alt: "Digital health resources",
+        hdSrc: "https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
       }
     ]
   },
@@ -66,12 +96,29 @@ const services = [
     ],
     gallery: [
       {
-        src: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
-        alt: "Virtual consultation"
+        src: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+        alt: "Virtual consultation",
+        hdSrc: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
       },
       {
-        src: "https://images.unsplash.com/photo-1579684453397-57b996e60df7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
-        alt: "Doctor consultation" 
+        src: "https://images.unsplash.com/photo-1579684453397-57b996e60df7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+        alt: "Doctor consultation",
+        hdSrc: "https://images.unsplash.com/photo-1579684453397-57b996e60df7?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
+      },
+      {
+        src: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+        alt: "Telehealth appointment",
+        hdSrc: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
+      },
+      {
+        src: "https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+        alt: "Health innovation consultation",
+        hdSrc: "https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
+      },
+      {
+        src: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+        alt: "Team health consultation",
+        hdSrc: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
       }
     ]
   },
@@ -89,12 +136,29 @@ const services = [
     ],
     gallery: [
       {
-        src: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
-        alt: "Health education workshop"
+        src: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+        alt: "Health education workshop",
+        hdSrc: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
       },
       {
-        src: "https://images.unsplash.com/photo-1543269865-cbf427effbad?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
-        alt: "Group health education session"
+        src: "https://images.unsplash.com/photo-1543269865-cbf427effbad?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+        alt: "Group health education session",
+        hdSrc: "https://images.unsplash.com/photo-1543269865-cbf427effbad?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
+      },
+      {
+        src: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+        alt: "Digital health education",
+        hdSrc: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
+      },
+      {
+        src: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+        alt: "Health data visualization",
+        hdSrc: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
+      },
+      {
+        src: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+        alt: "Interactive health learning",
+        hdSrc: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
       }
     ]
   },
@@ -112,12 +176,69 @@ const services = [
     ],
     gallery: [
       {
-        src: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
-        alt: "Community support group"
+        src: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+        alt: "Community support group",
+        hdSrc: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
       },
       {
-        src: "https://images.unsplash.com/photo-1527613426441-4da17471b66d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
-        alt: "Health community event"
+        src: "https://images.unsplash.com/photo-1527613426441-4da17471b66d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+        alt: "Health community event",
+        hdSrc: "https://images.unsplash.com/photo-1527613426441-4da17471b66d?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
+      },
+      {
+        src: "https://images.unsplash.com/photo-1582562124811-c09040d0a901?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+        alt: "Wellness group activity",
+        hdSrc: "https://images.unsplash.com/photo-1582562124811-c09040d0a901?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
+      },
+      {
+        src: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+        alt: "Support network meeting",
+        hdSrc: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
+      },
+      {
+        src: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+        alt: "Community health initiative",
+        hdSrc: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
+      }
+    ]
+  },
+  {
+    id: "diseases",
+    icon: FileText,
+    title: "Information about Diseases",
+    description: "Access comprehensive information about various diseases, including symptoms, causes, treatment options, and prevention methods. Our disease information is regularly updated with the latest medical findings.",
+    features: [
+      "Disease profiles and overviews",
+      "Symptom guidance",
+      "Treatment approaches",
+      "Prevention strategies",
+      "Research updates"
+    ],
+    gallery: [
+      {
+        src: "https://images.unsplash.com/photo-1576671081837-49000212a370?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+        alt: "Medical research visuals",
+        hdSrc: "https://images.unsplash.com/photo-1576671081837-49000212a370?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
+      },
+      {
+        src: "https://images.unsplash.com/photo-1579154204601-01588f351e67?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+        alt: "Disease awareness campaign",
+        hdSrc: "https://images.unsplash.com/photo-1579154204601-01588f351e67?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
+      },
+      {
+        src: "https://images.unsplash.com/photo-1581093588401-fbb62a02f120?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+        alt: "Healthcare analytics dashboard",
+        hdSrc: "https://images.unsplash.com/photo-1581093588401-fbb62a02f120?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
+      },
+      {
+        src: "https://images.unsplash.com/photo-1631815588090-d1bcbe9736c8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+        alt: "Medical information graphic",
+        hdSrc: "https://images.unsplash.com/photo-1631815588090-d1bcbe9736c8?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
+      },
+      {
+        src: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+        alt: "Health condition visualization",
+        hdSrc: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
       }
     ]
   }
@@ -145,6 +266,55 @@ const additionalServices = [
     description: "Telephone service providing guidance on health concerns and questions."
   }
 ];
+
+const ImageGallery = ({ images }: { images: { src: string; alt: string; hdSrc: string }[] }) => {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" className="w-full flex items-center justify-between">
+          <span className="flex items-center">
+            <ImageIcon className="h-5 w-5 mr-2" />
+            View Image Gallery
+          </span>
+          <ChevronDown className="h-4 w-4 ml-2" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-64 bg-background">
+        <DropdownMenuGroup>
+          {images.map((image, index) => (
+            <DropdownMenuItem key={index} asChild>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <div className="cursor-pointer flex items-center py-2 px-1 hover:bg-accent rounded-sm">
+                    <div className="h-10 w-10 mr-3 overflow-hidden rounded-sm">
+                      <img src={image.src} alt={image.alt} className="h-full w-full object-cover" />
+                    </div>
+                    <div className="text-sm truncate">{image.alt}</div>
+                  </div>
+                </DialogTrigger>
+                <DialogContent className="max-w-4xl">
+                  <DialogHeader>
+                    <DialogTitle className="text-lg font-medium">{image.alt}</DialogTitle>
+                    <DialogDescription className="text-sm text-muted-foreground">
+                      High quality version of the image
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="bg-muted rounded-md overflow-hidden">
+                    <img
+                      src={image.hdSrc}
+                      alt={image.alt}
+                      className="w-full h-auto max-h-[70vh] object-contain"
+                    />
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
 
 const ServiceDetail = ({ service }: { service: typeof services[0] }) => {
   return (
@@ -181,30 +351,7 @@ const ServiceDetail = ({ service }: { service: typeof services[0] }) => {
                 <Image className="h-5 w-5 mr-2 text-health-green-dark" />
                 Image Gallery
               </h4>
-              <ScrollArea className="w-full rounded-md border p-4">
-                <Carousel className="w-full">
-                  <CarouselContent>
-                    {service.gallery.map((image, index) => (
-                      <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
-                        <div className="p-1">
-                          <AspectRatio ratio={16 / 9} className="bg-muted rounded-md overflow-hidden border border-border">
-                            <img 
-                              src={image.src} 
-                              alt={image.alt} 
-                              className="object-cover w-full h-full transition-all hover:scale-105"
-                            />
-                          </AspectRatio>
-                          <p className="text-sm text-muted-foreground mt-2 text-center">{image.alt}</p>
-                        </div>
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
-                  <div className="flex justify-center mt-4">
-                    <CarouselPrevious className="relative static translate-y-0 -left-0 mr-2" />
-                    <CarouselNext className="relative static translate-y-0 -right-0" />
-                  </div>
-                </Carousel>
-              </ScrollArea>
+              <ImageGallery images={service.gallery} />
             </div>
           )}
         </div>
