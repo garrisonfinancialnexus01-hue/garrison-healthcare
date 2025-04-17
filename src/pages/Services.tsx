@@ -20,13 +20,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { 
   Heart, 
   Stethoscope, 
@@ -37,8 +30,7 @@ import {
   Globe, 
   MessageCircle,
   Image,
-  ChevronDown,
-  ImageIcon
+  GalleryVertical
 } from "lucide-react";
 
 const services = [
@@ -267,52 +259,44 @@ const additionalServices = [
   }
 ];
 
-const ImageGallery = ({ images }: { images: { src: string; alt: string; hdSrc: string }[] }) => {
+const VerticalImageGallery = ({ images }: { images: { src: string; alt: string; hdSrc: string }[] }) => {
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="w-full flex items-center justify-between">
-          <span className="flex items-center">
-            <ImageIcon className="h-5 w-5 mr-2" />
-            View Image Gallery
-          </span>
-          <ChevronDown className="h-4 w-4 ml-2" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-64 bg-background">
-        <DropdownMenuGroup>
-          {images.map((image, index) => (
-            <DropdownMenuItem key={index} asChild>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <div className="cursor-pointer flex items-center py-2 px-1 hover:bg-accent rounded-sm">
-                    <div className="h-10 w-10 mr-3 overflow-hidden rounded-sm">
-                      <img src={image.src} alt={image.alt} className="h-full w-full object-cover" />
-                    </div>
-                    <div className="text-sm truncate">{image.alt}</div>
-                  </div>
-                </DialogTrigger>
-                <DialogContent className="max-w-4xl">
-                  <DialogHeader>
-                    <DialogTitle className="text-lg font-medium">{image.alt}</DialogTitle>
-                    <DialogDescription className="text-sm text-muted-foreground">
-                      High quality version of the image
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div className="bg-muted rounded-md overflow-hidden">
-                    <img
-                      src={image.hdSrc}
-                      alt={image.alt}
-                      className="w-full h-auto max-h-[70vh] object-contain"
-                    />
-                  </div>
-                </DialogContent>
-              </Dialog>
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <div className="space-y-4">
+      {images.map((image, index) => (
+        <Dialog key={index}>
+          <DialogTrigger asChild>
+            <div className="cursor-pointer group rounded-md overflow-hidden">
+              <div className="relative aspect-video">
+                <img 
+                  src={image.src} 
+                  alt={image.alt} 
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" 
+                />
+                <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <span className="text-white text-sm font-medium bg-black/50 px-2 py-1 rounded">View full image</span>
+                </div>
+              </div>
+              <p className="text-sm mt-1 text-muted-foreground">{image.alt}</p>
+            </div>
+          </DialogTrigger>
+          <DialogContent className="max-w-4xl">
+            <DialogHeader>
+              <DialogTitle className="text-lg font-medium">{image.alt}</DialogTitle>
+              <DialogDescription className="text-sm text-muted-foreground">
+                High quality version of the image
+              </DialogDescription>
+            </DialogHeader>
+            <div className="bg-muted rounded-md overflow-hidden">
+              <img
+                src={image.hdSrc}
+                alt={image.alt}
+                className="w-full h-auto max-h-[70vh] object-contain"
+              />
+            </div>
+          </DialogContent>
+        </Dialog>
+      ))}
+    </div>
   );
 };
 
@@ -348,10 +332,12 @@ const ServiceDetail = ({ service }: { service: typeof services[0] }) => {
           {service.gallery && service.gallery.length > 0 && (
             <div className="mt-6">
               <h4 className="flex items-center text-lg font-semibold mb-4">
-                <Image className="h-5 w-5 mr-2 text-health-green-dark" />
+                <GalleryVertical className="h-5 w-5 mr-2 text-health-green-dark" />
                 Image Gallery
               </h4>
-              <ImageGallery images={service.gallery} />
+              <ScrollArea className="h-[400px] pr-4">
+                <VerticalImageGallery images={service.gallery} />
+              </ScrollArea>
             </div>
           )}
         </div>
