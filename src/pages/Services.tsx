@@ -1,4 +1,3 @@
-
 import Layout from "@/components/layout/Layout";
 import HealthCard from "@/components/ui/HealthCard";
 import { Button } from "@/components/ui/button";
@@ -218,9 +217,9 @@ const services = [
         hdSrc: "https://images.unsplash.com/photo-1579154204601-01588f351e67?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
       },
       {
-        src: "https://images.unsplash.com/photo-1581093588401-fbb62a02f120?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
-        alt: "Healthcare analytics dashboard",
-        hdSrc: "https://images.unsplash.com/photo-1581093588401-fbb62a02f120?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
+        src: "/lovable-uploads/d6e6b05e-f063-4d2c-8f99-85d60e45626e.png", // New diabetes infographic
+        alt: "Diabetes Overview",
+        hdSrc: "/lovable-uploads/d6e6b05e-f063-4d2c-8f99-85d60e45626e.png"
       },
       {
         src: "https://images.unsplash.com/photo-1631815588090-d1bcbe9736c8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
