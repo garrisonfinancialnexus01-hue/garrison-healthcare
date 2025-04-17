@@ -3,6 +3,7 @@ import Layout from "@/components/layout/Layout";
 import HealthCard from "@/components/ui/HealthCard";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { 
   Heart, 
   Stethoscope, 
@@ -26,6 +27,16 @@ const services = [
       "Treatment options and information",
       "Preventive healthcare resources",
       "Health tips and advice"
+    ],
+    images: [
+      {
+        src: "https://images.unsplash.com/photo-1615729947596-a598e5de0ab3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
+        alt: "Healthcare information resources"
+      },
+      {
+        src: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
+        alt: "Digital health information"
+      }
     ]
   },
   {
@@ -110,7 +121,7 @@ const ServiceDetail = ({ service }: { service: typeof services[0] }) => {
           <p className="text-muted-foreground mb-6">{service.description}</p>
           
           <h4 className="text-lg font-semibold mb-4">What we offer:</h4>
-          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6">
             {service.features.map((feature, index) => (
               <li key={index} className="flex items-start mb-2">
                 <div className="h-5 w-5 rounded-full bg-health-red-light flex items-center justify-center mr-2 mt-0.5 flex-shrink-0">
@@ -120,6 +131,25 @@ const ServiceDetail = ({ service }: { service: typeof services[0] }) => {
               </li>
             ))}
           </ul>
+          
+          {service.images && service.images.length > 0 && (
+            <div className="mt-6">
+              <h4 className="text-lg font-semibold mb-4">Resources:</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {service.images.map((image, index) => (
+                  <div key={index} className="rounded-md overflow-hidden border border-border">
+                    <AspectRatio ratio={16 / 9}>
+                      <img 
+                        src={image.src} 
+                        alt={image.alt} 
+                        className="object-cover w-full h-full transition-all hover:scale-105"
+                      />
+                    </AspectRatio>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </HealthCard>
     </div>
