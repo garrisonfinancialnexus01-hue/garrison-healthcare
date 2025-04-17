@@ -4,6 +4,14 @@ import HealthCard from "@/components/ui/HealthCard";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious
+} from "@/components/ui/carousel";
 import { 
   Heart, 
   Stethoscope, 
@@ -12,7 +20,8 @@ import {
   FileText, 
   Video, 
   Globe, 
-  MessageCircle 
+  MessageCircle,
+  Image
 } from "lucide-react";
 
 const services = [
@@ -28,7 +37,7 @@ const services = [
       "Preventive healthcare resources",
       "Health tips and advice"
     ],
-    images: [
+    gallery: [
       {
         src: "https://images.unsplash.com/photo-1615729947596-a598e5de0ab3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
         alt: "Healthcare information resources"
@@ -36,6 +45,10 @@ const services = [
       {
         src: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
         alt: "Digital health information"
+      },
+      {
+        src: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
+        alt: "Medical reference materials"
       }
     ]
   },
@@ -50,6 +63,16 @@ const services = [
       "Follow-up support",
       "Health risk assessments",
       "Medication guidance"
+    ],
+    gallery: [
+      {
+        src: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
+        alt: "Virtual consultation"
+      },
+      {
+        src: "https://images.unsplash.com/photo-1579684453397-57b996e60df7?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
+        alt: "Doctor consultation" 
+      }
     ]
   },
   {
@@ -63,6 +86,16 @@ const services = [
       "Wellness programs",
       "First aid training",
       "Health literacy resources"
+    ],
+    gallery: [
+      {
+        src: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
+        alt: "Health education workshop"
+      },
+      {
+        src: "https://images.unsplash.com/photo-1543269865-cbf427effbad?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
+        alt: "Group health education session"
+      }
     ]
   },
   {
@@ -76,6 +109,16 @@ const services = [
       "Peer counseling",
       "Health events and meetups",
       "Volunteer opportunities"
+    ],
+    gallery: [
+      {
+        src: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
+        alt: "Community support group"
+      },
+      {
+        src: "https://images.unsplash.com/photo-1527613426441-4da17471b66d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60",
+        alt: "Health community event"
+      }
     ]
   }
 ];
@@ -132,22 +175,36 @@ const ServiceDetail = ({ service }: { service: typeof services[0] }) => {
             ))}
           </ul>
           
-          {service.images && service.images.length > 0 && (
+          {service.gallery && service.gallery.length > 0 && (
             <div className="mt-6">
-              <h4 className="text-lg font-semibold mb-4">Resources:</h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {service.images.map((image, index) => (
-                  <div key={index} className="rounded-md overflow-hidden border border-border">
-                    <AspectRatio ratio={16 / 9}>
-                      <img 
-                        src={image.src} 
-                        alt={image.alt} 
-                        className="object-cover w-full h-full transition-all hover:scale-105"
-                      />
-                    </AspectRatio>
+              <h4 className="flex items-center text-lg font-semibold mb-4">
+                <Image className="h-5 w-5 mr-2 text-health-green-dark" />
+                Image Gallery
+              </h4>
+              <ScrollArea className="w-full rounded-md border p-4">
+                <Carousel className="w-full">
+                  <CarouselContent>
+                    {service.gallery.map((image, index) => (
+                      <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                        <div className="p-1">
+                          <AspectRatio ratio={16 / 9} className="bg-muted rounded-md overflow-hidden border border-border">
+                            <img 
+                              src={image.src} 
+                              alt={image.alt} 
+                              className="object-cover w-full h-full transition-all hover:scale-105"
+                            />
+                          </AspectRatio>
+                          <p className="text-sm text-muted-foreground mt-2 text-center">{image.alt}</p>
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <div className="flex justify-center mt-4">
+                    <CarouselPrevious className="relative static translate-y-0 -left-0 mr-2" />
+                    <CarouselNext className="relative static translate-y-0 -right-0" />
                   </div>
-                ))}
-              </div>
+                </Carousel>
+              </ScrollArea>
             </div>
           )}
         </div>
