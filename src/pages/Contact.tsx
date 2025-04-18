@@ -32,8 +32,8 @@ const ContactInfo = () => {
           <div>
             <h3 className="text-lg font-semibold mb-2">Phone</h3>
             <p className="text-muted-foreground">
-              <a href="tel:+256761281222" className="hover:text-primary transition-colors">
-                +256 761 281 222
+              <a href="tel:+256756530349" className="hover:text-primary transition-colors">
+                +256 756 530 349
               </a>
             </p>
           </div>
@@ -245,11 +245,11 @@ const Contact = () => {
           </p>
           <div className="flex justify-center">
             <a 
-              href="tel:+256761281222" 
+              href="tel:+256756530349" 
               className="inline-flex items-center justify-center px-6 py-3 bg-health-red-light text-health-red-dark font-semibold rounded-md hover:bg-health-red transition-colors"
             >
               <Phone className="mr-2 h-5 w-5" />
-              +256 761 281 222
+              +256 756 530 349
             </a>
           </div>
         </div>

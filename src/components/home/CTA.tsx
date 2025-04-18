@@ -21,9 +21,9 @@ const CTA = () => {
               </Link>
             </Button>
             <Button asChild variant="outline" className="px-6 py-3 text-base border-health-green flex items-center justify-center">
-              <a href="tel:+256761281222">
+              <a href="tel:+256756530349">
                 <Phone className="mr-2 h-5 w-5" />
-                Call: +256 761 281 222
+                Call: +256 756 530 349
               </a>
             </Button>
           </div>
