@@ -1,6 +1,7 @@
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, Heart, Phone } from "lucide-react";
+import { Menu, X, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
@@ -16,7 +17,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center py-4 md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">
             <Link to="/" className="flex items-center">
-              <Heart className="h-8 w-8 text-health-red-dark" />
+              <img src="/lovable-uploads/d6e6b05e-f063-4d2c-8f99-85d60e45626e.png" alt="Garrison Health Logo" className="h-12 w-auto" />
               <span className="ml-2 text-xl font-bold text-foreground">Garrison Health</span>
             </Link>
           </div>
@@ -46,6 +47,9 @@ const Navbar = () => {
             <Link to="/articles" className="text-base font-medium text-foreground hover:text-primary transition-colors">
               Health Articles
             </Link>
+            <Link to="/services#diseases" className="text-base font-medium text-foreground hover:text-primary transition-colors">
+              Disease Information
+            </Link>
             <Link to="/services" className="text-base font-medium text-foreground hover:text-primary transition-colors">
               Services
             </Link>
@@ -55,9 +59,9 @@ const Navbar = () => {
           </nav>
           
           <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-            <a href="tel:+256761281222" className="flex items-center text-health-green-dark hover:text-primary transition-colors">
+            <a href="tel:+256756530349" className="flex items-center text-health-green-dark hover:text-primary transition-colors">
               <Phone className="h-4 w-4 mr-1" />
-              <span>+256 761 281 222</span>
+              <span>+256756530349</span>
             </a>
           </div>
         </div>
@@ -91,6 +95,14 @@ const Navbar = () => {
           </Link>
           
           <Link 
+            to="/services#diseases" 
+            className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-health-green-light"
+            onClick={toggleMenu}
+          >
+            Disease Information
+          </Link>
+          
+          <Link 
             to="/services" 
             className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-health-green-light"
             onClick={toggleMenu}
@@ -107,12 +119,12 @@ const Navbar = () => {
           </Link>
           
           <a 
-            href="tel:+256761281222" 
+            href="tel:+256756530349" 
             className="flex items-center px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-health-green-light"
             onClick={toggleMenu}
           >
             <Phone className="h-4 w-4 mr-2" />
-            <span>+256 761 281 222</span>
+            <span>+256756530349 / +256761281222</span>
           </a>
         </div>
       </div>

@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-1">
             <div className="flex items-center">
-              <Heart className="h-8 w-8 text-health-red-dark" />
+              <img src="/lovable-uploads/d6e6b05e-f063-4d2c-8f99-85d60e45626e.png" alt="Garrison Health Logo" className="h-10 w-auto" />
               <span className="ml-2 text-xl font-bold">Garrison Health</span>
             </div>
             
@@ -71,11 +71,16 @@ const Footer = () => {
                 <MapPin className="h-5 w-5 mr-2 flex-shrink-0 text-health-red" />
                 <span className="text-sm">Ntinda, Kampala, Uganda</span>
               </li>
-              <li className="flex items-center">
+              <li className="flex items-start">
                 <Phone className="h-5 w-5 mr-2 flex-shrink-0 text-health-red" />
-                <a href="tel:+256761281222" className="text-sm hover:text-primary transition-colors">
-                  +256 761 281 222
-                </a>
+                <div className="text-sm">
+                  <a href="tel:+256756530349" className="hover:text-primary transition-colors block">
+                    +256 756 530 349
+                  </a>
+                  <a href="tel:+256761281222" className="hover:text-primary transition-colors block">
+                    +256 761 281 222
+                  </a>
+                </div>
               </li>
               <li className="flex items-center">
                 <Mail className="h-5 w-5 mr-2 flex-shrink-0 text-health-red" />
