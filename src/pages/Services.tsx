@@ -192,46 +192,6 @@ const services = [
         hdSrc: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
       }
     ]
-  },
-  {
-    id: "diseases",
-    icon: FileText,
-    title: "Information about Diseases",
-    description: "Access comprehensive information about various diseases, including symptoms, causes, treatment options, and prevention methods. Our disease information is regularly updated with the latest medical findings.",
-    features: [
-      "Disease profiles and overviews",
-      "Symptom guidance",
-      "Treatment approaches",
-      "Prevention strategies",
-      "Research updates"
-    ],
-    gallery: [
-      {
-        src: "https://images.unsplash.com/photo-1576671081837-49000212a370?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
-        alt: "Medical research visuals",
-        hdSrc: "https://images.unsplash.com/photo-1576671081837-49000212a370?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
-      },
-      {
-        src: "https://images.unsplash.com/photo-1579154204601-01588f351e67?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
-        alt: "Disease awareness campaign",
-        hdSrc: "https://images.unsplash.com/photo-1579154204601-01588f351e67?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
-      },
-      {
-        src: "/lovable-uploads/d6e6b05e-f063-4d2c-8f99-85d60e45626e.png", // New diabetes infographic
-        alt: "Diabetes Overview",
-        hdSrc: "/lovable-uploads/d6e6b05e-f063-4d2c-8f99-85d60e45626e.png"
-      },
-      {
-        src: "https://images.unsplash.com/photo-1631815588090-d1bcbe9736c8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
-        alt: "Medical information graphic",
-        hdSrc: "https://images.unsplash.com/photo-1631815588090-d1bcbe9736c8?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
-      },
-      {
-        src: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
-        alt: "Health condition visualization",
-        hdSrc: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
-      }
-    ]
   }
 ];
 

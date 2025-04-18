@@ -47,9 +47,6 @@ const Navbar = () => {
             <Link to="/articles" className="text-base font-medium text-foreground hover:text-primary transition-colors">
               Health Articles
             </Link>
-            <Link to="/services#diseases" className="text-base font-medium text-foreground hover:text-primary transition-colors">
-              Disease Information
-            </Link>
             <Link to="/services" className="text-base font-medium text-foreground hover:text-primary transition-colors">
               Services
             </Link>
@@ -95,14 +92,6 @@ const Navbar = () => {
           </Link>
           
           <Link 
-            to="/services#diseases" 
-            className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-health-green-light"
-            onClick={toggleMenu}
-          >
-            Disease Information
-          </Link>
-          
-          <Link 
             to="/services" 
             className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-health-green-light"
             onClick={toggleMenu}
@@ -124,7 +113,7 @@ const Navbar = () => {
             onClick={toggleMenu}
           >
             <Phone className="h-4 w-4 mr-2" />
-            <span>+256756530349 / +256761281222</span>
+            <span>+256756530349</span>
           </a>
         </div>
       </div>
