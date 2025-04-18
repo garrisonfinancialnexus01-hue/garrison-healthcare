@@ -1,9 +1,16 @@
+
 import { useState } from "react";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import HealthCard from "@/components/ui/HealthCard";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+);
 
 const ContactInfo = () => {
   return (
@@ -92,20 +99,34 @@ const ContactForm = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     
-    // Simulate form submission
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      const { error } = await supabase.functions.invoke('send-contact-email', {
+        body: {
+          to: 'garrisonhealth147@gmail.com',
+          subject: `Contact Form: ${formData.subject}`,
+          content: `
+            Name: ${formData.name}
+            Email: ${formData.email}
+            Phone: ${formData.phone}
+            
+            Message:
+            ${formData.message}
+          `
+        }
+      });
+
+      if (error) throw error;
+
       toast({
         title: "Message sent successfully",
         description: "Thanks for reaching out! We'll get back to you soon.",
         variant: "default",
       });
       
-      // Reset form
       setFormData({
         name: "",
         email: "",
@@ -113,7 +134,15 @@ const ContactForm = () => {
         subject: "",
         message: ""
       });
-    }, 1500);
+    } catch (error) {
+      toast({
+        title: "Error sending message",
+        description: "Please try again later or contact us directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
