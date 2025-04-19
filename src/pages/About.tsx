@@ -93,9 +93,9 @@ const About = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div className="order-2 md:order-1 flex justify-center">
               <img
-                src="/placeholder.svg"
+                src="/lovable-uploads/260a8d31-4c30-4748-9759-f5cbdb710afc.png"
                 alt="Isiah Kasule"
-                className="w-full max-w-md rounded-lg shadow-lg"
+                className="w-full max-w-md rounded-lg shadow-lg object-cover"
               />
             </div>
             <div className="order-1 md:order-2">
