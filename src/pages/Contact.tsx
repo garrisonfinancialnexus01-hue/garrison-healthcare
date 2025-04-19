@@ -7,14 +7,21 @@ import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { createClient } from '@supabase/supabase-js';
 
-// Initialize Supabase client with explicit string checks to prevent empty values
+// Initialize Supabase client with environment variables
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-// Only create the client if both URL and key are available
+// Create client only if both URL and key are available
 const supabase = supabaseUrl && supabaseAnonKey 
   ? createClient(supabaseUrl, supabaseAnonKey)
   : null;
+
+// Log Supabase initialization status for debugging
+console.log("Supabase initialization:", {
+  urlAvailable: !!supabaseUrl,
+  keyAvailable: !!supabaseAnonKey,
+  clientCreated: !!supabase
+});
 
 const ContactInfo = () => {
   return (
@@ -108,12 +115,22 @@ const ContactForm = () => {
     setLoading(true);
     
     try {
-      // Check if Supabase client is available
+      // Verify Supabase client is initialized
       if (!supabase) {
-        throw new Error("Supabase client is not initialized properly");
+        console.error("Supabase client is not initialized. Check your environment variables.");
+        throw new Error("Supabase client is not available - check your project settings");
       }
       
-      const { error } = await supabase.functions.invoke('send-contact-email', {
+      // Log the attempt to call the function
+      console.log("Attempting to call Supabase Edge Function with data:", {
+        to: 'garrisonhealth147@gmail.com',
+        subject: formData.subject,
+        name: formData.name,
+        email: formData.email
+      });
+      
+      // Call the edge function to send email
+      const { data, error } = await supabase.functions.invoke('send-contact-email', {
         body: {
           to: 'garrisonhealth147@gmail.com',
           subject: `Contact Form: ${formData.subject}`,
@@ -128,6 +145,9 @@ const ContactForm = () => {
         }
       });
 
+      // Log the response for debugging
+      console.log("Edge function response:", { data, error });
+
       if (error) throw error;
 
       toast({
@@ -136,6 +156,7 @@ const ContactForm = () => {
         variant: "default",
       });
       
+      // Reset form after successful submission
       setFormData({
         name: "",
         email: "",
