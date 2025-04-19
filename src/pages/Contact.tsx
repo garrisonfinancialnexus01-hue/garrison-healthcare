@@ -7,10 +7,14 @@ import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY
-);
+// Initialize Supabase client with explicit string checks to prevent empty values
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+// Only create the client if both URL and key are available
+const supabase = supabaseUrl && supabaseAnonKey 
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : null;
 
 const ContactInfo = () => {
   return (
@@ -104,6 +108,11 @@ const ContactForm = () => {
     setLoading(true);
     
     try {
+      // Check if Supabase client is available
+      if (!supabase) {
+        throw new Error("Supabase client is not initialized properly");
+      }
+      
       const { error } = await supabase.functions.invoke('send-contact-email', {
         body: {
           to: 'garrisonhealth147@gmail.com',
@@ -135,6 +144,7 @@ const ContactForm = () => {
         message: ""
       });
     } catch (error) {
+      console.error("Contact form submission error:", error);
       toast({
         title: "Error sending message",
         description: "Please try again later or contact us directly.",
