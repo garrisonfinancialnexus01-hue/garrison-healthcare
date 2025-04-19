@@ -8,22 +8,64 @@ if (!resendApiKey) {
   console.error("RESEND_API_KEY environment variable is not set");
 }
 
+// Initialize Resend client
 const resend = new Resend(resendApiKey);
 
 console.log("Edge function initialized, Resend API key available:", !!resendApiKey);
 
 serve(async (req) => {
   try {
-    // Parse request body
-    const { to, subject, content } = await req.json();
+    // CORS headers for preflight requests
+    if (req.method === "OPTIONS") {
+      return new Response(null, {
+        status: 204,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        },
+      });
+    }
     
-    console.log("Received email request:", { to, subject, contentLength: content?.length });
+    // Parse request body
+    const requestBody = await req.json();
+    const { to, subject, content } = requestBody;
+    
+    console.log("Received email request:", { 
+      to, 
+      subject, 
+      contentLength: content?.length,
+      requestBody 
+    });
 
     // Validation
     if (!to || !subject || !content) {
       return new Response(
-        JSON.stringify({ error: "Missing required fields: to, subject, or content" }),
-        { status: 400, headers: { "Content-Type": "application/json" } }
+        JSON.stringify({ 
+          error: "Missing required fields: to, subject, or content",
+          providedFields: { to: !!to, subject: !!subject, content: !!content }
+        }),
+        { 
+          status: 400, 
+          headers: { 
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*" 
+          } 
+        }
+      );
+    }
+
+    // Validate that the API key is available
+    if (!resendApiKey) {
+      return new Response(
+        JSON.stringify({ error: "Email service configuration is missing. Please contact the administrator." }),
+        { 
+          status: 500, 
+          headers: { 
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*" 
+          } 
+        }
       );
     }
 
@@ -39,14 +81,29 @@ serve(async (req) => {
 
     return new Response(
       JSON.stringify({ message: "Email sent successfully", data }),
-      { headers: { "Content-Type": "application/json" } }
+      { 
+        headers: { 
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*" 
+        } 
+      }
     );
   } catch (error) {
     console.error("Error sending email:", error);
     
     return new Response(
-      JSON.stringify({ error: error.message || "Unknown error occurred" }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
+      JSON.stringify({ 
+        error: error.message || "Unknown error occurred",
+        stack: error.stack,
+        name: error.name 
+      }),
+      { 
+        status: 500, 
+        headers: { 
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*" 
+        } 
+      }
     );
   }
 })
