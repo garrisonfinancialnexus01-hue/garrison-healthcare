@@ -87,29 +87,19 @@ const services = [
     ],
     gallery: [
       {
-        src: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
-        alt: "Virtual consultation",
-        hdSrc: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
+        src: "/lovable-uploads/0c377822-93f1-4059-a8f7-e8d945f865be.png",
+        alt: "Health consultation with smiling doctor",
+        hdSrc: "/lovable-uploads/0c377822-93f1-4059-a8f7-e8d945f865be.png"
       },
       {
-        src: "https://images.unsplash.com/photo-1579684453397-57b996e60df7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
-        alt: "Doctor consultation",
-        hdSrc: "https://images.unsplash.com/photo-1579684453397-57b996e60df7?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
+        src: "/lovable-uploads/149bf20d-3f0b-4bc2-b53b-44cec7cbb3c4.png",
+        alt: "Doctor and patient reviewing documents",
+        hdSrc: "/lovable-uploads/149bf20d-3f0b-4bc2-b53b-44cec7cbb3c4.png"
       },
       {
-        src: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
-        alt: "Telehealth appointment",
-        hdSrc: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
-      },
-      {
-        src: "https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
-        alt: "Health innovation consultation",
-        hdSrc: "https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
-      },
-      {
-        src: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
-        alt: "Team health consultation",
-        hdSrc: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
+        src: "/lovable-uploads/f6f114d0-cc75-4332-8af8-85699dbf10dc.png",
+        alt: "Female healthcare professional consulting patient",
+        hdSrc: "/lovable-uploads/f6f114d0-cc75-4332-8af8-85699dbf10dc.png"
       }
     ]
   },
