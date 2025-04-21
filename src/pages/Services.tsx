@@ -117,19 +117,19 @@ const services = [
     ],
     gallery: [
       {
-        src: "/lovable-uploads/645983dd-993c-4ab4-ae29-e0c22ef2e224.png",
-        alt: "Outdoor health education outreach",
-        hdSrc: "/lovable-uploads/645983dd-993c-4ab4-ae29-e0c22ef2e224.png"
+        src: "/lovable-uploads/76f07cf1-1066-4fb0-a7c8-c2d6f73a3b93.png",
+        alt: "Health education for children and families",
+        hdSrc: "/lovable-uploads/76f07cf1-1066-4fb0-a7c8-c2d6f73a3b93.png"
       },
       {
-        src: "/lovable-uploads/497e76d6-65b9-4a2a-b2f9-0ff14cffb6ee.png",
-        alt: "Group health education session inside clinic",
-        hdSrc: "/lovable-uploads/497e76d6-65b9-4a2a-b2f9-0ff14cffb6ee.png"
+        src: "/lovable-uploads/9ee79168-7296-4163-9356-30e85d6bea9e.png",
+        alt: "Community-focused health awareness event",
+        hdSrc: "/lovable-uploads/9ee79168-7296-4163-9356-30e85d6bea9e.png"
       },
       {
-        src: "/lovable-uploads/e415c5e6-29e9-4244-a202-5133d8e9be0d.png",
-        alt: "Health talk delivered to families",
-        hdSrc: "/lovable-uploads/e415c5e6-29e9-4244-a202-5133d8e9be0d.png"
+        src: "/lovable-uploads/e4869e10-cd9f-4d51-8bd1-e3893bb72d8c.png",
+        alt: "Family health education outreach and support",
+        hdSrc: "/lovable-uploads/e4869e10-cd9f-4d51-8bd1-e3893bb72d8c.png"
       }
     ]
   },
@@ -147,29 +147,19 @@ const services = [
     ],
     gallery: [
       {
-        src: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
-        alt: "Community support group",
-        hdSrc: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
+        src: "/lovable-uploads/5eb25ca5-fa61-45b6-9970-c8a320f4cd9e.png",
+        alt: "Community support for people with Down Syndrome",
+        hdSrc: "/lovable-uploads/5eb25ca5-fa61-45b6-9970-c8a320f4cd9e.png"
       },
       {
-        src: "https://images.unsplash.com/photo-1527613426441-4da17471b66d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
-        alt: "Health community event",
-        hdSrc: "https://images.unsplash.com/photo-1527613426441-4da17471b66d?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
+        src: "/lovable-uploads/6e37ab27-00d5-4d32-9dbd-cd38e3cd9090.png",
+        alt: "Inclusive community support event outdoor",
+        hdSrc: "/lovable-uploads/6e37ab27-00d5-4d32-9dbd-cd38e3cd9090.png"
       },
       {
-        src: "https://images.unsplash.com/photo-1582562124811-c09040d0a901?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
-        alt: "Wellness group activity",
-        hdSrc: "https://images.unsplash.com/photo-1582562124811-c09040d0a901?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
-      },
-      {
-        src: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
-        alt: "Support network meeting",
-        hdSrc: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
-      },
-      {
-        src: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
-        alt: "Community health initiative",
-        hdSrc: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=100"
+        src: "/lovable-uploads/6f7d2b8b-853b-4c52-8a19-e363e6877afe.png",
+        alt: "Family and community members supporting with supplies",
+        hdSrc: "/lovable-uploads/6f7d2b8b-853b-4c52-8a19-e363e6877afe.png"
       }
     ]
   }
