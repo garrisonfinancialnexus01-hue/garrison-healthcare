@@ -76,29 +76,19 @@ const services = [
     link: "/services#education",
     gallery: [
       {
-        src: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-        alt: "Health education workshop",
-        hdSrc: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=100"
+        src: "/lovable-uploads/645983dd-993c-4ab4-ae29-e0c22ef2e224.png",
+        alt: "Outdoor health education outreach",
+        hdSrc: "/lovable-uploads/645983dd-993c-4ab4-ae29-e0c22ef2e224.png"
       },
       {
-        src: "https://images.unsplash.com/photo-1543269865-cbf427effbad?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-        alt: "Health literacy resources",
-        hdSrc: "https://images.unsplash.com/photo-1543269865-cbf427effbad?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=100"
+        src: "/lovable-uploads/497e76d6-65b9-4a2a-b2f9-0ff14cffb6ee.png",
+        alt: "Group health education session inside clinic",
+        hdSrc: "/lovable-uploads/497e76d6-65b9-4a2a-b2f9-0ff14cffb6ee.png"
       },
       {
-        src: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-        alt: "Digital health education",
-        hdSrc: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=100"
-      },
-      {
-        src: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-        alt: "Health data visualization",
-        hdSrc: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=100"
-      },
-      {
-        src: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-        alt: "Interactive health learning",
-        hdSrc: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=100"
+        src: "/lovable-uploads/e415c5e6-29e9-4244-a202-5133d8e9be0d.png",
+        alt: "Health talk delivered to families",
+        hdSrc: "/lovable-uploads/e415c5e6-29e9-4244-a202-5133d8e9be0d.png"
       }
     ]
   },
