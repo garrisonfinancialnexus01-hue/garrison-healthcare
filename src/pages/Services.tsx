@@ -147,19 +147,19 @@ const services = [
     ],
     gallery: [
       {
-        src: "/lovable-uploads/5eb25ca5-fa61-45b6-9970-c8a320f4cd9e.png",
-        alt: "Community support for people with Down Syndrome",
-        hdSrc: "/lovable-uploads/5eb25ca5-fa61-45b6-9970-c8a320f4cd9e.png"
+        src: "/lovable-uploads/149bf20d-3f0b-4bc2-b53b-44cec7cbb3c4.png",
+        alt: "Doctor and patient reviewing documents",
+        hdSrc: "/lovable-uploads/149bf20d-3f0b-4bc2-b53b-44cec7cbb3c4.png"
       },
       {
-        src: "/lovable-uploads/6e37ab27-00d5-4d32-9dbd-cd38e3cd9090.png",
-        alt: "Inclusive community support event outdoor",
-        hdSrc: "/lovable-uploads/6e37ab27-00d5-4d32-9dbd-cd38e3cd9090.png"
+        src: "/lovable-uploads/260a8d31-4c30-4748-9759-f5cbdb710afc.png",
+        alt: "Patient consultation and care planning",
+        hdSrc: "/lovable-uploads/260a8d31-4c30-4748-9759-f5cbdb710afc.png"
       },
       {
-        src: "/lovable-uploads/6f7d2b8b-853b-4c52-8a19-e363e6877afe.png",
-        alt: "Family and community members supporting with supplies",
-        hdSrc: "/lovable-uploads/6f7d2b8b-853b-4c52-8a19-e363e6877afe.png"
+        src: "/lovable-uploads/497e76d6-65b9-4a2a-b2f9-0ff14cffb6ee.png",
+        alt: "Healthcare professional discussing with patient",
+        hdSrc: "/lovable-uploads/497e76d6-65b9-4a2a-b2f9-0ff14cffb6ee.png"
       }
     ]
   }
