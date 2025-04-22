@@ -76,29 +76,6 @@ const services = [
     link: "/services#education",
     gallery: [
       {
-        src: "/lovable-uploads/76f07cf1-1066-4fb0-a7c8-c2d6f73a3b93.png",
-        alt: "Health education for children and families",
-        hdSrc: "/lovable-uploads/76f07cf1-1066-4fb0-a7c8-c2d6f73a3b93.png"
-      },
-      {
-        src: "/lovable-uploads/9ee79168-7296-4163-9356-30e85d6bea9e.png",
-        alt: "Community-focused health awareness event",
-        hdSrc: "/lovable-uploads/9ee79168-7296-4163-9356-30e85d6bea9e.png"
-      },
-      {
-        src: "/lovable-uploads/e4869e10-cd9f-4d51-8bd1-e3893bb72d8c.png",
-        alt: "Family health education outreach and support",
-        hdSrc: "/lovable-uploads/e4869e10-cd9f-4d51-8bd1-e3893bb72d8c.png"
-      }
-    ]
-  },
-  {
-    icon: Users,
-    title: "Community Support",
-    description: "Connect with a community of individuals focused on health and wellness.",
-    link: "/services#support",
-    gallery: [
-      {
         src: "/lovable-uploads/149bf20d-3f0b-4bc2-b53b-44cec7cbb3c4.png",
         alt: "Doctor and patient reviewing documents",
         hdSrc: "/lovable-uploads/149bf20d-3f0b-4bc2-b53b-44cec7cbb3c4.png"
@@ -112,6 +89,29 @@ const services = [
         src: "/lovable-uploads/497e76d6-65b9-4a2a-b2f9-0ff14cffb6ee.png",
         alt: "Healthcare professional discussing with patient",
         hdSrc: "/lovable-uploads/497e76d6-65b9-4a2a-b2f9-0ff14cffb6ee.png"
+      }
+    ]
+  },
+  {
+    icon: Users,
+    title: "Community Support",
+    description: "Connect with a community of individuals focused on health and wellness.",
+    link: "/services#support",
+    gallery: [
+      {
+        src: "/lovable-uploads/76f07cf1-1066-4fb0-a7c8-c2d6f73a3b93.png",
+        alt: "Health education for children and families",
+        hdSrc: "/lovable-uploads/76f07cf1-1066-4fb0-a7c8-c2d6f73a3b93.png"
+      },
+      {
+        src: "/lovable-uploads/9ee79168-7296-4163-9356-30e85d6bea9e.png",
+        alt: "Community-focused health awareness event",
+        hdSrc: "/lovable-uploads/9ee79168-7296-4163-9356-30e85d6bea9e.png"
+      },
+      {
+        src: "/lovable-uploads/e4869e10-cd9f-4d51-8bd1-e3893bb72d8c.png",
+        alt: "Family health education outreach and support",
+        hdSrc: "/lovable-uploads/e4869e10-cd9f-4d51-8bd1-e3893bb72d8c.png"
       }
     ]
   }
