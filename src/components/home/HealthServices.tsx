@@ -15,7 +15,7 @@ import { ScrollArea } from "../ui/scroll-area";
 const services = [
   {
     icon: Heart,
-    title: "Health Information",
+    title: "Information about diseases",
     description: "Access accurate and up-to-date medical information on various health conditions.",
     link: "/services#information",
     gallery: [

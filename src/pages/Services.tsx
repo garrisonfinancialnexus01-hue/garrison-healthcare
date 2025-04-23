@@ -36,7 +36,7 @@ const services = [
   {
     id: "information",
     icon: Heart,
-    title: "Health Information",
+    title: "Information about diseases",
     description: "Access accurate and up-to-date medical information on various health conditions, treatments, and preventive measures. Our content is reviewed by healthcare professionals to ensure accuracy and relevance.",
     features: [
       "Evidence-based health articles",
