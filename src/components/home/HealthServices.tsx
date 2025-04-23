@@ -20,29 +20,29 @@ const services = [
     link: "/services#information",
     gallery: [
       {
-        src: "https://images.unsplash.com/photo-1615729947596-a598e5de0ab3?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-        alt: "Medical information resources",
-        hdSrc: "https://images.unsplash.com/photo-1615729947596-a598e5de0ab3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=100"
+        src: "/lovable-uploads/26521903-4164-446d-913f-8d65fb9b2185.png",
+        alt: "Malaria disease information overview",
+        hdSrc: "/lovable-uploads/26521903-4164-446d-913f-8d65fb9b2185.png"
       },
       {
-        src: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-        alt: "Digital health information",
-        hdSrc: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=100"
+        src: "/lovable-uploads/ec63752e-79d7-4f86-97e6-757c1e8ac0e7.png",
+        alt: "Diabetes mellitus disease information",
+        hdSrc: "/lovable-uploads/ec63752e-79d7-4f86-97e6-757c1e8ac0e7.png"
       },
       {
-        src: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-        alt: "Medical reference materials",
-        hdSrc: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=100"
+        src: "/lovable-uploads/b43a88c7-e45c-4495-af0b-9301e64f9147.png",
+        alt: "High blood pressure (HTN) information",
+        hdSrc: "/lovable-uploads/b43a88c7-e45c-4495-af0b-9301e64f9147.png"
       },
       {
-        src: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-        alt: "Health guides and publications",
-        hdSrc: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=100"
+        src: "/lovable-uploads/ccf555e1-dfcb-453b-90ee-e04a44befc30.png",
+        alt: "Kidney failure information overview",
+        hdSrc: "/lovable-uploads/ccf555e1-dfcb-453b-90ee-e04a44befc30.png"
       },
       {
-        src: "https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
-        alt: "Digital health resources",
-        hdSrc: "https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=100"
+        src: "/lovable-uploads/a8f42de6-c556-4699-b2fd-5f42a8644036.png",
+        alt: "Heart failure disease information",
+        hdSrc: "/lovable-uploads/a8f42de6-c556-4699-b2fd-5f42a8644036.png"
       }
     ]
   },
