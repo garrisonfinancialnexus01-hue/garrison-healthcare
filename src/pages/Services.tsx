@@ -117,9 +117,9 @@ const services = [
     ],
     gallery: [
       {
-        src: "/lovable-uploads/149bf20d-3f0b-4bc2-b53b-44cec7cbb3c4.png",
-        alt: "Doctor and patient reviewing documents",
-        hdSrc: "/lovable-uploads/149bf20d-3f0b-4bc2-b53b-44cec7cbb3c4.png"
+        src: "/lovable-uploads/4c22f431-e2e6-4d39-9282-713e55c19c72.png",
+        alt: "USAID Health Education Community Session",
+        hdSrc: "/lovable-uploads/4c22f431-e2e6-4d39-9282-713e55c19c72.png"
       },
       {
         src: "/lovable-uploads/497e76d6-65b9-4a2a-b2f9-0ff14cffb6ee.png",
