@@ -12,7 +12,7 @@ const healthArticles = [
     id: 1,
     title: "Understanding Diabetes: Symptoms, Causes, and Management",
     excerpt: "Learn about the different types of diabetes, common symptoms, and effective management strategies.",
-    image: "/placeholder.svg",
+    image: "/lovable-uploads/010d885b-6a86-4fa9-b298-275e7ce0ecb1.png",
     category: "Chronic Diseases",
     date: "April 12, 2025",
     slug: "understanding-diabetes",
