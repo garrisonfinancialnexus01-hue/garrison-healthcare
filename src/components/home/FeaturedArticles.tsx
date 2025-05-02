@@ -15,19 +15,19 @@ const featuredArticles = [
   },
   {
     id: 2,
+    title: "Understanding Malaria: Causes, Symptoms, and Prevention",
+    excerpt: "Learn about malaria, a disease caused by parasites transmitted through mosquito bites, and how to protect yourself.",
+    image: "/lovable-uploads/da1d8d36-dad9-431e-a9b8-b02f8c75075e.png",
+    date: "May 2, 2025",
+    slug: "understanding-malaria"
+  },
+  {
+    id: 3,
     title: "The Importance of Mental Health: Breaking the Stigma",
     excerpt: "Discover why mental health is as important as physical health and how to seek help when needed.",
     image: "/placeholder.svg",
     date: "April 10, 2025",
     slug: "importance-of-mental-health"
-  },
-  {
-    id: 3,
-    title: "COVID-19 Vaccines: Facts and Myths",
-    excerpt: "Get accurate information about COVID-19 vaccines, their effectiveness, and common misconceptions.",
-    image: "/placeholder.svg",
-    date: "April 8, 2025",
-    slug: "covid-vaccines-facts-myths"
   }
 ];
 
