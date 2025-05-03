@@ -1,10 +1,8 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
-import { ArrowLeft, Calendar } from "lucide-react";
+import { ArrowLeft, Calendar, Bug, Shield } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { mosquito, Shield } from "lucide-react";
 
 const UnderstandingMalaria = () => {
   return (
