@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Search, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-// Mock health articles data
+// Mock health articles data - keeping only diabetes, malaria, and hypertension
 const healthArticles = [
   {
     id: 1,
@@ -36,66 +36,6 @@ const healthArticles = [
     date: "May 3, 2025",
     slug: "understanding-hypertension",
     tags: ["Hypertension", "Blood Pressure", "Cardiovascular Health", "Heart Disease"]
-  },
-  {
-    id: 4,
-    title: "The Importance of Mental Health: Breaking the Stigma",
-    excerpt: "Discover why mental health is as important as physical health and how to seek help when needed.",
-    image: "/placeholder.svg",
-    category: "Mental Health",
-    date: "April 10, 2025",
-    slug: "importance-of-mental-health",
-    tags: ["Mental Health", "Wellness", "Healthcare"]
-  },
-  {
-    id: 5,
-    title: "Nutrition Basics: Building a Balanced Diet",
-    excerpt: "Learn the fundamentals of nutrition and how to create a balanced diet for optimal health.",
-    image: "/placeholder.svg",
-    category: "Nutrition",
-    date: "April 5, 2025",
-    slug: "nutrition-basics-balanced-diet",
-    tags: ["Nutrition", "Diet", "Healthy Eating"]
-  },
-  {
-    id: 6,
-    title: "Heart Health: Understanding Cardiovascular Disease",
-    excerpt: "Learn about the risk factors, symptoms, and prevention strategies for cardiovascular disease.",
-    image: "/placeholder.svg",
-    category: "Cardiovascular Health",
-    date: "April 3, 2025",
-    slug: "heart-health-cardiovascular-disease",
-    tags: ["Heart Health", "Cardiovascular", "Disease Prevention"]
-  },
-  {
-    id: 7,
-    title: "Exercise Fundamentals: Building a Routine That Works",
-    excerpt: "Discover how to create an exercise routine that suits your lifestyle and fitness goals.",
-    image: "/placeholder.svg",
-    category: "Fitness",
-    date: "April 1, 2025",
-    slug: "exercise-fundamentals-routine",
-    tags: ["Exercise", "Fitness", "Physical Activity"]
-  },
-  {
-    id: 8,
-    title: "Women's Health: Essential Screenings at Every Age",
-    excerpt: "Learn about the important health screenings women should have at different stages of life.",
-    image: "/placeholder.svg",
-    category: "Women's Health",
-    date: "March 28, 2025",
-    slug: "womens-health-screenings",
-    tags: ["Women's Health", "Preventive Care", "Healthcare"]
-  },
-  {
-    id: 9,
-    title: "Men's Health: Common Issues and When to See a Doctor",
-    excerpt: "Understand common health issues affecting men and when it's important to seek medical attention.",
-    image: "/placeholder.svg",
-    category: "Men's Health",
-    date: "March 25, 2025",
-    slug: "mens-health-issues",
-    tags: ["Men's Health", "Preventive Care", "Healthcare"]
   }
 ];
 
