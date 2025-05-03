@@ -29,6 +29,16 @@ const healthArticles = [
   },
   {
     id: 3,
+    title: "Understanding High Blood Pressure (Hypertension)",
+    excerpt: "Learn about the causes, symptoms, and management strategies for high blood pressure, a common condition affecting arteries.",
+    image: "/lovable-uploads/191cda90-e826-4e3f-8c1e-13d09dd334e5.png",
+    category: "Cardiovascular Health",
+    date: "May 3, 2025",
+    slug: "understanding-hypertension",
+    tags: ["Hypertension", "Blood Pressure", "Cardiovascular Health", "Heart Disease"]
+  },
+  {
+    id: 4,
     title: "The Importance of Mental Health: Breaking the Stigma",
     excerpt: "Discover why mental health is as important as physical health and how to seek help when needed.",
     image: "/placeholder.svg",
@@ -38,7 +48,7 @@ const healthArticles = [
     tags: ["Mental Health", "Wellness", "Healthcare"]
   },
   {
-    id: 4,
+    id: 5,
     title: "Nutrition Basics: Building a Balanced Diet",
     excerpt: "Learn the fundamentals of nutrition and how to create a balanced diet for optimal health.",
     image: "/placeholder.svg",
@@ -48,7 +58,7 @@ const healthArticles = [
     tags: ["Nutrition", "Diet", "Healthy Eating"]
   },
   {
-    id: 5,
+    id: 6,
     title: "Heart Health: Understanding Cardiovascular Disease",
     excerpt: "Learn about the risk factors, symptoms, and prevention strategies for cardiovascular disease.",
     image: "/placeholder.svg",
@@ -58,7 +68,7 @@ const healthArticles = [
     tags: ["Heart Health", "Cardiovascular", "Disease Prevention"]
   },
   {
-    id: 6,
+    id: 7,
     title: "Exercise Fundamentals: Building a Routine That Works",
     excerpt: "Discover how to create an exercise routine that suits your lifestyle and fitness goals.",
     image: "/placeholder.svg",
@@ -68,7 +78,7 @@ const healthArticles = [
     tags: ["Exercise", "Fitness", "Physical Activity"]
   },
   {
-    id: 7,
+    id: 8,
     title: "Women's Health: Essential Screenings at Every Age",
     excerpt: "Learn about the important health screenings women should have at different stages of life.",
     image: "/placeholder.svg",
@@ -78,7 +88,7 @@ const healthArticles = [
     tags: ["Women's Health", "Preventive Care", "Healthcare"]
   },
   {
-    id: 8,
+    id: 9,
     title: "Men's Health: Common Issues and When to See a Doctor",
     excerpt: "Understand common health issues affecting men and when it's important to seek medical attention.",
     image: "/placeholder.svg",

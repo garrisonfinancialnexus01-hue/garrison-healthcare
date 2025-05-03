@@ -23,11 +23,11 @@ const featuredArticles = [
   },
   {
     id: 3,
-    title: "The Importance of Mental Health: Breaking the Stigma",
-    excerpt: "Discover why mental health is as important as physical health and how to seek help when needed.",
-    image: "/placeholder.svg",
-    date: "April 10, 2025",
-    slug: "importance-of-mental-health"
+    title: "Understanding High Blood Pressure (Hypertension)",
+    excerpt: "Learn about the causes, symptoms, and management strategies for high blood pressure, a common condition affecting arteries.",
+    image: "/lovable-uploads/191cda90-e826-4e3f-8c1e-13d09dd334e5.png",
+    date: "May 3, 2025",
+    slug: "understanding-hypertension"
   }
 ];
 
