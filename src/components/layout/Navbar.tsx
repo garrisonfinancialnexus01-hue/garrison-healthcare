@@ -17,7 +17,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center py-4 md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">
             <Link to="/" className="flex items-center">
-              <img src="/lovable-uploads/5f86d8ae-8d01-43ca-af29-6b10e8827151.png" alt="Garrison Health Logo" className="h-12 w-auto" />
+              <img src="/lovable-uploads/d3c3b86e-3882-4112-b6e3-6890acabf27d.png" alt="Garrison Health Logo" className="h-12 w-auto" />
               <span className="ml-2 text-xl font-bold text-foreground">Garrison Health</span>
             </Link>
           </div>

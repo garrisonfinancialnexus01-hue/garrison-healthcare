@@ -1,3 +1,4 @@
+
 import { Heart, Mail, Phone, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -8,7 +9,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-1">
             <div className="flex items-center">
-              <img src="/lovable-uploads/5f86d8ae-8d01-43ca-af29-6b10e8827151.png" alt="Garrison Health Logo" className="h-10 w-auto" />
+              <img src="/lovable-uploads/d3c3b86e-3882-4112-b6e3-6890acabf27d.png" alt="Garrison Health Logo" className="h-10 w-auto" />
               <span className="ml-2 text-xl font-bold">Garrison Health</span>
             </div>
             
