@@ -29,11 +29,13 @@ serve(async (req) => {
     
     // Parse request body
     const requestBody = await req.json();
-    const { to, subject, content } = requestBody;
+    const { to, subject, content, from_email, from_name } = requestBody;
     
     console.log("Received email request:", { 
       to, 
       subject, 
+      from_email,
+      from_name,
       contentLength: content?.length,
       requestBody 
     });
@@ -69,18 +71,53 @@ serve(async (req) => {
       );
     }
 
-    // Send email using Resend
-    const data = await resend.emails.send({
-      from: 'Garrison Health Contact <contact@garrisonhealth.com>',
+    // Configure email with improved options
+    const emailOptions = {
+      from: from_email && from_name 
+        ? `${from_name} <contact@garrisonhealth.com>` 
+        : 'Garrison Health Contact <contact@garrisonhealth.com>',
       to: [to],
       subject: subject,
       text: content,
-    });
+      reply_to: from_email || undefined,
+    };
 
-    console.log("Email sent successfully:", data);
+    console.log("Sending email with options:", emailOptions);
+
+    // Send email with retry logic
+    let attempts = 0;
+    let lastError = null;
+    let data = null;
+    
+    while (attempts < 3) {
+      try {
+        data = await resend.emails.send(emailOptions);
+        console.log(`Email sent successfully on attempt ${attempts + 1}:`, data);
+        break; // Success - exit the retry loop
+      } catch (error) {
+        lastError = error;
+        console.error(`Email sending failed on attempt ${attempts + 1}:`, error);
+        attempts++;
+        
+        if (attempts < 3) {
+          // Wait before retrying (exponential backoff)
+          const waitTime = Math.pow(2, attempts) * 500; // 1s, 2s, 4s
+          console.log(`Waiting ${waitTime}ms before retry...`);
+          await new Promise(resolve => setTimeout(resolve, waitTime));
+        }
+      }
+    }
+    
+    if (lastError && !data) {
+      throw lastError; // Re-throw the last error if all attempts failed
+    }
 
     return new Response(
-      JSON.stringify({ message: "Email sent successfully", data }),
+      JSON.stringify({ 
+        message: "Email sent successfully", 
+        data,
+        attempts 
+      }),
       { 
         headers: { 
           "Content-Type": "application/json",

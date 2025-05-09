@@ -24,11 +24,55 @@ const ContactForm = () => {
     message: ""
   });
   const [loading, setLoading] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
   const supabase = useSupabaseClient();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const sendEmail = async (attempts = 0): Promise<boolean> => {
+    try {
+      if (!supabase) {
+        throw new Error("Email service unavailable - using fallback method");
+      }
+      
+      console.log(`Sending email attempt ${attempts + 1}`);
+      
+      const { data, error } = await supabase.functions.invoke('send-contact-email', {
+        body: {
+          to: 'garrisonhealth147@gmail.com',
+          subject: `Contact Form: ${formData.subject}`,
+          content: `
+            Name: ${formData.name}
+            Email: ${formData.email}
+            Phone: ${formData.phone || 'Not provided'}
+            
+            Message:
+            ${formData.message}
+          `,
+          from_email: formData.email,
+          from_name: formData.name
+        }
+      });
+
+      console.log("Email sending response:", { data, error });
+
+      if (error) throw error;
+      return true;
+    } catch (error) {
+      console.error(`Email sending attempt ${attempts + 1} failed:`, error);
+      
+      // If we haven't reached max retries, try again
+      if (attempts < 2) {
+        console.log(`Retrying... (${attempts + 1}/2)`);
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second before retry
+        return sendEmail(attempts + 1);
+      }
+      
+      throw error;
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -41,62 +85,47 @@ const ContactForm = () => {
         throw new Error("Please fill in all required fields");
       }
 
-      // Handle the case when Supabase is not available - fallback to direct email
-      if (!supabase) {
-        console.error("Supabase client is not available - using fallback method");
-        
-        // Fallback: Using mailto link as a last resort
-        const mailtoLink = `mailto:garrisonhealth147@gmail.com?subject=Contact Form: ${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\n\nMessage:\n${formData.message}`)}`;
-        window.open(mailtoLink);
-        
+      const success = await sendEmail();
+      
+      if (success) {
         toast({
-          title: "Email client opened",
-          description: "Please send the email from your email client to complete your message submission.",
+          title: "Message sent successfully",
+          description: "Thanks for reaching out! We'll get back to you soon.",
+          variant: "default",
+        });
+        resetForm();
+      }
+    } catch (error) {
+      console.error("Contact form submission error:", error);
+      
+      // Fallback method if all attempts fail
+      if (retryCount < 2) {
+        setRetryCount(prev => prev + 1);
+        toast({
+          title: "Retrying to send message",
+          description: "We're having some difficulties. Trying again...",
           variant: "default",
         });
         
-        resetForm();
+        // Try again after a short delay
+        setTimeout(() => handleSubmit(e), 2000);
         return;
       }
       
-      // Attempt to send email via Supabase Edge Function
-      console.log("Attempting to send email via Supabase Edge Function");
+      // If all retries fail, use mailto fallback
+      const mailtoLink = `mailto:garrisonhealth147@gmail.com?subject=Contact Form: ${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\n\nMessage:\n${formData.message}`)}`;
+      window.open(mailtoLink);
       
-      const { data, error } = await supabase.functions.invoke('send-contact-email', {
-        body: {
-          to: 'garrisonhealth147@gmail.com',
-          subject: `Contact Form: ${formData.subject}`,
-          content: `
-            Name: ${formData.name}
-            Email: ${formData.email}
-            Phone: ${formData.phone}
-            
-            Message:
-            ${formData.message}
-          `
-        }
-      });
-
-      console.log("Edge function response:", { data, error });
-
-      if (error) throw error;
-
       toast({
-        title: "Message sent successfully",
-        description: "Thanks for reaching out! We'll get back to you soon.",
+        title: "Alternative email method used",
+        description: "Please complete sending the email from your email client.",
         variant: "default",
       });
       
       resetForm();
-    } catch (error) {
-      console.error("Contact form submission error:", error);
-      toast({
-        title: "Error sending message",
-        description: error instanceof Error ? error.message : "Please try again later or contact us directly.",
-        variant: "destructive",
-      });
     } finally {
       setLoading(false);
+      setRetryCount(0);
     }
   };
 
