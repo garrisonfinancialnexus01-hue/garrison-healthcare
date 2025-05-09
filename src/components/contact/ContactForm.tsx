@@ -24,7 +24,6 @@ const ContactForm = () => {
     message: ""
   });
   const [loading, setLoading] = useState(false);
-  const [retryCount, setRetryCount] = useState(0);
   const supabase = useSupabaseClient();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -32,13 +31,14 @@ const ContactForm = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const sendEmail = async (attempts = 0): Promise<boolean> => {
+  const sendEmail = async (): Promise<boolean> => {
     try {
       if (!supabase) {
-        throw new Error("Email service unavailable - using fallback method");
+        console.log("Supabase client not available, using mailto fallback");
+        throw new Error("Email service unavailable");
       }
       
-      console.log(`Sending email attempt ${attempts + 1}`);
+      console.log("Sending email via Supabase function");
       
       const { data, error } = await supabase.functions.invoke('send-contact-email', {
         body: {
@@ -62,16 +62,14 @@ const ContactForm = () => {
       if (error) throw error;
       return true;
     } catch (error) {
-      console.error(`Email sending attempt ${attempts + 1} failed:`, error);
+      console.error("Email sending failed:", error);
       
-      // If we haven't reached max retries, try again
-      if (attempts < 2) {
-        console.log(`Retrying... (${attempts + 1}/2)`);
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second before retry
-        return sendEmail(attempts + 1);
-      }
+      // Use mailto fallback immediately instead of retrying
+      const mailtoLink = `mailto:garrisonhealth147@gmail.com?subject=Contact Form: ${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\n\nMessage:\n${formData.message}`)}`;
+      window.open(mailtoLink);
       
-      throw error;
+      // We still return true since we've provided an alternative method
+      return true;
     }
   };
 
@@ -96,36 +94,15 @@ const ContactForm = () => {
         resetForm();
       }
     } catch (error) {
-      console.error("Contact form submission error:", error);
-      
-      // Fallback method if all attempts fail
-      if (retryCount < 2) {
-        setRetryCount(prev => prev + 1);
-        toast({
-          title: "Retrying to send message",
-          description: "We're having some difficulties. Trying again...",
-          variant: "default",
-        });
-        
-        // Try again after a short delay
-        setTimeout(() => handleSubmit(e), 2000);
-        return;
-      }
-      
-      // If all retries fail, use mailto fallback
-      const mailtoLink = `mailto:garrisonhealth147@gmail.com?subject=Contact Form: ${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\n\nMessage:\n${formData.message}`)}`;
-      window.open(mailtoLink);
+      console.error("Contact form error:", error);
       
       toast({
-        title: "Alternative email method used",
-        description: "Please complete sending the email from your email client.",
-        variant: "default",
+        title: "Unable to send message",
+        description: "Please try again or contact us directly via email or phone.",
+        variant: "destructive",
       });
-      
-      resetForm();
     } finally {
       setLoading(false);
-      setRetryCount(0);
     }
   };
 

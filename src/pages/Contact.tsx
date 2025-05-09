@@ -33,7 +33,7 @@ const Contact = () => {
               <div className="mt-8 p-4 bg-amber-50 border border-amber-200 rounded-md flex items-start">
                 <AlertCircle className="text-amber-600 h-5 w-5 mt-0.5 mr-2 flex-shrink-0" />
                 <p className="text-sm text-amber-800">
-                  If you don't receive a confirmation within 24 hours, please email us directly at{" "}
+                  If you prefer to contact us directly, please email us at{" "}
                   <a href="mailto:garrisonhealth147@gmail.com" className="font-medium underline hover:text-amber-900">
                     garrisonhealth147@gmail.com
                   </a>{" "}
