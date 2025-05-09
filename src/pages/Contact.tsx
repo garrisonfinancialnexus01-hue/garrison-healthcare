@@ -1,6 +1,6 @@
 
 import Layout from "@/components/layout/Layout";
-import { Phone, Mail, AlertCircle } from "lucide-react";
+import { Phone, Mail } from "lucide-react";
 import HealthCard from "@/components/ui/HealthCard";
 import ContactInfo from "@/components/contact/ContactInfo";
 import ContactForm from "@/components/contact/ContactForm";
@@ -29,17 +29,6 @@ const Contact = () => {
               </p>
               
               <ContactInfo />
-              
-              <div className="mt-8 p-4 bg-amber-50 border border-amber-200 rounded-md flex items-start">
-                <AlertCircle className="text-amber-600 h-5 w-5 mt-0.5 mr-2 flex-shrink-0" />
-                <p className="text-sm text-amber-800">
-                  If you prefer to contact us directly, please email us at{" "}
-                  <a href="mailto:garrisonhealth147@gmail.com" className="font-medium underline hover:text-amber-900">
-                    garrisonhealth147@gmail.com
-                  </a>{" "}
-                  or call our support team.
-                </p>
-              </div>
             </div>
             
             <div>
