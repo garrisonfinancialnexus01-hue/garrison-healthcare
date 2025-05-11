@@ -1,4 +1,3 @@
-
 import Layout from "@/components/layout/Layout";
 import { Heart, ThumbsUp, Lightbulb, Award } from "lucide-react";
 import HealthCard from "@/components/ui/HealthCard";
@@ -19,26 +18,18 @@ const About = () => {
       
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="section-title mb-6">Our Mission</h2>
-              <p className="text-muted-foreground mb-6">
-                At Garrison Health, our mission is to provide accurate, accessible, and culturally relevant health information to empower individuals to make informed decisions about their health and wellbeing.
-              </p>
-              <p className="text-muted-foreground mb-6">
-                We are committed to improving health literacy and promoting preventive healthcare measures in our communities. We believe that access to reliable health information is a fundamental right and a key component of healthcare equity.
-              </p>
-              <p className="text-muted-foreground">
-                Through our platform, we aim to bridge the gap between complex medical information and public understanding, making health knowledge accessible to all.
-              </p>
-            </div>
-            <div className="flex justify-center">
-              <img
-                src="/placeholder.svg"
-                alt="Garrison Health Mission"
-                className="w-full max-w-md rounded-lg shadow-lg"
-              />
-            </div>
+          {/* Removed the grid and the image div, using full width for the mission text */}
+          <div>
+            <h2 className="section-title mb-6">Our Mission</h2>
+            <p className="text-muted-foreground mb-6">
+              At Garrison Health, our mission is to provide accurate, accessible, and culturally relevant health information to empower individuals to make informed decisions about their health and wellbeing.
+            </p>
+            <p className="text-muted-foreground mb-6">
+              We are committed to improving health literacy and promoting preventive healthcare measures in our communities. We believe that access to reliable health information is a fundamental right and a key component of healthcare equity.
+            </p>
+            <p className="text-muted-foreground">
+              Through our platform, we aim to bridge the gap between complex medical information and public understanding, making health knowledge accessible to all.
+            </p>
           </div>
         </div>
       </section>
