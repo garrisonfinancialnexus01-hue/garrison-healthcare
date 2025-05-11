@@ -63,16 +63,16 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// New color palette with teal and red
+				// Updated color palette with new teal and red
 				"health-green": {
-					light: "#E0F2F1", // Pale Teal
-					DEFAULT: "#4DB6AC", // Teal
-					dark: "#00796B"    // Dark Teal
+					light: "#E0F2F1", // Pale Teal - keeping the light shade
+					DEFAULT: "#058789", // New Teal color as specified
+					dark: "#046769"    // Slightly darker shade of the new teal
 				},
 				"health-red": {
-					light: "#FFEBEE", // Light Red
-					DEFAULT: "#EF5350", // Red
-					dark: "#C62828"    // Dark Red
+					light: "#FFEBEE", // Light Red - keeping the light shade
+					DEFAULT: "#E03F3E", // New Red color as specified
+					dark: "#B32F2E"    // Slightly darker shade of the new red
 				},
 			},
 			borderRadius: {
