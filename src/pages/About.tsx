@@ -1,3 +1,4 @@
+
 import Layout from "@/components/layout/Layout";
 import { Heart, ThumbsUp, Lightbulb, Award } from "lucide-react";
 import HealthCard from "@/components/ui/HealthCard";
@@ -84,7 +85,7 @@ const About = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div className="order-2 md:order-1 flex justify-center">
               <img
-                src="/lovable-uploads/260a8d31-4c30-4748-9759-f5cbdb710afc.png"
+                src="/lovable-uploads/65dcfa46-d1e7-4967-a00c-60683c8503ac.png"
                 alt="Isiah Kasule"
                 className="w-full max-w-md rounded-lg shadow-lg object-cover"
               />
