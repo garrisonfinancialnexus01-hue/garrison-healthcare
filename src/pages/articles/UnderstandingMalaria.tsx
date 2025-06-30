@@ -1,7 +1,8 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
-import { ArrowLeft, Calendar, Bug, Shield } from "lucide-react";
+import { ArrowLeft, Calendar, Bug, Shield, AlertTriangle, MapPin } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 
 const UnderstandingMalaria = () => {
@@ -36,156 +37,204 @@ const UnderstandingMalaria = () => {
           <p className="text-sm text-muted-foreground mt-2 text-center">Malaria prevention is crucial in endemic regions</p>
         </div>
 
+        {/* Quick Facts Alert */}
+        <div className="bg-health-red-light border border-health-red/20 rounded-lg p-6 mb-8">
+          <div className="flex items-start">
+            <AlertTriangle className="h-5 w-5 text-health-red mt-0.5 mr-3 flex-shrink-0" />
+            <div>
+              <h3 className="font-semibold text-health-red-dark mb-2">Important</h3>
+              <p className="text-sm">
+                Malaria is a life-threatening illness that requires immediate medical attention. If you've traveled to an area where malaria is common and experience symptoms, see a healthcare provider right away.
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Article Content */}
         <div className="prose max-w-none">
-          <h2 className="text-2xl font-semibold mt-8 mb-4">Overview</h2>
+          <h2 className="text-2xl font-semibold mt-8 mb-4 flex items-center">
+            <Bug className="h-6 w-6 mr-2 text-health-red" />
+            Overview
+          </h2>
+          
+          <h3 className="text-xl font-semibold mt-6 mb-3">What is malaria?</h3>
           <p>
-            Malaria is a disease caused by a parasite. The parasite is spread to humans through the bites of infected mosquitoes. People who have malaria usually feel very sick with a high fever and shaking chills.
+            Malaria is a serious disease that spreads when you're bitten by a mosquito infected by Plasmodium parasites. When it bites, the mosquito injects malaria parasites into your bloodstream.
           </p>
           <p>
-            While the disease is uncommon in temperate climates, malaria is still common in tropical and subtropical countries. Each year nearly 290 million people are infected with malaria, and more than 400,000 people die of the disease.
+            Malaria is common in tropical areas where it's hot and humid. Most cases happen in Africa and South Asia. It's rare in the U.S.
           </p>
           <p>
-            To reduce malaria infections, world health programs distribute preventive drugs and insecticide-treated bed nets to protect people from mosquito bites. The World Health Organization has recommended a malaria vaccine for use in children who live in countries with high numbers of malaria cases.
-          </p>
-          <p>
-            Protective clothing, bed nets and insecticides can protect you while traveling. You also can take preventive medicine before, during and after a trip to a high-risk area. Many malaria parasites have developed resistance to common drugs used to treat the disease.
+            Without treatment, malaria can cause brain damage, organ failure and death. See a healthcare provider right away if you live in or have traveled to an area where malaria spreads and you have symptoms.
           </p>
 
-          <h2 className="text-2xl font-semibold mt-8 mb-4">Symptoms</h2>
-          <p>Signs and symptoms of malaria may include:</p>
-          <ul className="list-disc pl-6 my-4">
-            <li>Fever</li>
-            <li>Chills</li>
-            <li>General feeling of discomfort</li>
-            <li>Headache</li>
-            <li>Nausea and vomiting</li>
-            <li>Diarrhea</li>
-            <li>Abdominal pain</li>
-            <li>Muscle or joint pain</li>
+          <Separator className="my-8" />
+
+          <h2 className="text-2xl font-semibold mt-8 mb-4">Symptoms and Causes</h2>
+          
+          <h3 className="text-xl font-semibold mt-6 mb-3">Symptoms of malaria</h3>
+          <p>Signs and symptoms of malaria include:</p>
+          <ul className="list-disc pl-6 my-4 grid grid-cols-1 md:grid-cols-2 gap-2">
+            <li>Fever and sweating</li>
+            <li>Chills — these can shake your whole body</li>
+            <li>Headache and muscle aches</li>
             <li>Fatigue</li>
-            <li>Rapid breathing</li>
-            <li>Rapid heart rate</li>
+            <li>Chest pain</li>
+            <li>Difficulty breathing</li>
             <li>Cough</li>
+            <li>Diarrhea</li>
+            <li>Nausea and vomiting</li>
+            <li>Seizures</li>
           </ul>
           <p>
-            Some people who have malaria experience cycles of malaria "attacks." An attack usually starts with shivering and chills, followed by a high fever, followed by sweating and a return to normal temperature.
-          </p>
-          <p>
-            Malaria signs and symptoms typically begin within a few weeks after being bitten by an infected mosquito. However, some types of malaria parasites can lie dormant in your body for up to a year.
+            Symptoms can be mild or severe. As malaria gets worse, it can cause anemia and jaundice (yellowing of your skin and the whites of your eyes).
           </p>
 
-          <h3 className="text-xl font-semibold mt-6 mb-3">When to see a doctor</h3>
+          <div className="bg-health-green-light border border-health-green/20 rounded-lg p-6 my-6">
+            <h4 className="font-semibold text-health-green-dark mb-2">When do symptoms begin?</h4>
+            <p className="text-sm mb-2">
+              Malaria symptoms usually appear a week to a month after you're infected. Some people don't feel sick for a year or longer after the mosquito bite.
+            </p>
+            <p className="text-sm">
+              Sometimes, even after treatment, malaria infections get better but come back (recur) again. You can start having symptoms again years after your initial infection.
+            </p>
+          </div>
+
+          <h3 className="text-xl font-semibold mt-6 mb-3">Malaria causes</h3>
           <p>
-            Talk to your doctor if you experience a fever while living in or after traveling to a high-risk malaria region. If you have severe symptoms, seek emergency medical attention.
+            Plasmodium parasites cause malaria. There are five types that can infect humans.
+          </p>
+          <p>
+            A mosquito gets infected when it bites someone who's infected with the parasites. When that mosquito bites someone else, it transfers a parasite to the other person's bloodstream. There, the parasites multiply.
+          </p>
+          <p>
+            In rare cases, malaria can pass from a pregnant woman to the fetus during pregnancy or birth.
+          </p>
+          <p>
+            It's possible, but unlikely, for malaria to be passed through blood transfusions, organ donations and needles.
           </p>
 
-          <h2 className="text-2xl font-semibold mt-8 mb-4">Causes</h2>
+          <h3 className="text-xl font-semibold mt-6 mb-3">Risk factors</h3>
           <p>
-            Malaria is caused by a single-celled parasite of the genus plasmodium. The parasite is transmitted to humans most commonly through mosquito bites.
-          </p>
-
-          <h3 className="text-xl font-semibold mt-6 mb-3">Malaria transmission cycle</h3>
-          <p>
-            Malaria spreads when a mosquito becomes infected with the disease after biting an infected person, and the infected mosquito then bites a noninfected person. The malaria parasites enter that person's bloodstream and travel to the liver. When the parasites mature, they leave the liver and infect red blood cells.
-          </p>
-          <ol className="list-decimal pl-6 my-4">
-            <li><strong>Uninfected mosquito.</strong> A mosquito becomes infected by feeding on a person who has malaria.</li>
-            <li><strong>Transmission of parasite.</strong> If this mosquito bites you in the future, it can transmit malaria parasites to you.</li>
-            <li><strong>In the liver.</strong> Once the parasites enter your body, they travel to your liver — where some types can lie dormant for as long as a year.</li>
-            <li><strong>Into the bloodstream.</strong> When the parasites mature, they leave the liver and infect your red blood cells. This is when people typically develop malaria symptoms.</li>
-            <li><strong>On to the next person.</strong> If an uninfected mosquito bites you at this point in the cycle, it will become infected with your malaria parasites and can spread them to the other people it bites.</li>
-          </ol>
-
-          <h3 className="text-xl font-semibold mt-6 mb-3">Other modes of transmission</h3>
-          <p>
-            Because the parasites that cause malaria affect red blood cells, people can also catch malaria from exposure to infected blood, including:
+            Your risk of getting malaria is higher if you live in or travel to areas where it spreads, like parts of Africa. You're at higher risk of serious illness and death if you:
           </p>
           <ul className="list-disc pl-6 my-4">
-            <li>From mother to unborn child</li>
-            <li>Through blood transfusions</li>
-            <li>By sharing needles used to inject drugs</li>
+            <li>Are younger than 5 years old</li>
+            <li>Are pregnant</li>
+            <li>Have a weakened immune system</li>
+            <li>Don't have access to healthcare</li>
           </ul>
 
-          <h2 className="text-2xl font-semibold mt-8 mb-4">Risk factors</h2>
-          <p>
-            The greatest risk factor for developing malaria is to live in or to visit areas where the disease is common. These include the tropical and subtropical regions of:
-          </p>
+          <div className="bg-health-blue-light border border-health-blue/20 rounded-lg p-6 my-6">
+            <h4 className="font-semibold text-health-blue-dark mb-3 flex items-center">
+              <MapPin className="h-5 w-5 mr-2" />
+              Where is malaria found?
+            </h4>
+            <p className="text-sm mb-2">Malaria is most common in areas with warm temperatures and high humidity, including:</p>
+            <ul className="text-sm list-disc pl-6">
+              <li>Africa</li>
+              <li>Central and South America</li>
+              <li>Dominican Republic, Haiti and other areas in the Caribbean</li>
+              <li>South and Southeast Asia</li>
+              <li>Islands in the Central and South Pacific Ocean (Oceania)</li>
+            </ul>
+          </div>
+
+          <h3 className="text-xl font-semibold mt-6 mb-3">Complications of malaria</h3>
+          <p>If left untreated, malaria can cause:</p>
           <ul className="list-disc pl-6 my-4">
-            <li>Sub-Saharan Africa</li>
-            <li>South and Southeast Asia</li>
-            <li>Pacific Islands</li>
-            <li>Central America and northern South America</li>
-          </ul>
-          <p>
-            The degree of risk depends on local malaria control, seasonal changes in malaria rates and the precautions you take to prevent mosquito bites.
-          </p>
-
-          <h3 className="text-xl font-semibold mt-6 mb-3">Risks of more-severe disease</h3>
-          <p>
-            People at increased risk of serious disease include:
-          </p>
-          <ul className="list-disc pl-6 my-4">
-            <li>Young children and infants</li>
-            <li>Older adults</li>
-            <li>Travelers coming from areas with no malaria</li>
-            <li>Pregnant women and their unborn children</li>
-          </ul>
-          <p>
-            In many countries with high malaria rates, the problem is worsened by lack of access to preventive measures, medical care and information.
-          </p>
-
-          <h3 className="text-xl font-semibold mt-6 mb-3">Immunity can wane</h3>
-          <p>
-            Residents of a malaria region may be exposed to the disease enough to acquire a partial immunity, which can lessen the severity of malaria symptoms. However, this partial immunity can disappear if you move to a place where you're no longer frequently exposed to the parasite.
-          </p>
-
-          <h2 className="text-2xl font-semibold mt-8 mb-4">Complications</h2>
-          <p>
-            Malaria can be fatal, particularly when caused by the plasmodium species common in Africa. The World Health Organization estimates that about 94% of all malaria deaths occur in Africa — most commonly in children under the age of 5.
-          </p>
-          <p>
-            Malaria deaths are usually related to one or more serious complications, including:
-          </p>
-          <ul className="pl-6 my-4">
-            <li><strong>Cerebral malaria.</strong> If parasite-filled blood cells block small blood vessels to your brain (cerebral malaria), swelling of your brain or brain damage may occur. Cerebral malaria may cause seizures and coma.</li>
-            <li><strong>Breathing problems.</strong> Accumulated fluid in your lungs (pulmonary edema) can make it difficult to breathe.</li>
-            <li><strong>Organ failure.</strong> Malaria can damage the kidneys or liver or cause the spleen to rupture. Any of these conditions can be life-threatening.</li>
-            <li><strong>Anemia.</strong> Malaria may result in not having enough red blood cells for an adequate supply of oxygen to your body's tissues (anemia).</li>
-            <li><strong>Low blood sugar.</strong> Severe forms of malaria can cause low blood sugar (hypoglycemia), as can quinine — a common medication used to combat malaria. Very low blood sugar can result in coma or death.</li>
+            <li>Coma</li>
+            <li>Organ failure</li>
+            <li>Death</li>
           </ul>
 
-          <h3 className="text-xl font-semibold mt-6 mb-3">Malaria may recur</h3>
+          <Separator className="my-8" />
+
+          <h2 className="text-2xl font-semibold mt-8 mb-4">Diagnosis and Tests</h2>
+          
+          <h3 className="text-xl font-semibold mt-6 mb-3">How is malaria diagnosed?</h3>
           <p>
-            Some varieties of the malaria parasite, which typically cause milder forms of the disease, can persist for years and cause relapses.
+            A healthcare provider will examine you and ask about your symptoms and travel history. It's important to let them know what countries you've visited recently so they can clearly understand your risk.
+          </p>
+          <p>
+            Your provider will take a sample of your blood and send it to a lab to see if you have Plasmodium parasites. The blood test will tell your provider if you have malaria and will also identify the Plasmodium species. They'll use this information to determine the right treatment.
           </p>
 
-          <h2 className="text-2xl font-semibold mt-8 mb-4">Prevention</h2>
-          <p>
-            If you live in or are traveling to an area where malaria is common, take steps to avoid mosquito bites. Mosquitoes are most active between dusk and dawn. To protect yourself from mosquito bites, you should:
-          </p>
-          <ul className="list-disc pl-6 my-4">
-            <li><strong>Cover your skin.</strong> Wear pants and long-sleeved shirts. Tuck in your shirt, and tuck pant legs into socks.</li>
-            <li><strong>Apply insect repellent to skin.</strong> Use an insect repellent registered with the Environmental Protection Agency on any exposed skin. These include repellents that contain DEET, picaridin, IR3535, oil of lemon eucalyptus (OLE), para-menthane-3,8-diol (PMD) or 2-undecanone. Do not use a spray directly on your face. Do not use products with oil of lemon eucalyptus (OLE) or p-Menthane-3,8-diol (PMD) on children under age 3.</li>
-            <li><strong>Apply repellent to clothing.</strong> Sprays containing permethrin are safe to apply to clothing.</li>
-            <li><strong>Sleep under a net.</strong> Bed nets, particularly those treated with insecticides, such as permethrin, help prevent mosquito bites while you are sleeping.</li>
-          </ul>
+          <Separator className="my-8" />
 
-          <h3 className="text-xl font-semibold mt-6 mb-3">Preventive medicine</h3>
+          <h2 className="text-2xl font-semibold mt-8 mb-4">Management and Treatment</h2>
+          
+          <h3 className="text-xl font-semibold mt-6 mb-3">How is malaria treated?</h3>
           <p>
-            If you'll be traveling to a location where malaria is common, talk to your doctor a few months ahead of time about whether you should take drugs before, during and after your trip to help protect you from malaria parasites.
-          </p>
-          <p>
-            In general, the drugs taken to prevent malaria are the same drugs used to treat the disease. What drug you take depends on where and how long you are traveling and your own health.
+            Antimalarial medications can treat malaria and clear the infection from your body, but it's important to start treatment as soon as possible. If malaria isn't treated properly, it can cause serious health problems, including permanent organ damage and death. Your provider will prescribe medications to kill the type of Plasmodium parasite responsible for your infection. Some parasites are resistant to malaria drugs.
           </p>
 
-          <h3 className="text-xl font-semibold mt-6 mb-3">Vaccine</h3>
+          <div className="bg-white border border-gray-200 rounded-lg p-6 my-6">
+            <h4 className="font-semibold mb-3">Antimalarial drugs include:</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              <ul className="list-disc pl-6 text-sm">
+                <li>Artemisinin drugs (artemether and artesunate)</li>
+                <li>Atovaquone</li>
+                <li>Chloroquine</li>
+                <li>Doxycycline</li>
+              </ul>
+              <ul className="list-disc pl-6 text-sm">
+                <li>Mefloquine</li>
+                <li>Quinine</li>
+                <li>Primaquine</li>
+              </ul>
+            </div>
+          </div>
+
           <p>
-            The World Health Organization has recommended a malaria vaccine for use in children who live in countries with high numbers of malaria cases.
+            After treatment, it's important to protect yourself from mosquitoes as much as possible. If you've had malaria before, you can get it again if an infected mosquito bites you.
+          </p>
+
+          <h3 className="text-xl font-semibold mt-6 mb-3">When should I see my healthcare provider?</h3>
+          <p>
+            If you've traveled to or live in a country where malaria is common and you have symptoms, see a healthcare provider immediately. Early diagnosis makes treatment more effective.
+          </p>
+
+          <Separator className="my-8" />
+
+          <h2 className="text-2xl font-semibold mt-8 mb-4 flex items-center">
+            <Shield className="h-6 w-6 mr-2 text-health-green" />
+            Prevention
+          </h2>
+          
+          <h3 className="text-xl font-semibold mt-6 mb-3">How can I prevent malaria?</h3>
+          <p>
+            If you're traveling to an area where malaria is common, talk to a healthcare provider about ways you can prevent being infected. People who are infected and travel to Uganda can spread the disease if a mosquito bites them and then bites someone else.
           </p>
           <p>
-            Researchers are continuing to develop and study malaria vaccines to prevent infection.
+            Your provider might prescribe antimalarial medications for you to take before, during and after your stay. Medications can greatly reduce the chances of getting malaria. If you get sick with malaria while on an antimalarial drug, it won't work to treat it. Your provider will prescribe a different medication in that case.
           </p>
+
+          <div className="bg-health-green-light border border-health-green/20 rounded-lg p-6 my-6">
+            <h4 className="font-semibold text-health-green-dark mb-3">Prevention Measures</h4>
+            <p className="text-sm mb-2">To lower your chances of getting malaria, you should:</p>
+            <ul className="text-sm list-disc pl-6 space-y-1">
+              <li>Apply mosquito repellent with DEET (diethyltoluamide) to exposed skin</li>
+              <li>Drape mosquito netting over beds</li>
+              <li>Put screens on windows and doors</li>
+              <li>Treat clothing, mosquito nets, tents, sleeping bags and other fabrics with an insect repellent called permethrin</li>
+              <li>Wear long pants and long sleeves to cover your skin</li>
+            </ul>
+          </div>
+
+          <h3 className="text-xl font-semibold mt-6 mb-3">Is there a vaccine against malaria?</h3>
+          <p>
+            Two vaccines that help protect against malaria are available. Public health officials recommend vaccination against malaria for children who live in areas where infections are common.
+          </p>
+
+          <Separator className="my-8" />
+
+          <div className="bg-health-red-light border border-health-red/20 rounded-lg p-6 my-8">
+            <h3 className="font-semibold text-health-red-dark mb-3">A note from Garrison Health</h3>
+            <p className="text-sm">
+              Malaria is a serious illness, but you can take steps to prevent it. You can lower your risk of infection by protecting yourself from mosquito bites and taking preventive medications. If you're traveling to an area where malaria is common, talk to a healthcare provider several weeks before you leave. This is especially important if you're pregnant. And talk to a provider right away if you've traveled to an area where malaria is common and you have symptoms.
+            </p>
+          </div>
         </div>
 
         {/* Back to articles link */}
