@@ -23,7 +23,7 @@ const Hero = () => {
                   Our Services <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
-              <Button asChild variant="outline" className="text-white border-white hover:bg-white hover:text-garrison-teal text-lg px-8 py-4">
+              <Button asChild className="bg-garrison-teal hover:bg-garrison-teal-dark text-white border-garrison-teal text-lg px-8 py-4">
                 <Link to="/contact">
                   Contact Us
                 </Link>
@@ -52,8 +52,12 @@ const Hero = () => {
           
           <div className="lg:text-right">
             <div className="inline-block p-8 bg-white/10 backdrop-blur-sm rounded-2xl">
-              <div className="w-64 h-64 bg-white/20 rounded-full flex items-center justify-center">
-                <div className="text-6xl font-bold">G</div>
+              <div className="w-64 h-64 bg-white/20 rounded-full flex items-center justify-center overflow-hidden">
+                <img 
+                  src="/lovable-uploads/469e8eca-bd74-4a95-bbd5-ad3ca0a46078.png" 
+                  alt="Garrison Health Logo" 
+                  className="w-48 h-48 object-contain"
+                />
               </div>
             </div>
           </div>
