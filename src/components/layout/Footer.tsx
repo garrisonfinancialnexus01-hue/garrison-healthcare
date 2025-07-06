@@ -10,9 +10,11 @@ const Footer = () => {
           {/* Company Info */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
-              <div className="w-10 h-10 bg-garrison-teal rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-xl">G</span>
-              </div>
+              <img 
+                src="/lovable-uploads/469e8eca-bd74-4a95-bbd5-ad3ca0a46078.png" 
+                alt="Garrison Health Logo" 
+                className="w-12 h-12 object-contain"
+              />
               <div>
                 <h3 className="text-xl font-bold">Garrison Health</h3>
                 <p className="text-sm text-garrison-red italic">Your health, Our priority</p>

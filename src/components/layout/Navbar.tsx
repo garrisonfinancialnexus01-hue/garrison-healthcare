@@ -13,9 +13,11 @@ const Navbar = () => {
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-garrison-teal rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-xl">G</span>
-              </div>
+              <img 
+                src="/lovable-uploads/469e8eca-bd74-4a95-bbd5-ad3ca0a46078.png" 
+                alt="Garrison Health Logo" 
+                className="w-12 h-12 object-contain"
+              />
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">Garrison Health</h1>
                 <p className="text-sm text-garrison-red italic">Your health, Our priority</p>

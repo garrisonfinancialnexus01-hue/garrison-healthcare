@@ -56,8 +56,12 @@ const About = () => {
           </div>
           
           <div className="max-w-4xl mx-auto text-center">
-            <div className="w-32 h-32 bg-garrison-teal rounded-full flex items-center justify-center mx-auto mb-8">
-              <span className="text-white text-4xl font-bold">IK</span>
+            <div className="w-48 h-48 mx-auto mb-8 rounded-full overflow-hidden shadow-lg">
+              <img 
+                src="/lovable-uploads/25724637-5073-42f9-9696-2632e5d22ce5.png" 
+                alt="Isiah Kasule - Founder & CEO of Garrison Health" 
+                className="w-full h-full object-cover"
+              />
             </div>
             
             <h3 className="text-2xl font-bold text-gray-900 mb-4">Isiah Kasule</h3>

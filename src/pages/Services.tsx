@@ -118,14 +118,16 @@ const Services = () => {
                 </div>
                 
                 <div className="lg:order-1 lg:text-center">
-                  <div className="bg-gradient-to-br from-garrison-teal to-garrison-teal-dark rounded-lg p-8 h-64 flex items-center justify-center text-white">
-                    <div className="text-center">
-                      <div className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <span className="text-2xl font-bold">IN</span>
-                      </div>
-                      <h3 className="text-lg font-semibold">Immaculate Nakamya</h3>
-                      <p className="text-white/80">Health Practitioner</p>
-                    </div>
+                  <div className="w-64 h-64 mx-auto rounded-lg overflow-hidden shadow-lg">
+                    <img 
+                      src="/lovable-uploads/0f7260d9-52be-4b86-baed-073721b4feee.png" 
+                      alt="Immaculate Nakamya - Health Practitioner at Garrison Health" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="mt-4 text-center">
+                    <h3 className="text-lg font-semibold text-gray-900">Immaculate Nakamya</h3>
+                    <p className="text-garrison-teal font-medium">Health Practitioner</p>
                   </div>
                 </div>
               </div>
