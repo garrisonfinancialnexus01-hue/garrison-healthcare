@@ -1,38 +1,52 @@
 
-import { useLocation } from "react-router-dom";
-import { useEffect } from "react";
 import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Home } from "lucide-react";
+import { Home, ArrowLeft } from "lucide-react";
 
 const NotFound = () => {
-  const location = useLocation();
-
-  useEffect(() => {
-    console.error(
-      "404 Error: User attempted to access non-existent route:",
-      location.pathname
-    );
-  }, [location.pathname]);
-
   return (
     <Layout>
-      <div className="py-20 min-h-[50vh] flex items-center justify-center">
-        <div className="text-center max-w-md mx-auto">
-          <h1 className="text-6xl font-bold text-health-red-dark mb-6">404</h1>
-          <p className="text-2xl font-semibold mb-4">Oops! Page not found</p>
-          <p className="text-muted-foreground mb-8">
-            The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
-          </p>
-          <Button asChild className="health-btn-primary px-6 py-3">
-            <Link to="/" className="flex items-center">
-              <Home className="mr-2 h-5 w-5" />
-              Return to Home
-            </Link>
-          </Button>
+      <section className="py-20 text-center">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-8">
+            <div className="text-6xl font-bold text-garrison-teal mb-4">404</div>
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Page Not Found
+            </h1>
+            <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+              Sorry, we couldn't find the page you're looking for. 
+              The page might have been moved, deleted, or you entered the wrong URL.
+            </p>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button asChild className="garrison-btn-primary">
+              <Link to="/">
+                <Home className="mr-2 h-4 w-4" />
+                Go to Homepage
+              </Link>
+            </Button>
+            
+            <Button asChild className="garrison-btn-outline">
+              <Link to="/contact">
+                Contact Support
+              </Link>
+            </Button>
+          </div>
+          
+          <div className="mt-12">
+            <Button 
+              onClick={() => window.history.back()} 
+              variant="ghost" 
+              className="text-garrison-teal hover:text-garrison-teal-dark"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Go Back to Previous Page
+            </Button>
+          </div>
         </div>
-      </div>
+      </section>
     </Layout>
   );
 };

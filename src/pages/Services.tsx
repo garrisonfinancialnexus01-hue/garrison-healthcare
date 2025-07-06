@@ -1,346 +1,218 @@
+
 import Layout from "@/components/layout/Layout";
-import HealthCard from "@/components/ui/HealthCard";
+import { FileText, UserCheck, BookOpen, MessageSquare, Calendar, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious
-} from "@/components/ui/carousel";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { 
-  Heart, 
-  Stethoscope, 
-  BookOpen, 
-  Users, 
-  FileText, 
-  Video, 
-  Globe, 
-  MessageCircle,
-  Image,
-  GalleryVertical
-} from "lucide-react";
-
-const services = [
-  {
-    id: "information",
-    icon: Heart,
-    title: "Information about diseases",
-    description: "Access accurate and up-to-date medical information on various health conditions, treatments, and preventive measures. Our content is reviewed by healthcare professionals to ensure accuracy and relevance.",
-    features: [
-      "Evidence-based health articles",
-      "Medical condition guides",
-      "Treatment options and information",
-      "Preventive healthcare resources",
-      "Health tips and advice"
-    ],
-    gallery: [
-      {
-        src: "/lovable-uploads/26521903-4164-446d-913f-8d65fb9b2185.png",
-        alt: "Malaria disease information overview",
-        hdSrc: "/lovable-uploads/26521903-4164-446d-913f-8d65fb9b2185.png"
-      },
-      {
-        src: "/lovable-uploads/ec63752e-79d7-4f86-97e6-757c1e8ac0e7.png",
-        alt: "Diabetes mellitus disease information",
-        hdSrc: "/lovable-uploads/ec63752e-79d7-4f86-97e6-757c1e8ac0e7.png"
-      },
-      {
-        src: "/lovable-uploads/b43a88c7-e45c-4495-af0b-9301e64f9147.png",
-        alt: "High blood pressure (HTN) information",
-        hdSrc: "/lovable-uploads/b43a88c7-e45c-4495-af0b-9301e64f9147.png"
-      },
-      {
-        src: "/lovable-uploads/ccf555e1-dfcb-453b-90ee-e04a44befc30.png",
-        alt: "Kidney failure information overview",
-        hdSrc: "/lovable-uploads/ccf555e1-dfcb-453b-90ee-e04a44befc30.png"
-      },
-      {
-        src: "/lovable-uploads/a8f42de6-c556-4699-b2fd-5f42a8644036.png",
-        alt: "Heart failure disease information",
-        hdSrc: "/lovable-uploads/a8f42de6-c556-4699-b2fd-5f42a8644036.png"
-      }
-    ]
-  },
-  {
-    id: "consultations",
-    icon: Stethoscope,
-    title: "Health Consultations",
-    description: "Get professional advice from our team of healthcare professionals. Our consultations are designed to provide you with guidance on your health concerns and direct you to appropriate healthcare services when needed.",
-    features: [
-      "Virtual health consultations",
-      "Medical referrals",
-      "Follow-up support",
-      "Health risk assessments",
-      "Medication guidance"
-    ],
-    gallery: [
-      {
-        src: "/lovable-uploads/0c377822-93f1-4059-a8f7-e8d945f865be.png",
-        alt: "Health consultation with smiling doctor",
-        hdSrc: "/lovable-uploads/0c377822-93f1-4059-a8f7-e8d945f865be.png"
-      },
-      {
-        src: "/lovable-uploads/149bf20d-3f0b-4bc2-b53b-44cec7cbb3c4.png",
-        alt: "Doctor and patient reviewing documents",
-        hdSrc: "/lovable-uploads/149bf20d-3f0b-4bc2-b53b-44cec7cbb3c4.png"
-      },
-      {
-        src: "/lovable-uploads/f6f114d0-cc75-4332-8af8-85699dbf10dc.png",
-        alt: "Female healthcare professional consulting patient",
-        hdSrc: "/lovable-uploads/f6f114d0-cc75-4332-8af8-85699dbf10dc.png"
-      }
-    ]
-  },
-  {
-    id: "education",
-    icon: BookOpen,
-    title: "Health Education",
-    description: "Learn about preventive healthcare measures and healthy lifestyle practices through our educational resources. Our programs are designed to improve health literacy and empower individuals to take control of their health.",
-    features: [
-      "Health workshops and seminars",
-      "Educational materials",
-      "Wellness programs",
-      "First aid training",
-      "Health literacy resources"
-    ],
-    gallery: [
-      {
-        src: "/lovable-uploads/4c22f431-e2e6-4d39-9282-713e55c19c72.png",
-        alt: "USAID Health Education Community Session",
-        hdSrc: "/lovable-uploads/4c22f431-e2e6-4d39-9282-713e55c19c72.png"
-      },
-      {
-        src: "/lovable-uploads/497e76d6-65b9-4a2a-b2f9-0ff14cffb6ee.png",
-        alt: "Healthcare professional discussing with patient",
-        hdSrc: "/lovable-uploads/497e76d6-65b9-4a2a-b2f9-0ff14cffb6ee.png"
-      },
-      {
-        src: "/lovable-uploads/0372b9e0-0341-420f-8d15-691ed91263bd.png",
-        alt: "Community health education session",
-        hdSrc: "/lovable-uploads/0372b9e0-0341-420f-8d15-691ed91263bd.png"
-      }
-    ]
-  },
-  {
-    id: "support",
-    icon: Users,
-    title: "Community Support",
-    description: "Connect with a community of individuals focused on health and wellness. Share experiences, get support, and learn from others who are navigating similar health journeys.",
-    features: [
-      "Community forums",
-      "Support groups",
-      "Peer counseling",
-      "Health events and meetups",
-      "Volunteer opportunities"
-    ],
-    gallery: [
-      {
-        src: "/lovable-uploads/76f07cf1-1066-4fb0-a7c8-c2d6f73a3b93.png",
-        alt: "Health education for children and families",
-        hdSrc: "/lovable-uploads/76f07cf1-1066-4fb0-a7c8-c2d6f73a3b93.png"
-      },
-      {
-        src: "/lovable-uploads/9ee79168-7296-4163-9356-30e85d6bea9e.png",
-        alt: "Community-focused health awareness event",
-        hdSrc: "/lovable-uploads/9ee79168-7296-4163-9356-30e85d6bea9e.png"
-      },
-      {
-        src: "/lovable-uploads/e4869e10-cd9f-4d51-8bd1-e3893bb72d8c.png",
-        alt: "Family health education outreach and support",
-        hdSrc: "/lovable-uploads/e4869e10-cd9f-4d51-8bd1-e3893bb72d8c.png"
-      }
-    ]
-  }
-];
-
-const additionalServices = [
-  {
-    icon: FileText,
-    title: "Health Publications",
-    description: "Regular newsletters, guides, and publications on various health topics."
-  },
-  {
-    icon: Video,
-    title: "Video Resources",
-    description: "Instructional videos, expert interviews, and health demonstrations."
-  },
-  {
-    icon: Globe,
-    title: "Outreach Programs",
-    description: "Community health initiatives and outreach activities in underserved areas."
-  },
-  {
-    icon: MessageCircle,
-    title: "Health Helpline",
-    description: "Telephone service providing guidance on health concerns and questions."
-  }
-];
-
-const VerticalImageGallery = ({ images }: { images: { src: string; alt: string; hdSrc: string }[] }) => {
-  return (
-    <div className="space-y-4">
-      {images.map((image, index) => (
-        <Dialog key={index}>
-          <DialogTrigger asChild>
-            <div className="cursor-pointer group rounded-md overflow-hidden">
-              <div className="relative aspect-video">
-                <img 
-                  src={image.src} 
-                  alt={image.alt} 
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" 
-                />
-                <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <span className="text-white text-sm font-medium bg-black/50 px-2 py-1 rounded">View full image</span>
-                </div>
-              </div>
-              <p className="text-sm mt-1 text-muted-foreground">{image.alt}</p>
-            </div>
-          </DialogTrigger>
-          <DialogContent className="max-w-4xl">
-            <DialogHeader>
-              <DialogTitle className="text-lg font-medium">{image.alt}</DialogTitle>
-              <DialogDescription className="text-sm text-muted-foreground">
-                High quality version of the image
-              </DialogDescription>
-            </DialogHeader>
-            <div className="bg-muted rounded-md overflow-hidden">
-              <img
-                src={image.hdSrc}
-                alt={image.alt}
-                className="w-full h-auto max-h-[70vh] object-contain"
-              />
-            </div>
-          </DialogContent>
-        </Dialog>
-      ))}
-    </div>
-  );
-};
-
-const ServiceDetail = ({ service }: { service: typeof services[0] }) => {
-  return (
-    <div id={service.id} className="pt-16 -mt-16 mb-16">
-      <HealthCard className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="md:col-span-1 flex flex-col items-center md:items-start text-center md:text-left">
-          <div className="h-16 w-16 rounded-full bg-health-green-light flex items-center justify-center mb-4">
-            <service.icon className="h-8 w-8 text-health-green-dark" />
-          </div>
-          <h3 className="text-2xl font-bold mb-4">{service.title}</h3>
-          <Button asChild className="health-btn-primary px-6 py-3 mt-auto">
-            <Link to="/contact">Inquire Now</Link>
-          </Button>
-        </div>
-        
-        <div className="md:col-span-2">
-          <p className="text-muted-foreground mb-6">{service.description}</p>
-          
-          <h4 className="text-lg font-semibold mb-4">What we offer:</h4>
-          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6">
-            {service.features.map((feature, index) => (
-              <li key={index} className="flex items-start mb-2">
-                <div className="h-5 w-5 rounded-full bg-health-red-light flex items-center justify-center mr-2 mt-0.5 flex-shrink-0">
-                  <span className="text-health-red-dark text-xs">✓</span>
-                </div>
-                <span>{feature}</span>
-              </li>
-            ))}
-          </ul>
-          
-          {service.gallery && service.gallery.length > 0 && (
-            <div className="mt-6">
-              <h4 className="flex items-center text-lg font-semibold mb-4">
-                <GalleryVertical className="h-5 w-5 mr-2 text-health-green-dark" />
-                Image Gallery
-              </h4>
-              <ScrollArea className="h-[400px] pr-4">
-                <VerticalImageGallery images={service.gallery} />
-              </ScrollArea>
-            </div>
-          )}
-        </div>
-      </HealthCard>
-    </div>
-  );
-};
 
 const Services = () => {
   return (
     <Layout>
-      <div className="bg-health-green-light py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-3xl md:text-4xl font-bold text-foreground">Our Services</h1>
-            <p className="mt-4 text-lg text-muted-foreground max-w-3xl mx-auto">
-              Comprehensive health services designed to support your wellbeing
-            </p>
-          </div>
-        </div>
-      </div>
-      
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap justify-center gap-4 mb-16">
-            {services.map((service) => (
-              <a
-                key={service.id}
-                href={`#${service.id}`}
-                className="px-4 py-2 bg-health-green-light text-foreground rounded-md hover:bg-health-green transition-colors"
-              >
-                {service.title}
-              </a>
-            ))}
-          </div>
-          
-          {services.map((service) => (
-            <ServiceDetail key={service.id} service={service} />
-          ))}
+      {/* Hero Section */}
+      <section className="bg-gradient-to-r from-garrison-teal to-garrison-teal-dark text-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">Our Services</h1>
+          <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto">
+            Comprehensive healthcare solutions tailored to meet your needs
+          </p>
         </div>
       </section>
-      
-      <section className="py-16 bg-health-green-light/50">
+
+      {/* Main Services */}
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="section-title">Additional Services</h2>
-            <p className="mt-4 text-muted-foreground max-w-3xl mx-auto">
-              Complementary offerings to enhance your healthcare experience
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {additionalServices.map((service, index) => (
-              <HealthCard key={index} className="text-center">
-                <div className="inline-flex items-center justify-center p-3 bg-health-red-light rounded-full mb-4">
-                  <service.icon className="h-6 w-6 text-health-red-dark" />
+          {/* Information about Diseases */}
+          <div id="diseases" className="mb-20">
+            <div className="garrison-card p-8 md:p-12">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div>
+                  <div className="flex items-center mb-6">
+                    <FileText className="h-12 w-12 text-garrison-teal mr-4" />
+                    <h2 className="text-3xl font-bold text-gray-900">Information about Diseases</h2>
+                  </div>
+                  <p className="text-lg text-gray-600 mb-6">
+                    Access comprehensive, medically-reviewed information about various health conditions, 
+                    their symptoms, causes, treatments, and prevention strategies. Our disease information 
+                    library is regularly updated with the latest medical research and guidelines.
+                  </p>
+                  <ul className="space-y-3 mb-8">
+                    <li className="flex items-center text-gray-700">
+                      <div className="w-2 h-2 bg-garrison-red rounded-full mr-3"></div>
+                      Detailed disease profiles and symptoms
+                    </li>
+                    <li className="flex items-center text-gray-700">
+                      <div className="w-2 h-2 bg-garrison-red rounded-full mr-3"></div>
+                      Treatment options and medications
+                    </li>
+                    <li className="flex items-center text-gray-700">
+                      <div className="w-2 h-2 bg-garrison-red rounded-full mr-3"></div>
+                      Prevention and lifestyle recommendations
+                    </li>
+                    <li className="flex items-center text-gray-700">
+                      <div className="w-2 h-2 bg-garrison-red rounded-full mr-3"></div>
+                      Visual aids and infographics
+                    </li>
+                  </ul>
+                  <Button className="garrison-btn-primary">
+                    Browse Disease Information
+                  </Button>
                 </div>
-                <h3 className="text-xl font-semibold mb-2">{service.title}</h3>
-                <p className="text-muted-foreground">{service.description}</p>
-              </HealthCard>
-            ))}
+                <div className="lg:text-center">
+                  <div className="bg-gray-100 rounded-lg p-8 h-64 flex items-center justify-center">
+                    <div className="text-center">
+                      <FileText className="h-16 w-16 text-garrison-teal mx-auto mb-4" />
+                      <p className="text-gray-600">Disease Information Images</p>
+                      <p className="text-sm text-gray-500">Visual resources coming soon</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Health Consultations */}
+          <div id="consultations" className="mb-20">
+            <div className="garrison-card p-8 md:p-12">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div className="lg:order-2">
+                  <div className="flex items-center mb-6">
+                    <UserCheck className="h-12 w-12 text-garrison-teal mr-4" />
+                    <h2 className="text-3xl font-bold text-gray-900">Health Consultations</h2>
+                  </div>
+                  <p className="text-lg text-gray-600 mb-6">
+                    Get professional health advice from our qualified practitioners. Our consultation 
+                    services provide personalized medical guidance to help you make informed decisions 
+                    about your health and treatment options.
+                  </p>
+                  
+                  {/* Consultant Profile */}
+                  <div className="bg-gray-50 rounded-lg p-6 mb-6">
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">Meet Your Health Consultant</h3>
+                    <h4 className="text-lg font-medium text-garrison-teal mb-3">Immaculate Nakamya</h4>
+                    <p className="text-gray-600 mb-4">
+                      Health Practitioner at Garrison Health with extensive experience in primary healthcare, 
+                      preventive medicine, and patient education. Dedicated to providing compassionate, 
+                      evidence-based healthcare guidance.
+                    </p>
+                    <p className="text-sm text-gray-700 italic mb-4">
+                      "Consult Immaculate Nakamya, a health practitioner at Garrison Health."
+                    </p>
+                  </div>
+                  
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <Button asChild className="garrison-btn-primary">
+                      <a 
+                        href="https://wa.me/256745101519?text=Hello%20Immaculate,%20I%20would%20like%20to%20schedule%20a%20health%20consultation"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <MessageSquare className="mr-2 h-4 w-4" />
+                        WhatsApp Consultation
+                      </a>
+                    </Button>
+                    <Button asChild className="garrison-btn-outline">
+                      <a href="tel:+256745101519">
+                        Call +256 745 101 519
+                      </a>
+                    </Button>
+                  </div>
+                </div>
+                
+                <div className="lg:order-1 lg:text-center">
+                  <div className="bg-gradient-to-br from-garrison-teal to-garrison-teal-dark rounded-lg p-8 h-64 flex items-center justify-center text-white">
+                    <div className="text-center">
+                      <div className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span className="text-2xl font-bold">IN</span>
+                      </div>
+                      <h3 className="text-lg font-semibold">Immaculate Nakamya</h3>
+                      <p className="text-white/80">Health Practitioner</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Health Education */}
+          <div id="education" className="mb-20">
+            <div className="garrison-card p-8 md:p-12">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div>
+                  <div className="flex items-center mb-6">
+                    <BookOpen className="h-12 w-12 text-garrison-teal mr-4" />
+                    <h2 className="text-3xl font-bold text-gray-900">Health Education</h2>
+                  </div>
+                  <p className="text-lg text-gray-600 mb-6">
+                    Stay informed with our weekly health education programs. We provide regularly updated 
+                    educational content covering various health topics, preventive care strategies, and 
+                    wellness tips tailored for the Ugandan context.
+                  </p>
+                  
+                  <div className="bg-garrison-red/10 border-l-4 border-garrison-red p-4 mb-6">
+                    <div className="flex items-center">
+                      <Calendar className="h-5 w-5 text-garrison-red mr-2" />
+                      <span className="font-semibold text-garrison-red">Updated Weekly</span>
+                    </div>
+                    <p className="text-sm text-gray-700 mt-2">
+                      New health education content is published every week to keep you informed 
+                      about the latest health trends and recommendations.
+                    </p>
+                  </div>
+                  
+                  <ul className="space-y-3 mb-8">
+                    <li className="flex items-center text-gray-700">
+                      <div className="w-2 h-2 bg-garrison-red rounded-full mr-3"></div>
+                      Weekly health tips and advice
+                    </li>
+                    <li className="flex items-center text-gray-700">
+                      <div className="w-2 h-2 bg-garrison-red rounded-full mr-3"></div>
+                      Preventive care guidelines
+                    </li>
+                    <li className="flex items-center text-gray-700">
+                      <div className="w-2 h-2 bg-garrison-red rounded-full mr-3"></div>
+                      Seasonal health recommendations
+                    </li>
+                    <li className="flex items-center text-gray-700">
+                      <div className="w-2 h-2 bg-garrison-red rounded-full mr-3"></div>
+                      Community health initiatives
+                    </li>
+                  </ul>
+                  
+                  <Button asChild className="garrison-btn-primary">
+                    <Link to="/health-articles">
+                      View Health Education Content
+                    </Link>
+                  </Button>
+                </div>
+                <div className="lg:text-center">
+                  <div className="bg-gray-100 rounded-lg p-8 h-64 flex items-center justify-center">
+                    <div className="text-center">
+                      <BookOpen className="h-16 w-16 text-garrison-teal mx-auto mb-4" />
+                      <p className="text-gray-600">Weekly Health Education</p>
+                      <p className="text-sm text-gray-500">Updated every week</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
-      
-      <section className="py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-health-red-light rounded-lg p-8 text-center">
-            <h2 className="text-2xl md:text-3xl font-bold mb-6">Ready to prioritize your health?</h2>
-            <p className="text-lg text-muted-foreground mb-8 max-w-3xl mx-auto">
-              Contact us today to learn more about our services and how we can support your health journey.
-            </p>
-            <Button asChild className="health-btn-primary px-8 py-3 text-base">
+
+      {/* Call to Action */}
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold text-gray-900 mb-6">
+            Ready to Get Started?
+          </h2>
+          <p className="text-lg text-gray-600 mb-8">
+            Contact us today to learn more about our services or schedule a consultation
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button asChild className="garrison-btn-primary">
               <Link to="/contact">Contact Us</Link>
+            </Button>
+            <Button asChild className="garrison-btn-outline">
+              <a href="tel:+256745101519">Call Now</a>
             </Button>
           </div>
         </div>

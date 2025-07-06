@@ -1,102 +1,83 @@
 
-import { Heart, Mail, Phone, MapPin } from "lucide-react";
+import { MapPin, Phone, Mail, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="bg-health-green-light text-foreground">
+    <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="col-span-1 md:col-span-1">
-            <div className="flex items-center">
-              <img src="/lovable-uploads/d3c3b86e-3882-4112-b6e3-6890acabf27d.png" alt="Garrison Health Logo" className="h-10 w-auto" />
-              <span className="ml-2 text-xl font-bold">Garrison Health</span>
+          {/* Company Info */}
+          <div className="col-span-1 md:col-span-2">
+            <div className="flex items-center space-x-3 mb-4">
+              <div className="w-10 h-10 bg-garrison-teal rounded-full flex items-center justify-center">
+                <span className="text-white font-bold text-xl">G</span>
+              </div>
+              <div>
+                <h3 className="text-xl font-bold">Garrison Health</h3>
+                <p className="text-sm text-garrison-red italic">Your health, Our priority</p>
+              </div>
             </div>
-            
-            <p className="mt-4 text-sm">
-              Providing reliable medical information and healthcare services to improve the health and wellbeing of our community.
+            <p className="text-gray-300 mb-4 max-w-md">
+              Providing comprehensive healthcare services and reliable medical information 
+              to improve the health and wellbeing of our community in Uganda and beyond.
+            </p>
+            <p className="text-sm text-gray-400">
+              Founded by <span className="text-garrison-teal font-semibold">Isiah Kasule</span>
             </p>
           </div>
-          
+
+          {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
+            <h4 className="text-lg font-semibold mb-4 text-garrison-teal">Quick Links</h4>
             <ul className="space-y-2">
-              <li>
-                <Link to="/" className="text-sm hover:text-primary transition-colors">Home</Link>
-              </li>
-              <li>
-                <Link to="/about" className="text-sm hover:text-primary transition-colors">About Us</Link>
-              </li>
-              <li>
-                <Link to="/articles" className="text-sm hover:text-primary transition-colors">Health Articles</Link>
-              </li>
-              <li>
-                <Link to="/services" className="text-sm hover:text-primary transition-colors">Services</Link>
-              </li>
-              <li>
-                <Link to="/contact" className="text-sm hover:text-primary transition-colors">Contact</Link>
-              </li>
+              <li><Link to="/" className="text-gray-300 hover:text-white transition-colors">Home</Link></li>
+              <li><Link to="/about" className="text-gray-300 hover:text-white transition-colors">About</Link></li>
+              <li><Link to="/services" className="text-gray-300 hover:text-white transition-colors">Services</Link></li>
+              <li><Link to="/health-articles" className="text-gray-300 hover:text-white transition-colors">Health Articles</Link></li>
+              <li><Link to="/contact" className="text-gray-300 hover:text-white transition-colors">Contact</Link></li>
             </ul>
           </div>
-          
+
+          {/* Contact Info */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Services</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/services#consultations" className="text-sm hover:text-primary transition-colors">
-                  Health Consultations
-                </Link>
-              </li>
-              <li>
-                <Link to="/services#information" className="text-sm hover:text-primary transition-colors">
-                  Medical Information
-                </Link>
-              </li>
-              <li>
-                <Link to="/services#education" className="text-sm hover:text-primary transition-colors">
-                  Health Education
-                </Link>
-              </li>
-              <li>
-                <Link to="/services#resources" className="text-sm hover:text-primary transition-colors">
-                  Health Resources
-                </Link>
-              </li>
-            </ul>
-          </div>
-          
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
-            <ul className="space-y-2">
-              <li className="flex items-start">
-                <MapPin className="h-5 w-5 mr-2 flex-shrink-0 text-health-red" />
-                <span className="text-sm">Ntinda, Kampala, Uganda</span>
-              </li>
-              <li className="flex items-start">
-                <Phone className="h-5 w-5 mr-2 flex-shrink-0 text-health-red" />
-                <div className="text-sm">
-                  <a href="tel:+256756530349" className="hover:text-primary transition-colors block font-medium">
-                    +256 756 530 349
+            <h4 className="text-lg font-semibold mb-4 text-garrison-teal">Contact Us</h4>
+            <div className="space-y-3">
+              <div className="flex items-start space-x-3">
+                <MapPin className="h-5 w-5 text-garrison-red mt-1 flex-shrink-0" />
+                <span className="text-gray-300">Kampala, Uganda</span>
+              </div>
+              <div className="flex items-center space-x-3">
+                <Phone className="h-5 w-5 text-garrison-red flex-shrink-0" />
+                <div>
+                  <a href="tel:+256745101519" className="text-gray-300 hover:text-white transition-colors block">
+                    +256 745 101 519
                   </a>
-                  <a href="tel:+256761281222" className="hover:text-primary transition-colors block text-muted-foreground">
-                    Alternative: +256 761 281 222
+                  <a href="tel:+256761281222" className="text-gray-400 hover:text-gray-300 transition-colors text-sm">
+                    +256 761 281 222 (Alt)
                   </a>
                 </div>
-              </li>
-              <li className="flex items-center">
-                <Mail className="h-5 w-5 mr-2 flex-shrink-0 text-health-red" />
-                <a href="mailto:garrisonhealth147@gmail.com" className="text-sm hover:text-primary transition-colors">
+              </div>
+              <div className="flex items-center space-x-3">
+                <Mail className="h-5 w-5 text-garrison-red flex-shrink-0" />
+                <a href="mailto:garrisonhealth147@gmail.com" className="text-gray-300 hover:text-white transition-colors">
                   garrisonhealth147@gmail.com
                 </a>
-              </li>
-            </ul>
+              </div>
+            </div>
           </div>
         </div>
-        
-        <div className="mt-8 pt-8 border-t border-health-green">
-          <p className="text-sm text-center">
-            &copy; {new Date().getFullYear()} Garrison Health. All rights reserved. Founded by Isiah Kasule.
-          </p>
+
+        <div className="mt-8 pt-8 border-t border-gray-800">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <p className="text-gray-400 text-sm">
+              © {new Date().getFullYear()} Garrison Health. All rights reserved.
+            </p>
+            <div className="flex items-center mt-4 md:mt-0">
+              <Heart className="h-4 w-4 text-garrison-red mr-2" />
+              <span className="text-gray-400 text-sm">Made with care for your health</span>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

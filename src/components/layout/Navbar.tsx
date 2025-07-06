@@ -7,115 +7,87 @@ import { Button } from "@/components/ui/button";
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
   return (
-    <header className="sticky top-0 bg-white/95 backdrop-blur-sm shadow-sm z-50">
+    <header className="sticky top-0 bg-white/95 backdrop-blur-sm shadow-sm z-50 border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center py-4 md:space-x-10">
-          <div className="flex justify-start lg:w-0 lg:flex-1">
-            <Link to="/" className="flex items-center">
-              <img src="/lovable-uploads/d3c3b86e-3882-4112-b6e3-6890acabf27d.png" alt="Garrison Health Logo" className="h-12 w-auto" />
-              <span className="ml-2 text-xl font-bold text-foreground">Garrison Health</span>
+        <div className="flex justify-between items-center py-4">
+          <div className="flex items-center">
+            <Link to="/" className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-garrison-teal rounded-full flex items-center justify-center">
+                <span className="text-white font-bold text-xl">G</span>
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">Garrison Health</h1>
+                <p className="text-sm text-garrison-red italic">Your health, Our priority</p>
+              </div>
             </Link>
           </div>
-          
-          <div className="-mr-2 -my-2 md:hidden">
-            <Button
-              variant="ghost"
-              onClick={toggleMenu}
-              aria-label="Toggle menu"
-              className="rounded-md p-2"
-            >
-              {isMenuOpen ? (
-                <X className="h-6 w-6" aria-hidden="true" />
-              ) : (
-                <Menu className="h-6 w-6" aria-hidden="true" />
-              )}
-            </Button>
-          </div>
-          
+
+          {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8">
-            <Link to="/" className="text-base font-medium text-foreground hover:text-primary transition-colors">
+            <Link to="/" className="text-gray-700 hover:text-garrison-teal font-medium transition-colors">
               Home
             </Link>
-            <Link to="/about" className="text-base font-medium text-foreground hover:text-primary transition-colors">
+            <Link to="/about" className="text-gray-700 hover:text-garrison-teal font-medium transition-colors">
               About
             </Link>
-            <Link to="/articles" className="text-base font-medium text-foreground hover:text-primary transition-colors">
-              Health Articles
-            </Link>
-            <Link to="/services" className="text-base font-medium text-foreground hover:text-primary transition-colors">
+            <Link to="/services" className="text-gray-700 hover:text-garrison-teal font-medium transition-colors">
               Services
             </Link>
-            <Link to="/contact" className="text-base font-medium text-foreground hover:text-primary transition-colors">
+            <Link to="/health-articles" className="text-gray-700 hover:text-garrison-teal font-medium transition-colors">
+              Health Articles
+            </Link>
+            <Link to="/contact" className="text-gray-700 hover:text-garrison-teal font-medium transition-colors">
               Contact
             </Link>
           </nav>
-          
-          <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-            <a href="tel:+256756530349" className="flex items-center text-health-green-dark hover:text-primary transition-colors">
-              <Phone className="h-4 w-4 mr-1" />
-              <span>+256756530349</span>
+
+          {/* Contact Info */}
+          <div className="hidden lg:flex items-center space-x-4">
+            <a href="tel:+256745101519" className="flex items-center text-garrison-teal hover:text-garrison-teal-dark transition-colors">
+              <Phone className="h-4 w-4 mr-2" />
+              <span className="font-medium">+256 745 101 519</span>
             </a>
           </div>
+
+          {/* Mobile menu button */}
+          <div className="md:hidden">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </Button>
+          </div>
         </div>
-      </div>
-      
-      {/* Mobile menu */}
-      <div className={`${isMenuOpen ? 'block' : 'hidden'} md:hidden`}>
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white shadow-md">
-          <Link 
-            to="/" 
-            className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-health-green-light"
-            onClick={toggleMenu}
-          >
-            Home
-          </Link>
-          
-          <Link 
-            to="/about" 
-            className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-health-green-light"
-            onClick={toggleMenu}
-          >
-            About
-          </Link>
-          
-          <Link 
-            to="/articles" 
-            className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-health-green-light"
-            onClick={toggleMenu}
-          >
-            Health Articles
-          </Link>
-          
-          <Link 
-            to="/services" 
-            className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-health-green-light"
-            onClick={toggleMenu}
-          >
-            Services
-          </Link>
-          
-          <Link 
-            to="/contact" 
-            className="block px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-health-green-light"
-            onClick={toggleMenu}
-          >
-            Contact
-          </Link>
-          
-          <a 
-            href="tel:+256756530349" 
-            className="flex items-center px-3 py-2 rounded-md text-base font-medium text-foreground hover:bg-health-green-light"
-            onClick={toggleMenu}
-          >
-            <Phone className="h-4 w-4 mr-2" />
-            <span>+256756530349</span>
-          </a>
-        </div>
+
+        {/* Mobile Navigation */}
+        {isMenuOpen && (
+          <div className="md:hidden py-4 border-t border-gray-200">
+            <div className="flex flex-col space-y-3">
+              <Link to="/" className="text-gray-700 hover:text-garrison-teal font-medium py-2" onClick={() => setIsMenuOpen(false)}>
+                Home
+              </Link>
+              <Link to="/about" className="text-gray-700 hover:text-garrison-teal font-medium py-2" onClick={() => setIsMenuOpen(false)}>
+                About
+              </Link>
+              <Link to="/services" className="text-gray-700 hover:text-garrison-teal font-medium py-2" onClick={() => setIsMenuOpen(false)}>
+                Services
+              </Link>
+              <Link to="/health-articles" className="text-gray-700 hover:text-garrison-teal font-medium py-2" onClick={() => setIsMenuOpen(false)}>
+                Health Articles
+              </Link>
+              <Link to="/contact" className="text-gray-700 hover:text-garrison-teal font-medium py-2" onClick={() => setIsMenuOpen(false)}>
+                Contact
+              </Link>
+              <a href="tel:+256745101519" className="flex items-center text-garrison-teal py-2">
+                <Phone className="h-4 w-4 mr-2" />
+                +256 745 101 519
+              </a>
+            </div>
+          </div>
+        )}
       </div>
     </header>
   );

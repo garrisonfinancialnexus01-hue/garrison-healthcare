@@ -1,106 +1,116 @@
 
 import Layout from "@/components/layout/Layout";
-import { Heart, ThumbsUp, Lightbulb, Award } from "lucide-react";
-import HealthCard from "@/components/ui/HealthCard";
+import { Users, Target, Eye, Heart } from "lucide-react";
 
 const About = () => {
   return (
     <Layout>
-      <div className="bg-health-green-light py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-3xl md:text-4xl font-bold text-foreground">About Garrison Health</h1>
-            <p className="mt-4 text-lg text-muted-foreground max-w-3xl mx-auto">
-              Learn about our mission, vision, and the team behind Garrison Health
-            </p>
-          </div>
+      {/* Hero Section */}
+      <section className="bg-gradient-to-r from-garrison-teal to-garrison-teal-dark text-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">About Garrison Health</h1>
+          <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto">
+            Dedicated to improving healthcare accessibility and education in Uganda
+          </p>
         </div>
-      </div>
-      
-      <section className="py-16">
+      </section>
+
+      {/* Our Story */}
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Removed the grid and the image div, using full width for the mission text */}
-          <div>
-            <h2 className="section-title mb-6">Our Mission</h2>
-            <p className="text-muted-foreground mb-6">
-              At Garrison Health, our mission is to provide accurate, accessible, and culturally relevant health information to empower individuals to make informed decisions about their health and wellbeing.
-            </p>
-            <p className="text-muted-foreground mb-6">
-              We are committed to improving health literacy and promoting preventive healthcare measures in our communities. We believe that access to reliable health information is a fundamental right and a key component of healthcare equity.
-            </p>
-            <p className="text-muted-foreground">
-              Through our platform, we aim to bridge the gap between complex medical information and public understanding, making health knowledge accessible to all.
-            </p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900 mb-6">Our Story</h2>
+              <p className="text-lg text-gray-600 mb-6">
+                Garrison Health was founded with a simple yet powerful vision: to make quality healthcare 
+                information and services accessible to everyone in Uganda. We recognized the critical need 
+                for reliable health education and professional medical guidance in our communities.
+              </p>
+              <p className="text-lg text-gray-600 mb-6">
+                Our journey began with the understanding that health literacy is fundamental to 
+                individual and community wellbeing. We're committed to bridging the gap between 
+                complex medical information and public understanding.
+              </p>
+              <p className="text-lg text-gray-600">
+                Today, we continue to serve our community with dedication, providing comprehensive 
+                healthcare services and educational resources that empower individuals to make 
+                informed decisions about their health.
+              </p>
+            </div>
+            <div className="lg:text-center">
+              <div className="inline-block p-8 bg-garrison-teal/10 rounded-2xl">
+                <div className="w-64 h-64 bg-garrison-teal/20 rounded-full flex items-center justify-center">
+                  <Heart className="h-24 w-24 text-garrison-teal" />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
-      
-      <section className="py-16 bg-health-green-light/50">
+
+      {/* Founder Section */}
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="section-title">Our Values</h2>
-            <p className="mt-4 text-muted-foreground max-w-3xl mx-auto">
-              The principles that guide our work and interactions
-            </p>
+          <div className="text-center mb-16">
+            <h2 className="section-title">Our Founder</h2>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <HealthCard className="text-center">
-              <div className="inline-flex items-center justify-center p-3 bg-health-red-light rounded-full mb-4">
-                <Heart className="h-6 w-6 text-health-red-dark" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Compassion</h3>
-              <p className="text-muted-foreground">We approach our work with empathy and understanding of the diverse health needs in our communities.</p>
-            </HealthCard>
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="w-32 h-32 bg-garrison-teal rounded-full flex items-center justify-center mx-auto mb-8">
+              <span className="text-white text-4xl font-bold">IK</span>
+            </div>
             
-            <HealthCard className="text-center">
-              <div className="inline-flex items-center justify-center p-3 bg-health-red-light rounded-full mb-4">
-                <ThumbsUp className="h-6 w-6 text-health-red-dark" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Integrity</h3>
-              <p className="text-muted-foreground">We uphold the highest standards of honesty, transparency, and ethical conduct in all our operations.</p>
-            </HealthCard>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">Isiah Kasule</h3>
+            <p className="text-lg text-garrison-teal font-semibold mb-6">Founder & CEO</p>
             
-            <HealthCard className="text-center">
-              <div className="inline-flex items-center justify-center p-3 bg-health-red-light rounded-full mb-4">
-                <Lightbulb className="h-6 w-6 text-health-red-dark" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Innovation</h3>
-              <p className="text-muted-foreground">We continuously seek new and better ways to deliver health information and services to our audiences.</p>
-            </HealthCard>
+            <p className="text-lg text-gray-600 mb-6">
+              Isiah Kasule is a visionary healthcare advocate and the driving force behind Garrison Health. 
+              With a deep commitment to improving healthcare accessibility in Uganda, Isiah founded the 
+              organization to address the critical gaps in health education and medical services.
+            </p>
             
-            <HealthCard className="text-center">
-              <div className="inline-flex items-center justify-center p-3 bg-health-red-light rounded-full mb-4">
-                <Award className="h-6 w-6 text-health-red-dark" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Excellence</h3>
-              <p className="text-muted-foreground">We strive for excellence in the quality and accuracy of the health information we provide.</p>
-            </HealthCard>
+            <p className="text-lg text-gray-600">
+              His passion for community health and dedication to empowering individuals through knowledge 
+              has shaped Garrison Health's mission to be a trusted partner in everyone's health journey.
+            </p>
           </div>
         </div>
       </section>
-      
-      <section className="py-16">
+
+      {/* Mission, Vision, Values */}
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div className="order-2 md:order-1 flex justify-center">
-              <img
-                src="/lovable-uploads/65dcfa46-d1e7-4967-a00c-60683c8503ac.png"
-                alt="Isiah Kasule"
-                className="w-full max-w-md rounded-lg shadow-lg object-cover"
-              />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-garrison-red rounded-full flex items-center justify-center mx-auto mb-6">
+                <Target className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Mission</h3>
+              <p className="text-gray-600">
+                To provide accessible, reliable healthcare information and professional medical services 
+                that empower individuals and communities to achieve optimal health and wellbeing.
+              </p>
             </div>
-            <div className="order-1 md:order-2">
-              <h2 className="section-title mb-6">Our Founder</h2>
-              <h3 className="text-2xl font-semibold mb-4">Isiah Kasule</h3>
-              <p className="text-muted-foreground mb-6">
-                Isiah Kasule is the visionary founder and CEO of Garrison Health. With a background in healthcare and a passion for health education, Isiah established Garrison Health to address the gap in accessible, reliable health information in Uganda and beyond.
+            
+            <div className="text-center">
+              <div className="w-16 h-16 bg-garrison-teal rounded-full flex items-center justify-center mx-auto mb-6">
+                <Eye className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Vision</h3>
+              <p className="text-gray-600">
+                To be Uganda's leading healthcare education and service provider, creating healthier 
+                communities through knowledge, compassion, and quality care.
               </p>
-              <p className="text-muted-foreground mb-6">
-                Having witnessed firsthand the challenges many people face in accessing accurate health information, Isiah was motivated to create a platform that would empower individuals with knowledge about their health, enabling them to make informed decisions and take proactive steps towards better health outcomes.
-              </p>
-              <p className="text-muted-foreground">
-                Under Isiah's leadership, Garrison Health has grown from a small local initiative to a trusted source of health information, serving communities across Uganda with plans for expansion throughout East Africa.
+            </div>
+            
+            <div className="text-center">
+              <div className="w-16 h-16 bg-garrison-red rounded-full flex items-center justify-center mx-auto mb-6">
+                <Heart className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Our Values</h3>
+              <p className="text-gray-600">
+                Compassion, integrity, excellence, and accessibility guide everything we do. 
+                We believe healthcare is a fundamental right that should be available to all.
               </p>
             </div>
           </div>

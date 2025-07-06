@@ -5,41 +5,26 @@
 
 @layer base {
   :root {
-    --background: 180 50% 97%; /* Pale teal background */
-    --foreground: 180 10% 10%; /* Dark teal text */
-
-    --card: 180 50% 98%; /* Light teal card background */
-    --card-foreground: 180 10% 10%;
-
-    --primary: 180 52% 28%; /* Updated to match new teal */
-    --primary-foreground: 180 100% 98%;
-
-    --secondary: 1 59% 56%; /* Updated to match new red */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 180 52% 28%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 1 59% 56%;
     --secondary-foreground: 0 0% 98%;
-
-    --muted: 180 30% 96%; /* Very light teal */
-    --muted-foreground: 180 10% 45%;
-
-    --accent: 180 30% 96%; /* Light teal accent */
-    --accent-foreground: 180 10% 10%;
-
-    --destructive: 1 59% 56%; /* Updated to match new red */
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-
-    --border: 180 20% 90%; /* Teal border */
-    --input: 180 20% 90%;
-    --ring: 180 52% 28%;
-
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
     --radius: 0.5rem;
-
-    --sidebar-background: 180 50% 98%;
-    --sidebar-foreground: 180 10% 26%;
-    --sidebar-primary: 180 52% 28%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 180 30% 96%;
-    --sidebar-accent-foreground: 180 10% 10%;
-    --sidebar-border: 180 20% 90%;
-    --sidebar-ring: 180 52% 28%;
   }
 }
 
@@ -47,31 +32,33 @@
   * {
     @apply border-border;
   }
-
   body {
     @apply bg-background text-foreground;
   }
 }
 
 @layer components {
-  .health-card {
-    @apply bg-white rounded-lg shadow-md transition-all hover:shadow-lg border border-health-green/20;
+  .garrison-card {
+    @apply bg-white rounded-lg shadow-lg transition-all hover:shadow-xl border border-gray-100;
   }
   
   .section-title {
-    @apply text-2xl md:text-3xl font-bold text-foreground relative pb-2 inline-block;
+    @apply text-3xl md:text-4xl font-bold text-gray-900 text-center mb-4;
   }
   
-  .section-title::after {
-    content: '';
-    @apply absolute bottom-0 left-0 w-2/3 h-1 bg-health-green rounded;
+  .section-subtitle {
+    @apply text-lg text-gray-600 text-center mb-12 max-w-3xl mx-auto;
   }
   
-  .health-btn-primary {
-    @apply bg-health-green hover:bg-health-green-dark text-foreground font-medium rounded-md transition-colors;
+  .garrison-btn-primary {
+    @apply bg-[#058789] hover:bg-[#046769] text-white font-semibold py-3 px-6 rounded-lg transition-colors;
   }
   
-  .health-btn-secondary {
-    @apply bg-health-red hover:bg-health-red-dark text-foreground font-medium rounded-md transition-colors;
+  .garrison-btn-secondary {
+    @apply bg-[#E03F3E] hover:bg-[#c63534] text-white font-semibold py-3 px-6 rounded-lg transition-colors;
+  }
+  
+  .garrison-btn-outline {
+    @apply border-2 border-[#058789] text-[#058789] hover:bg-[#058789] hover:text-white font-semibold py-3 px-6 rounded-lg transition-colors;
   }
 }
