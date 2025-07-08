@@ -23,7 +23,7 @@ const Hero = () => {
                   Our Services <ArrowRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
-              <Button asChild className="bg-garrison-teal hover:bg-garrison-teal-dark text-white border-garrison-teal text-lg px-8 py-4">
+              <Button asChild className="bg-white text-garrison-teal hover:bg-gray-50 border-white text-lg px-8 py-4">
                 <Link to="/contact">
                   Contact Us
                 </Link>
