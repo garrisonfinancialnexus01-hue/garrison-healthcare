@@ -1,6 +1,6 @@
 
 import Layout from "@/components/layout/Layout";
-import { MapPin, Phone, Mail, Clock, MessageSquare } from "lucide-react";
+import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
@@ -122,7 +122,7 @@ const Contact = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <MessageSquare className="mr-2 h-4 w-4" />
+                    <img src="/lovable-uploads/00e52556-ed3d-4b6a-baa5-494f09fd2008.png" alt="WhatsApp" className="mr-2 h-4 w-4" />
                     Start WhatsApp Chat
                   </a>
                 </Button>
@@ -251,7 +251,7 @@ const Contact = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <MessageSquare className="mr-2 h-5 w-5" />
+                <img src="/lovable-uploads/00e52556-ed3d-4b6a-baa5-494f09fd2008.png" alt="WhatsApp" className="mr-2 h-5 w-5" />
                 Emergency WhatsApp
               </a>
             </Button>

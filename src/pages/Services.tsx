@@ -1,6 +1,6 @@
 
 import Layout from "@/components/layout/Layout";
-import { FileText, UserCheck, BookOpen, MessageSquare, Calendar, Users } from "lucide-react";
+import { FileText, UserCheck, BookOpen, Calendar, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
@@ -105,7 +105,7 @@ const Services = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        <MessageSquare className="mr-2 h-4 w-4" />
+                        <img src="/lovable-uploads/00e52556-ed3d-4b6a-baa5-494f09fd2008.png" alt="WhatsApp" className="mr-2 h-4 w-4" />
                         WhatsApp Consultation
                       </a>
                     </Button>
