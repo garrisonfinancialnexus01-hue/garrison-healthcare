@@ -7,40 +7,17 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Search, Filter, Download, Eye, MessageSquare, Phone, Video, User, Calendar, DollarSign, LogOut, Activity, Clock, TrendingUp, Users, Shield } from "lucide-react";
 import DoctorLogin from "@/components/auth/DoctorLogin";
 import { useToast } from "@/hooks/use-toast";
-
-// Interface for consultation data
-interface Consultation {
-  id: string;
-  patientName: string;
-  age: number;
-  gender: string;
-  contact: string;
-  nationalId?: string;
-  condition: string;
-  type: "acute" | "chronic";
-  system: string;
-  fee: number;
-  paid: boolean;
-  whatsappSent: boolean;
-  status: "completed" | "pending" | "awaiting_payment" | "in_progress";
-  consultationMode: "chat" | "video" | "phone" | "in-person";
-  submittedAt: Date;
-  duration?: string;
-  rating?: number;
-  symptomsDescription?: string;
-  onsetDate?: Date;
-  medicalHistory?: string;
-  attachments?: string[];
-}
+import { useConsultations, Consultation } from "@/hooks/useConsultations";
+import { format } from "date-fns";
 
 const DoctorDashboard = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [authToken, setAuthToken] = useState<string | null>(null);
   const [userEmail, setUserEmail] = useState<string>("");
-  const [consultations, setConsultations] = useState<Consultation[]>([]);
   const [filters, setFilters] = useState({
     type: "all",
     system: "all",
@@ -49,6 +26,7 @@ const DoctorDashboard = () => {
     dateRange: "all"
   });
   const { toast } = useToast();
+  const { consultations, updateConsultation } = useConsultations();
 
   // Check for existing session on component mount
   useEffect(() => {
@@ -79,32 +57,6 @@ const DoctorDashboard = () => {
     }
   }, []);
 
-  // Load consultations from localStorage on component mount
-  useEffect(() => {
-    if (isLoggedIn) {
-      const savedConsultations = localStorage.getItem('doctor_consultations');
-      if (savedConsultations) {
-        try {
-          const parsed = JSON.parse(savedConsultations);
-          setConsultations(parsed.map((c: any) => ({
-            ...c,
-            submittedAt: new Date(c.submittedAt),
-            onsetDate: c.onsetDate ? new Date(c.onsetDate) : undefined
-          })));
-        } catch (error) {
-          console.error('Error loading consultations:', error);
-        }
-      }
-    }
-  }, [isLoggedIn]);
-
-  // Save consultations to localStorage whenever they change
-  useEffect(() => {
-    if (consultations.length > 0) {
-      localStorage.setItem('doctor_consultations', JSON.stringify(consultations));
-    }
-  }, [consultations]);
-
   const handleLogin = (token: string) => {
     setAuthToken(token);
     setUserEmail(localStorage.getItem('doctor_email') || "");
@@ -120,6 +72,12 @@ const DoctorDashboard = () => {
     toast({
       title: "Logged Out",
       description: "You have been successfully logged out.",
+    });
+  };
+
+  const handleStatusChange = (consultationId: string, newStatus: string) => {
+    updateConsultation(consultationId, { 
+      status: newStatus as "completed" | "pending" | "awaiting_payment" | "in_progress" 
     });
   };
 
@@ -139,8 +97,18 @@ const DoctorDashboard = () => {
 
   const stats = useMemo(() => {
     const today = new Date();
-    const thisWeek = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
-    const thisMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+
+    const todayConsultations = consultations.filter(c => 
+      new Date(c.submittedAt) >= todayStart
+    ).length;
+
+    const monthlyRevenue = consultations.filter(c => 
+      c.paid && new Date(c.submittedAt) >= monthStart
+    ).reduce((sum, c) => sum + c.fee, 0);
+
+    const activePatientsCount = consultations.filter(c => c.paid).length;
 
     return {
       total: consultations.length,
@@ -151,18 +119,12 @@ const DoctorDashboard = () => {
       inProgress: consultations.filter(c => c.status === "in_progress").length,
       awaitingPayment: consultations.filter(c => c.status === "awaiting_payment").length,
       totalRevenue: consultations.filter(c => c.paid).reduce((sum, c) => sum + c.fee, 0),
-      todayConsultations: consultations.filter(c => 
-        new Date(c.submittedAt).toDateString() === today.toDateString()
-      ).length,
+      todayConsultations,
       weeklyConsultations: consultations.filter(c => 
-        new Date(c.submittedAt) >= thisWeek
+        new Date(c.submittedAt) >= new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000)
       ).length,
-      monthlyRevenue: consultations.filter(c => 
-        c.paid && new Date(c.submittedAt) >= thisMonth
-      ).reduce((sum, c) => sum + c.fee, 0),
-      averageRating: consultations.filter(c => c.rating).reduce((sum, c, _, arr) => 
-        sum + (c.rating || 0) / arr.length, 0
-      ) || 0
+      monthlyRevenue,
+      activePatients: activePatientsCount
     };
   }, [consultations]);
 
@@ -203,7 +165,7 @@ const DoctorDashboard = () => {
     }
 
     const csvContent = [
-      ['Patient Name', 'Age', 'Gender', 'Contact', 'Condition', 'Type', 'System', 'Fee', 'Status', 'Date'].join(','),
+      ['Patient Name', 'Age', 'Gender', 'Contact', 'Condition', 'Type', 'System', 'Fee', 'Payment', 'Status', 'Mode', 'Date'].join(','),
       ...consultations.map(c => [
         c.patientName,
         c.age,
@@ -213,7 +175,9 @@ const DoctorDashboard = () => {
         c.type,
         c.system,
         c.fee,
+        c.paid ? 'Paid' : 'Unpaid',
         c.status,
+        c.consultationMode,
         c.submittedAt.toLocaleDateString()
       ].join(','))
     ].join('\n');
@@ -226,6 +190,78 @@ const DoctorDashboard = () => {
     a.click();
     window.URL.revokeObjectURL(url);
   };
+
+  const PatientDetailsDialog = ({ consultation }: { consultation: Consultation }) => (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button size="sm" variant="outline" title="View Details">
+          <Eye className="h-4 w-4" />
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Patient Consultation Details</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-6">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <h3 className="font-semibold text-gray-900">Patient Information</h3>
+              <div className="mt-2 space-y-1">
+                <p><span className="font-medium">Name:</span> {consultation.patientName}</p>
+                <p><span className="font-medium">Age:</span> {consultation.age}</p>
+                <p><span className="font-medium">Gender:</span> {consultation.gender}</p>
+                <p><span className="font-medium">Contact:</span> {consultation.contact}</p>
+                {consultation.nationalId && (
+                  <p><span className="font-medium">National ID:</span> {consultation.nationalId}</p>
+                )}
+              </div>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900">Consultation Details</h3>
+              <div className="mt-2 space-y-1">
+                <p><span className="font-medium">Condition:</span> {consultation.condition}</p>
+                <p><span className="font-medium">Type:</span> {consultation.type}</p>
+                <p><span className="font-medium">System:</span> {consultation.system}</p>
+                <p><span className="font-medium">Fee:</span> {consultation.fee.toLocaleString()} UGX</p>
+                <p><span className="font-medium">Payment:</span> {consultation.paid ? 'Paid' : 'Unpaid'}</p>
+                <p><span className="font-medium">Mode:</span> {consultation.consultationMode}</p>
+                <p><span className="font-medium">Status:</span> {consultation.status}</p>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <h3 className="font-semibold text-gray-900">Symptoms Description</h3>
+            <p className="mt-2 text-gray-700 bg-gray-50 p-3 rounded">
+              {consultation.symptomsDescription}
+            </p>
+          </div>
+
+          {consultation.medicalHistory && (
+            <div>
+              <h3 className="font-semibold text-gray-900">Medical History</h3>
+              <p className="mt-2 text-gray-700 bg-gray-50 p-3 rounded">
+                {consultation.medicalHistory}
+              </p>
+            </div>
+          )}
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <h3 className="font-semibold text-gray-900">Submission Date</h3>
+              <p className="mt-2">{format(consultation.submittedAt, 'PPP p')}</p>
+            </div>
+            {consultation.onsetDate && (
+              <div>
+                <h3 className="font-semibold text-gray-900">Symptom Onset</h3>
+                <p className="mt-2">{format(consultation.onsetDate, 'PPP')}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
 
   if (!isLoggedIn) {
     return <DoctorLogin onLogin={handleLogin} />;
@@ -324,8 +360,8 @@ const DoctorDashboard = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">Active Patients</p>
-                  <p className="text-3xl font-bold text-purple-600">{stats.inProgress}</p>
-                  <p className="text-xs text-gray-500 mt-1">In progress</p>
+                  <p className="text-3xl font-bold text-purple-600">{stats.activePatients}</p>
+                  <p className="text-xs text-gray-500 mt-1">Paid consultations</p>
                 </div>
                 <Users className="h-8 w-8 text-purple-600" />
               </div>
@@ -480,7 +516,6 @@ const DoctorDashboard = () => {
                       <TableHead>Fee</TableHead>
                       <TableHead>Payment</TableHead>
                       <TableHead>Mode</TableHead>
-                      <TableHead>Duration</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead>Actions</TableHead>
                     </TableRow>
@@ -524,19 +559,24 @@ const DoctorDashboard = () => {
                           </div>
                         </TableCell>
                         <TableCell>
-                          <div className="flex items-center space-x-1">
-                            <Clock className="h-3 w-3 text-gray-400" />
-                            <span className="text-sm">{consultation.duration || "TBD"}</span>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          {getStatusBadge(consultation.status)}
+                          <Select 
+                            value={consultation.status} 
+                            onValueChange={(value) => handleStatusChange(consultation.id, value)}
+                          >
+                            <SelectTrigger className="w-32">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="completed">Completed</SelectItem>
+                              <SelectItem value="pending">Pending</SelectItem>
+                              <SelectItem value="awaiting_payment">Awaiting Payment</SelectItem>
+                              <SelectItem value="in_progress">In Progress</SelectItem>
+                            </SelectContent>
+                          </Select>
                         </TableCell>
                         <TableCell>
                           <div className="flex space-x-2">
-                            <Button size="sm" variant="outline" title="View Details">
-                              <Eye className="h-4 w-4" />
-                            </Button>
+                            <PatientDetailsDialog consultation={consultation} />
                             <Button 
                               size="sm" 
                               variant="outline"

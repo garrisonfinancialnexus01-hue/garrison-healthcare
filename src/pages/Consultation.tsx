@@ -1,10 +1,9 @@
-
 import Layout from "@/components/layout/Layout";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Stethoscope, Heart, Banknote, MessageCircle } from "lucide-react";
+import { Stethoscope, Heart, Banknote, MessageCircle, CheckCircle } from "lucide-react";
 import ConsultationForm from "@/components/consultation/ConsultationForm";
 import { conditionData } from "@/data/consultationData";
 
@@ -13,6 +12,7 @@ const Consultation = () => {
   const [selectedSystem, setSelectedSystem] = useState<string | null>(null);
   const [selectedDisease, setSelectedDisease] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const consultationFee = selectedConditionType === "acute" ? 5000 : 10000;
   const currency = "UGX";
@@ -22,10 +22,16 @@ const Consultation = () => {
     setSelectedSystem(null);
     setSelectedDisease(null);
     setShowForm(false);
+    setShowSuccess(false);
   };
 
   const handleStartConsultation = () => {
     setShowForm(true);
+  };
+
+  const handleSuccess = () => {
+    setShowForm(false);
+    setShowSuccess(true);
   };
 
   return (
@@ -42,11 +48,33 @@ const Consultation = () => {
       </section>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {showForm ? (
+        {showSuccess ? (
+          <Card className="text-center">
+            <CardContent className="py-12">
+              <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-6" />
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                Consultation Submitted Successfully!
+              </h2>
+              <p className="text-lg text-gray-600 mb-6">
+                Our health practitioner will contact you soon with your preferred consultation mode.
+              </p>
+              <p className="text-xl font-semibold text-garrison-teal mb-8">
+                Thank you!
+              </p>
+              <Button 
+                onClick={resetSelection}
+                className="garrison-btn-primary"
+              >
+                Submit Another Consultation
+              </Button>
+            </CardContent>
+          </Card>
+        ) : showForm ? (
           <ConsultationForm
             selectedDisease={{ name: selectedDisease!, system: selectedSystem! }}
             conditionType={selectedConditionType!}
             onBack={() => setShowForm(false)}
+            onSuccess={handleSuccess}
           />
         ) : (
           <>
@@ -192,19 +220,6 @@ const Consultation = () => {
                         <span>{consultationFee.toLocaleString()} {currency}</span>
                       </div>
                     </div>
-                    
-                    <div className="bg-white rounded-lg p-4 border border-garrison-teal/20">
-                      <h4 className="font-semibold mb-2 text-garrison-teal">Payment Instructions</h4>
-                      <p className="text-sm text-gray-600 mb-2">
-                        📱 Pay via Mobile Money to: <strong>Mr. Kasule</strong>
-                      </p>
-                      <p className="text-lg font-bold text-center bg-garrison-teal text-white py-2 rounded">
-                        +256761281222
-                      </p>
-                      <p className="text-xs text-gray-500 mt-2 text-center">
-                        After payment, click "Start Consultation" to proceed with WhatsApp consultation
-                      </p>
-                    </div>
                   </div>
 
                   <div className="text-center space-y-4">
@@ -218,7 +233,7 @@ const Consultation = () => {
                     
                     <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
                       <MessageCircle className="h-4 w-4" />
-                      <span>After payment, you'll be connected to Immaculate Nakamya via WhatsApp</span>
+                      <span>After payment, you'll be connected to our health practitioner</span>
                     </div>
                   </div>
                 </CardContent>
