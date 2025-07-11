@@ -1,3 +1,4 @@
+
 import Layout from "@/components/layout/Layout";
 import { useState, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -10,83 +11,36 @@ import { Search, Filter, Download, Eye, MessageSquare, Phone, Video, User, Calen
 import DoctorLogin from "@/components/auth/DoctorLogin";
 import { useToast } from "@/hooks/use-toast";
 
-// Mock data for demonstration - in real app this would come from API
-const mockConsultations = [
-  {
-    id: "1",
-    patientName: "John Doe",
-    age: 35,
-    condition: "Common Cold",
-    type: "acute",
-    system: "Respiratory System",
-    fee: 5000,
-    paid: true,
-    whatsappSent: true,
-    status: "completed",
-    consultationMode: "chat",
-    submittedAt: new Date("2024-01-15T10:30:00Z"),
-    contact: "+256701234567",
-    duration: "30 mins",
-    rating: 5
-  },
-  {
-    id: "2",
-    patientName: "Jane Smith",
-    age: 28,
-    condition: "Hypertension",
-    type: "chronic",
-    system: "Cardiovascular System",
-    fee: 10000,
-    paid: true,
-    whatsappSent: false,
-    status: "pending",
-    consultationMode: "video",
-    submittedAt: new Date("2024-01-15T14:20:00Z"),
-    contact: "+256702345678",
-    duration: "45 mins",
-    rating: null
-  },
-  {
-    id: "3",
-    patientName: "Robert Johnson",
-    age: 42,
-    condition: "Acute Gastritis",
-    type: "acute",
-    system: "Gastrointestinal System",
-    fee: 5000,
-    paid: false,
-    whatsappSent: false,
-    status: "awaiting_payment",
-    consultationMode: "phone",
-    submittedAt: new Date("2024-01-15T16:45:00Z"),
-    contact: "+256703456789",
-    duration: null,
-    rating: null
-  },
-  {
-    id: "4",
-    patientName: "Mary Nakato",
-    age: 31,
-    condition: "Diabetes Type 2",
-    type: "chronic",
-    system: "Endocrine System",
-    fee: 10000,
-    paid: true,
-    whatsappSent: true,
-    status: "in_progress",
-    consultationMode: "in-person",
-    submittedAt: new Date("2024-01-16T09:15:00Z"),
-    contact: "+256704567890",
-    duration: "60 mins",
-    rating: null
-  }
-];
+// Interface for consultation data
+interface Consultation {
+  id: string;
+  patientName: string;
+  age: number;
+  gender: string;
+  contact: string;
+  nationalId?: string;
+  condition: string;
+  type: "acute" | "chronic";
+  system: string;
+  fee: number;
+  paid: boolean;
+  whatsappSent: boolean;
+  status: "completed" | "pending" | "awaiting_payment" | "in_progress";
+  consultationMode: "chat" | "video" | "phone" | "in-person";
+  submittedAt: Date;
+  duration?: string;
+  rating?: number;
+  symptomsDescription?: string;
+  onsetDate?: Date;
+  medicalHistory?: string;
+  attachments?: string[];
+}
 
 const DoctorDashboard = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [authToken, setAuthToken] = useState<string | null>(null);
   const [userEmail, setUserEmail] = useState<string>("");
-  const [consultations, setConsultations] = useState(mockConsultations);
+  const [consultations, setConsultations] = useState<Consultation[]>([]);
   const [filters, setFilters] = useState({
     type: "all",
     system: "all",
@@ -124,6 +78,32 @@ const DoctorDashboard = () => {
       }
     }
   }, []);
+
+  // Load consultations from localStorage on component mount
+  useEffect(() => {
+    if (isLoggedIn) {
+      const savedConsultations = localStorage.getItem('doctor_consultations');
+      if (savedConsultations) {
+        try {
+          const parsed = JSON.parse(savedConsultations);
+          setConsultations(parsed.map((c: any) => ({
+            ...c,
+            submittedAt: new Date(c.submittedAt),
+            onsetDate: c.onsetDate ? new Date(c.onsetDate) : undefined
+          })));
+        } catch (error) {
+          console.error('Error loading consultations:', error);
+        }
+      }
+    }
+  }, [isLoggedIn]);
+
+  // Save consultations to localStorage whenever they change
+  useEffect(() => {
+    if (consultations.length > 0) {
+      localStorage.setItem('doctor_consultations', JSON.stringify(consultations));
+    }
+  }, [consultations]);
 
   const handleLogin = (token: string) => {
     setAuthToken(token);
@@ -210,6 +190,41 @@ const DoctorDashboard = () => {
       case "in-person": return <User className="h-4 w-4" />;
       default: return <MessageSquare className="h-4 w-4" />;
     }
+  };
+
+  const handleExportData = () => {
+    if (consultations.length === 0) {
+      toast({
+        title: "No Data to Export",
+        description: "There are no consultations to export yet.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const csvContent = [
+      ['Patient Name', 'Age', 'Gender', 'Contact', 'Condition', 'Type', 'System', 'Fee', 'Status', 'Date'].join(','),
+      ...consultations.map(c => [
+        c.patientName,
+        c.age,
+        c.gender,
+        c.contact,
+        c.condition,
+        c.type,
+        c.system,
+        c.fee,
+        c.status,
+        c.submittedAt.toLocaleDateString()
+      ].join(','))
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `consultations_${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
   };
 
   if (!isLoggedIn) {
@@ -411,12 +426,21 @@ const DoctorDashboard = () => {
                     <SelectItem value="Cardiovascular System">Cardiovascular</SelectItem>
                     <SelectItem value="Gastrointestinal System">Gastrointestinal</SelectItem>
                     <SelectItem value="Endocrine System">Endocrine</SelectItem>
+                    <SelectItem value="Nervous System">Nervous</SelectItem>
+                    <SelectItem value="Urinary System">Urinary</SelectItem>
+                    <SelectItem value="Musculoskeletal System">Musculoskeletal</SelectItem>
+                    <SelectItem value="Skin & Soft Tissue">Skin & Soft Tissue</SelectItem>
+                    <SelectItem value="ENT (Ear, Nose, Throat)">ENT</SelectItem>
+                    <SelectItem value="Reproductive System">Reproductive</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="flex items-end">
-                <Button className="garrison-btn-primary w-full">
+                <Button 
+                  className="garrison-btn-primary w-full"
+                  onClick={handleExportData}
+                >
                   <Download className="h-4 w-4 mr-2" />
                   Export Data
                 </Button>
@@ -431,89 +455,104 @@ const DoctorDashboard = () => {
             <CardTitle>Patient Consultations ({filteredConsultations.length})</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Patient Details</TableHead>
-                    <TableHead>Condition</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>System</TableHead>
-                    <TableHead>Fee</TableHead>
-                    <TableHead>Payment</TableHead>
-                    <TableHead>Mode</TableHead>
-                    <TableHead>Duration</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredConsultations.map((consultation) => (
-                    <TableRow key={consultation.id}>
-                      <TableCell>
-                        <div>
-                          <p className="font-medium">{consultation.patientName}</p>
-                          <p className="text-sm text-gray-500">Age: {consultation.age}</p>
-                          <p className="text-sm text-gray-500">{consultation.contact}</p>
-                          <p className="text-xs text-gray-400">
-                            {consultation.submittedAt.toLocaleDateString()}
-                          </p>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <p className="font-medium">{consultation.condition}</p>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant={consultation.type === "acute" ? "destructive" : "secondary"}>
-                          {consultation.type.toUpperCase()}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <p className="text-sm">{consultation.system}</p>
-                      </TableCell>
-                      <TableCell>
-                        <p className="font-medium">{consultation.fee.toLocaleString()} UGX</p>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant={consultation.paid ? "default" : "destructive"}>
-                          {consultation.paid ? "Paid" : "Unpaid"}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center space-x-2">
-                          {getConsultationModeIcon(consultation.consultationMode)}
-                          <span className="text-sm capitalize">{consultation.consultationMode}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center space-x-1">
-                          <Clock className="h-3 w-3 text-gray-400" />
-                          <span className="text-sm">{consultation.duration || "TBD"}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        {getStatusBadge(consultation.status)}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex space-x-2">
-                          <Button size="sm" variant="outline" title="View Details">
-                            <Eye className="h-4 w-4" />
-                          </Button>
-                          <Button 
-                            size="sm" 
-                            variant="outline"
-                            title="Contact via WhatsApp"
-                            onClick={() => window.open(`https://wa.me/${consultation.contact.replace('+', '')}`, '_blank')}
-                          >
-                            <img src="/lovable-uploads/00e52556-ed3d-4b6a-baa5-494f09fd2008.png" alt="WhatsApp" className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
+            {consultations.length === 0 ? (
+              <div className="text-center py-12">
+                <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                  <Calendar className="h-8 w-8 text-gray-400" />
+                </div>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No Consultations Yet</h3>
+                <p className="text-gray-500 mb-4">
+                  Patient consultations will appear here once they submit their forms.
+                </p>
+                <p className="text-sm text-gray-400">
+                  The dashboard will automatically update with real-time consultation data.
+                </p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Patient Details</TableHead>
+                      <TableHead>Condition</TableHead>
+                      <TableHead>Type</TableHead>
+                      <TableHead>System</TableHead>
+                      <TableHead>Fee</TableHead>
+                      <TableHead>Payment</TableHead>
+                      <TableHead>Mode</TableHead>
+                      <TableHead>Duration</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Actions</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredConsultations.map((consultation) => (
+                      <TableRow key={consultation.id}>
+                        <TableCell>
+                          <div>
+                            <p className="font-medium">{consultation.patientName}</p>
+                            <p className="text-sm text-gray-500">Age: {consultation.age}</p>
+                            <p className="text-sm text-gray-500">{consultation.contact}</p>
+                            <p className="text-xs text-gray-400">
+                              {consultation.submittedAt.toLocaleDateString()}
+                            </p>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <p className="font-medium">{consultation.condition}</p>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant={consultation.type === "acute" ? "destructive" : "secondary"}>
+                            {consultation.type.toUpperCase()}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <p className="text-sm">{consultation.system}</p>
+                        </TableCell>
+                        <TableCell>
+                          <p className="font-medium">{consultation.fee.toLocaleString()} UGX</p>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant={consultation.paid ? "default" : "destructive"}>
+                            {consultation.paid ? "Paid" : "Unpaid"}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center space-x-2">
+                            {getConsultationModeIcon(consultation.consultationMode)}
+                            <span className="text-sm capitalize">{consultation.consultationMode}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center space-x-1">
+                            <Clock className="h-3 w-3 text-gray-400" />
+                            <span className="text-sm">{consultation.duration || "TBD"}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          {getStatusBadge(consultation.status)}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex space-x-2">
+                            <Button size="sm" variant="outline" title="View Details">
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              title="Contact via WhatsApp"
+                              onClick={() => window.open(`https://wa.me/${consultation.contact.replace('+', '')}`, '_blank')}
+                            >
+                              <img src="/lovable-uploads/00e52556-ed3d-4b6a-baa5-494f09fd2008.png" alt="WhatsApp" className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
