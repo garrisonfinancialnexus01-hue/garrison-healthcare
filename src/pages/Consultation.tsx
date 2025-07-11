@@ -1,4 +1,3 @@
-
 import Layout from "@/components/layout/Layout";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -72,7 +71,7 @@ const Consultation = () => {
                       <p className="text-gray-600 mb-4">Short-term conditions requiring immediate attention</p>
                       <div className="flex items-center text-garrison-teal font-semibold">
                         <Banknote className="h-4 w-4 mr-2" />
-                        Consultation Fee: {consultationFee.toLocaleString()} {currency}
+                        Consultation Fee: 5,000 {currency}
                       </div>
                     </div>
 

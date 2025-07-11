@@ -1,15 +1,16 @@
 
 import Layout from "@/components/layout/Layout";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Search, Filter, Download, Eye, MessageSquare, Phone, Video, User, Calendar, DollarSign } from "lucide-react";
+import { Search, Filter, Download, Eye, MessageSquare, Phone, Video, User, Calendar, DollarSign, LogOut, Activity, Clock, TrendingUp, Users } from "lucide-react";
+import DoctorLogin from "@/components/auth/DoctorLogin";
 
-// Mock data for demonstration
+// Mock data for demonstration - in real app this would come from API
 const mockConsultations = [
   {
     id: "1",
@@ -23,8 +24,10 @@ const mockConsultations = [
     whatsappSent: true,
     status: "completed",
     consultationMode: "chat",
-    submittedAt: "2024-01-15T10:30:00Z",
-    contact: "+256701234567"
+    submittedAt: new Date("2024-01-15T10:30:00Z"),
+    contact: "+256701234567",
+    duration: "30 mins",
+    rating: 5
   },
   {
     id: "2",
@@ -38,8 +41,10 @@ const mockConsultations = [
     whatsappSent: false,
     status: "pending",
     consultationMode: "video",
-    submittedAt: "2024-01-15T14:20:00Z",
-    contact: "+256702345678"
+    submittedAt: new Date("2024-01-15T14:20:00Z"),
+    contact: "+256702345678",
+    duration: "45 mins",
+    rating: null
   },
   {
     id: "3",
@@ -53,31 +58,83 @@ const mockConsultations = [
     whatsappSent: false,
     status: "awaiting_payment",
     consultationMode: "phone",
-    submittedAt: "2024-01-15T16:45:00Z",
-    contact: "+256703456789"
+    submittedAt: new Date("2024-01-15T16:45:00Z"),
+    contact: "+256703456789",
+    duration: null,
+    rating: null
+  },
+  {
+    id: "4",
+    patientName: "Mary Nakato",
+    age: 31,
+    condition: "Diabetes Type 2",
+    type: "chronic",
+    system: "Endocrine System",
+    fee: 10000,
+    paid: true,
+    whatsappSent: true,
+    status: "in_progress",
+    consultationMode: "in-person",
+    submittedAt: new Date("2024-01-16T09:15:00Z"),
+    contact: "+256704567890",
+    duration: "60 mins",
+    rating: null
   }
 ];
 
 const DoctorDashboard = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [consultations, setConsultations] = useState(mockConsultations);
   const [filters, setFilters] = useState({
     type: "all",
     system: "all",
     status: "all",
-    search: ""
+    search: "",
+    dateRange: "all"
   });
 
-  const filteredConsultations = consultations.filter((consultation) => {
-    const matchesType = filters.type === "all" || consultation.type === filters.type;
-    const matchesSystem = filters.system === "all" || consultation.system === filters.system;
-    const matchesStatus = filters.status === "all" || consultation.status === filters.status;
-    const matchesSearch = 
-      filters.search === "" ||
-      consultation.patientName.toLowerCase().includes(filters.search.toLowerCase()) ||
-      consultation.condition.toLowerCase().includes(filters.search.toLowerCase());
-    
-    return matchesType && matchesSystem && matchesStatus && matchesSearch;
-  });
+  const filteredConsultations = useMemo(() => {
+    return consultations.filter((consultation) => {
+      const matchesType = filters.type === "all" || consultation.type === filters.type;
+      const matchesSystem = filters.system === "all" || consultation.system === filters.system;
+      const matchesStatus = filters.status === "all" || consultation.status === filters.status;
+      const matchesSearch = 
+        filters.search === "" ||
+        consultation.patientName.toLowerCase().includes(filters.search.toLowerCase()) ||
+        consultation.condition.toLowerCase().includes(filters.search.toLowerCase());
+      
+      return matchesType && matchesSystem && matchesStatus && matchesSearch;
+    });
+  }, [consultations, filters]);
+
+  const stats = useMemo(() => {
+    const today = new Date();
+    const thisWeek = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const thisMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+    return {
+      total: consultations.length,
+      acute: consultations.filter(c => c.type === "acute").length,
+      chronic: consultations.filter(c => c.type === "chronic").length,
+      completed: consultations.filter(c => c.status === "completed").length,
+      pending: consultations.filter(c => c.status === "pending").length,
+      inProgress: consultations.filter(c => c.status === "in_progress").length,
+      awaitingPayment: consultations.filter(c => c.status === "awaiting_payment").length,
+      totalRevenue: consultations.filter(c => c.paid).reduce((sum, c) => sum + c.fee, 0),
+      todayConsultations: consultations.filter(c => 
+        new Date(c.submittedAt).toDateString() === today.toDateString()
+      ).length,
+      weeklyConsultations: consultations.filter(c => 
+        new Date(c.submittedAt) >= thisWeek
+      ).length,
+      monthlyRevenue: consultations.filter(c => 
+        c.paid && new Date(c.submittedAt) >= thisMonth
+      ).reduce((sum, c) => sum + c.fee, 0),
+      averageRating: consultations.filter(c => c.rating).reduce((sum, c, _, arr) => 
+        sum + (c.rating || 0) / arr.length, 0
+      ) || 0
+    };
+  }, [consultations]);
 
   const getStatusBadge = (status: string) => {
     const statusConfig = {
@@ -105,27 +162,38 @@ const DoctorDashboard = () => {
     }
   };
 
-  const stats = {
-    total: consultations.length,
-    acute: consultations.filter(c => c.type === "acute").length,
-    chronic: consultations.filter(c => c.type === "chronic").length,
-    completed: consultations.filter(c => c.status === "completed").length,
-    pending: consultations.filter(c => c.status === "pending").length,
-    totalRevenue: consultations.filter(c => c.paid).reduce((sum, c) => sum + c.fee, 0)
+  const handleLogout = () => {
+    setIsLoggedIn(false);
   };
+
+  if (!isLoggedIn) {
+    return <DoctorLogin onLogin={() => setIsLoggedIn(true)} />;
+  }
 
   return (
     <Layout>
       {/* Header */}
-      <section className="bg-gradient-to-r from-garrison-teal to-garrison-teal-dark text-white py-12">
+      <section className="bg-gradient-to-r from-garrison-teal to-garrison-teal-dark text-white py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl md:text-4xl font-bold mb-4">Doctor Dashboard</h1>
-          <p className="text-xl text-white/90">Manage consultations and patient interactions</p>
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-3xl md:text-4xl font-bold mb-2">Doctor Dashboard</h1>
+              <p className="text-xl text-white/90">Advanced Health Management System</p>
+            </div>
+            <Button 
+              variant="outline" 
+              onClick={handleLogout}
+              className="bg-white/10 border-white/20 text-white hover:bg-white/20"
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Logout
+            </Button>
+          </div>
         </div>
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats Cards */}
+        {/* Enhanced Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <Card>
             <CardContent className="p-6">
@@ -133,6 +201,7 @@ const DoctorDashboard = () => {
                 <div>
                   <p className="text-sm font-medium text-gray-600">Total Consultations</p>
                   <p className="text-3xl font-bold text-garrison-teal">{stats.total}</p>
+                  <p className="text-xs text-gray-500 mt-1">All time</p>
                 </div>
                 <Calendar className="h-8 w-8 text-garrison-teal" />
               </div>
@@ -143,12 +212,11 @@ const DoctorDashboard = () => {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Acute Cases</p>
-                  <p className="text-3xl font-bold text-orange-600">{stats.acute}</p>
+                  <p className="text-sm font-medium text-gray-600">Today's Consultations</p>
+                  <p className="text-3xl font-bold text-blue-600">{stats.todayConsultations}</p>
+                  <p className="text-xs text-gray-500 mt-1">+{stats.weeklyConsultations} this week</p>
                 </div>
-                <div className="h-8 w-8 bg-orange-100 rounded-full flex items-center justify-center">
-                  <span className="text-orange-600 font-bold text-sm">A</span>
-                </div>
+                <Activity className="h-8 w-8 text-blue-600" />
               </div>
             </CardContent>
           </Card>
@@ -157,12 +225,11 @@ const DoctorDashboard = () => {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Chronic Cases</p>
-                  <p className="text-3xl font-bold text-purple-600">{stats.chronic}</p>
+                  <p className="text-sm font-medium text-gray-600">Monthly Revenue</p>
+                  <p className="text-3xl font-bold text-green-600">{stats.monthlyRevenue.toLocaleString()}</p>
+                  <p className="text-xs text-gray-500 mt-1">UGX</p>
                 </div>
-                <div className="h-8 w-8 bg-purple-100 rounded-full flex items-center justify-center">
-                  <span className="text-purple-600 font-bold text-sm">C</span>
-                </div>
+                <TrendingUp className="h-8 w-8 text-green-600" />
               </div>
             </CardContent>
           </Card>
@@ -171,26 +238,54 @@ const DoctorDashboard = () => {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Total Revenue</p>
-                  <p className="text-3xl font-bold text-green-600">{stats.totalRevenue.toLocaleString()}</p>
-                  <p className="text-xs text-gray-500">UGX</p>
+                  <p className="text-sm font-medium text-gray-600">Active Patients</p>
+                  <p className="text-3xl font-bold text-purple-600">{stats.inProgress}</p>
+                  <p className="text-xs text-gray-500 mt-1">In progress</p>
                 </div>
-                <DollarSign className="h-8 w-8 text-green-600" />
+                <Users className="h-8 w-8 text-purple-600" />
               </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Filters */}
+        {/* Status Overview */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <Card>
+            <CardContent className="p-4 text-center">
+              <p className="text-2xl font-bold text-green-600">{stats.completed}</p>
+              <p className="text-sm text-gray-600">Completed</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4 text-center">
+              <p className="text-2xl font-bold text-yellow-600">{stats.pending}</p>
+              <p className="text-sm text-gray-600">Pending</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4 text-center">
+              <p className="text-2xl font-bold text-blue-600">{stats.inProgress}</p>
+              <p className="text-sm text-gray-600">In Progress</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-4 text-center">
+              <p className="text-2xl font-bold text-red-600">{stats.awaitingPayment}</p>
+              <p className="text-sm text-gray-600">Awaiting Payment</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Enhanced Filters */}
         <Card className="mb-6">
           <CardHeader>
             <CardTitle className="flex items-center">
               <Filter className="h-5 w-5 mr-2" />
-              Filters & Search
+              Advanced Filters & Search
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
               <div>
                 <label className="text-sm font-medium mb-2 block">Search</label>
                 <div className="relative">
@@ -234,6 +329,22 @@ const DoctorDashboard = () => {
                 </Select>
               </div>
 
+              <div>
+                <label className="text-sm font-medium mb-2 block">System</label>
+                <Select value={filters.system} onValueChange={(value) => setFilters({...filters, system: value})}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Systems</SelectItem>
+                    <SelectItem value="Respiratory System">Respiratory</SelectItem>
+                    <SelectItem value="Cardiovascular System">Cardiovascular</SelectItem>
+                    <SelectItem value="Gastrointestinal System">Gastrointestinal</SelectItem>
+                    <SelectItem value="Endocrine System">Endocrine</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
               <div className="flex items-end">
                 <Button className="garrison-btn-primary w-full">
                   <Download className="h-4 w-4 mr-2" />
@@ -244,23 +355,24 @@ const DoctorDashboard = () => {
           </CardContent>
         </Card>
 
-        {/* Consultations Table */}
+        {/* Enhanced Consultations Table */}
         <Card>
           <CardHeader>
-            <CardTitle>Consultation Requests ({filteredConsultations.length})</CardTitle>
+            <CardTitle>Patient Consultations ({filteredConsultations.length})</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Patient</TableHead>
+                    <TableHead>Patient Details</TableHead>
                     <TableHead>Condition</TableHead>
                     <TableHead>Type</TableHead>
                     <TableHead>System</TableHead>
                     <TableHead>Fee</TableHead>
                     <TableHead>Payment</TableHead>
                     <TableHead>Mode</TableHead>
+                    <TableHead>Duration</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Actions</TableHead>
                   </TableRow>
@@ -273,6 +385,9 @@ const DoctorDashboard = () => {
                           <p className="font-medium">{consultation.patientName}</p>
                           <p className="text-sm text-gray-500">Age: {consultation.age}</p>
                           <p className="text-sm text-gray-500">{consultation.contact}</p>
+                          <p className="text-xs text-gray-400">
+                            {consultation.submittedAt.toLocaleDateString()}
+                          </p>
                         </div>
                       </TableCell>
                       <TableCell>
@@ -301,16 +416,23 @@ const DoctorDashboard = () => {
                         </div>
                       </TableCell>
                       <TableCell>
+                        <div className="flex items-center space-x-1">
+                          <Clock className="h-3 w-3 text-gray-400" />
+                          <span className="text-sm">{consultation.duration || "TBD"}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
                         {getStatusBadge(consultation.status)}
                       </TableCell>
                       <TableCell>
                         <div className="flex space-x-2">
-                          <Button size="sm" variant="outline">
+                          <Button size="sm" variant="outline" title="View Details">
                             <Eye className="h-4 w-4" />
                           </Button>
                           <Button 
                             size="sm" 
                             variant="outline"
+                            title="Contact via WhatsApp"
                             onClick={() => window.open(`https://wa.me/${consultation.contact.replace('+', '')}`, '_blank')}
                           >
                             <img src="/lovable-uploads/00e52556-ed3d-4b6a-baa5-494f09fd2008.png" alt="WhatsApp" className="h-4 w-4" />
