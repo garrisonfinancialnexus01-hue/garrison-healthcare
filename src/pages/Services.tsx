@@ -84,6 +84,34 @@ const Services = () => {
                     about your health and treatment options.
                   </p>
                   
+                  {/* New Professional Consultation System */}
+                  <div className="bg-gradient-to-r from-garrison-teal/10 to-garrison-red/10 rounded-lg p-6 mb-6">
+                    <h3 className="text-xl font-semibold text-garrison-teal mb-3">🩺 Professional Consultation System</h3>
+                    <p className="text-gray-700 mb-4">
+                      Our comprehensive consultation platform allows you to select specific conditions, 
+                      choose consultation modes, and connect directly with healthcare professionals.
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      <div className="bg-white rounded-lg p-4 border border-garrison-teal/20">
+                        <h4 className="font-semibold text-garrison-teal mb-2">Acute Conditions</h4>
+                        <p className="text-sm text-gray-600 mb-2">Short-term conditions requiring immediate attention</p>
+                        <p className="font-bold text-garrison-red">Fee: 5,000 UGX</p>
+                      </div>
+                      <div className="bg-white rounded-lg p-4 border border-garrison-teal/20">
+                        <h4 className="font-semibold text-garrison-teal mb-2">Chronic Conditions</h4>
+                        <p className="text-sm text-gray-600 mb-2">Long-term conditions requiring ongoing management</p>
+                        <p className="font-bold text-garrison-red">Fee: 10,000 UGX</p>
+                      </div>
+                    </div>
+                    <div className="text-center">
+                      <Button asChild className="garrison-btn-primary">
+                        <Link to="/consultation">
+                          Start Professional Consultation
+                        </Link>
+                      </Button>
+                    </div>
+                  </div>
+                  
                   {/* Consultant Profile */}
                   <div className="bg-gray-50 rounded-lg p-6 mb-6">
                     <h3 className="text-xl font-semibold text-gray-900 mb-2">Meet Your Health Consultant</h3>

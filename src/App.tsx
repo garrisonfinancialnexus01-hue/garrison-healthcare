@@ -9,6 +9,8 @@ import About from "./pages/About";
 import Services from "./pages/Services";
 import HealthArticles from "./pages/HealthArticles";
 import Contact from "./pages/Contact";
+import Consultation from "./pages/Consultation";
+import DoctorDashboard from "./pages/DoctorDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,6 +27,8 @@ const App = () => (
           <Route path="/services" element={<Services />} />
           <Route path="/health-articles" element={<HealthArticles />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/consultation" element={<Consultation />} />
+          <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
