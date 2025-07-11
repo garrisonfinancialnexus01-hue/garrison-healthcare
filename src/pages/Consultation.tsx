@@ -1,3 +1,4 @@
+
 import Layout from "@/components/layout/Layout";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -43,10 +44,8 @@ const Consultation = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {showForm ? (
           <ConsultationForm
+            selectedDisease={{ name: selectedDisease!, system: selectedSystem! }}
             conditionType={selectedConditionType!}
-            system={selectedSystem!}
-            disease={selectedDisease!}
-            fee={consultationFee}
             onBack={() => setShowForm(false)}
           />
         ) : (
