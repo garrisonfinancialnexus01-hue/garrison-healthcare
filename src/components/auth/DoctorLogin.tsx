@@ -4,20 +4,28 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Eye, EyeOff, Lock, User } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface DoctorLoginProps {
-  onLogin: () => void;
+  onLogin: (token: string) => void;
 }
 
 const DoctorLogin = ({ onLogin }: DoctorLoginProps) => {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
+  const AUTHORIZED_EMAIL = "garrisonhealth147@gmail.com";
   const CORRECT_PASSWORD = "Kasule@206";
+
+  const generateToken = (email: string) => {
+    const timestamp = Date.now();
+    const tokenData = { email, timestamp };
+    return btoa(JSON.stringify(tokenData));
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,12 +34,22 @@ const DoctorLogin = ({ onLogin }: DoctorLoginProps) => {
     // Simulate loading time
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    if (password === CORRECT_PASSWORD) {
+    if (email === AUTHORIZED_EMAIL && password === CORRECT_PASSWORD) {
+      const token = generateToken(email);
+      localStorage.setItem('doctor_auth_token', token);
+      localStorage.setItem('doctor_email', email);
+      
       toast({
         title: "Login Successful",
-        description: "Welcome to the Doctor Dashboard",
+        description: `Welcome to the Doctor Dashboard, ${email}`,
       });
-      onLogin();
+      onLogin(token);
+    } else if (email !== AUTHORIZED_EMAIL) {
+      toast({
+        title: "Access Denied",
+        description: "This email is not authorized to access the dashboard.",
+        variant: "destructive",
+      });
     } else {
       toast({
         title: "Access Denied",
@@ -50,12 +68,30 @@ const DoctorLogin = ({ onLogin }: DoctorLoginProps) => {
           <div className="mx-auto w-16 h-16 bg-garrison-teal rounded-full flex items-center justify-center">
             <User className="h-8 w-8 text-white" />
           </div>
-          <CardTitle className="text-2xl">Doctor Dashboard Login</CardTitle>
-          <p className="text-gray-600">Enter your credentials to access the dashboard</p>
+          <CardTitle className="text-2xl">Doctor Portal Access</CardTitle>
+          <p className="text-gray-600">Enter your authorized credentials to access the dashboard</p>
         </CardHeader>
         
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-sm font-medium">
+                Email Address
+              </Label>
+              <div className="relative">
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter authorized email"
+                  className="pl-10"
+                  required
+                />
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              </div>
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="password" className="text-sm font-medium">
                 Password
@@ -108,6 +144,9 @@ const DoctorLogin = ({ onLogin }: DoctorLoginProps) => {
           <div className="mt-6 text-center">
             <p className="text-xs text-gray-500">
               Authorized personnel only. All access attempts are logged.
+            </p>
+            <p className="text-xs text-gray-400 mt-2">
+              Contact support if you need access authorization.
             </p>
           </div>
         </CardContent>

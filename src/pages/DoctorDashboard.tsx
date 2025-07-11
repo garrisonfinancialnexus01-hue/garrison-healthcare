@@ -1,14 +1,14 @@
-
 import Layout from "@/components/layout/Layout";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Search, Filter, Download, Eye, MessageSquare, Phone, Video, User, Calendar, DollarSign, LogOut, Activity, Clock, TrendingUp, Users } from "lucide-react";
+import { Search, Filter, Download, Eye, MessageSquare, Phone, Video, User, Calendar, DollarSign, LogOut, Activity, Clock, TrendingUp, Users, Shield } from "lucide-react";
 import DoctorLogin from "@/components/auth/DoctorLogin";
+import { useToast } from "@/hooks/use-toast";
 
 // Mock data for demonstration - in real app this would come from API
 const mockConsultations = [
@@ -84,6 +84,8 @@ const mockConsultations = [
 
 const DoctorDashboard = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [authToken, setAuthToken] = useState<string | null>(null);
+  const [userEmail, setUserEmail] = useState<string>("");
   const [consultations, setConsultations] = useState(mockConsultations);
   const [filters, setFilters] = useState({
     type: "all",
@@ -92,6 +94,54 @@ const DoctorDashboard = () => {
     search: "",
     dateRange: "all"
   });
+  const { toast } = useToast();
+
+  // Check for existing session on component mount
+  useEffect(() => {
+    const token = localStorage.getItem('doctor_auth_token');
+    const email = localStorage.getItem('doctor_email');
+    
+    if (token && email) {
+      try {
+        const tokenData = JSON.parse(atob(token));
+        const now = Date.now();
+        const tokenAge = now - tokenData.timestamp;
+        const maxAge = 24 * 60 * 60 * 1000; // 24 hours
+        
+        if (tokenAge < maxAge && tokenData.email === "garrisonhealth147@gmail.com") {
+          setAuthToken(token);
+          setUserEmail(email);
+          setIsLoggedIn(true);
+        } else {
+          // Token expired or invalid
+          localStorage.removeItem('doctor_auth_token');
+          localStorage.removeItem('doctor_email');
+        }
+      } catch (error) {
+        // Invalid token format
+        localStorage.removeItem('doctor_auth_token');
+        localStorage.removeItem('doctor_email');
+      }
+    }
+  }, []);
+
+  const handleLogin = (token: string) => {
+    setAuthToken(token);
+    setUserEmail(localStorage.getItem('doctor_email') || "");
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('doctor_auth_token');
+    localStorage.removeItem('doctor_email');
+    setAuthToken(null);
+    setUserEmail("");
+    setIsLoggedIn(false);
+    toast({
+      title: "Logged Out",
+      description: "You have been successfully logged out.",
+    });
+  };
 
   const filteredConsultations = useMemo(() => {
     return consultations.filter((consultation) => {
@@ -162,12 +212,8 @@ const DoctorDashboard = () => {
     }
   };
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
-  };
-
   if (!isLoggedIn) {
-    return <DoctorLogin onLogin={() => setIsLoggedIn(true)} />;
+    return <DoctorLogin onLogin={handleLogin} />;
   }
 
   return (
@@ -179,6 +225,10 @@ const DoctorDashboard = () => {
             <div>
               <h1 className="text-3xl md:text-4xl font-bold mb-2">Doctor Dashboard</h1>
               <p className="text-xl text-white/90">Advanced Health Management System</p>
+              <div className="flex items-center mt-2 text-white/80">
+                <Shield className="h-4 w-4 mr-2" />
+                <span className="text-sm">Logged in as: {userEmail}</span>
+              </div>
             </div>
             <Button 
               variant="outline" 
@@ -193,6 +243,26 @@ const DoctorDashboard = () => {
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Session Info Card */}
+        <Card className="mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                  <Shield className="h-4 w-4 text-blue-600" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-blue-900">Secure Session Active</p>
+                  <p className="text-xs text-blue-600">Authorized Access - {userEmail}</p>
+                </div>
+              </div>
+              <div className="text-xs text-blue-500">
+                Session expires in 24 hours
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Enhanced Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <Card>
