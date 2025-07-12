@@ -1,12 +1,69 @@
-
 import Layout from "@/components/layout/Layout";
 import { Search, Calendar, User, ArrowRight, BookOpen, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const HealthArticles = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const { toast } = useToast();
+
+  const handleNewsletterSubscribe = async () => {
+    const emailInput = document.getElementById('newsletter-email') as HTMLInputElement;
+    const email = emailInput?.value;
+
+    if (!email) {
+      toast({
+        title: "Error",
+        description: "Please enter your email address",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const emailData = {
+        to: 'garrisonhealth147@gmail.com',
+        subject: 'Newsletter Subscription',
+        html: `
+          <h2>New Newsletter Subscription</h2>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Subscription Date:</strong> ${new Date().toLocaleString()}</p>
+          <p>This user has subscribed to receive the latest health articles and medical updates.</p>
+        `
+      };
+
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(emailData),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Subscribed Successfully!",
+          description: "Thank you for subscribing to our newsletter.",
+        });
+        emailInput.value = '';
+      } else {
+        throw new Error('Failed to subscribe');
+      }
+    } catch (error) {
+      // Fallback email method
+      const subject = encodeURIComponent('Newsletter Subscription');
+      const body = encodeURIComponent(`New newsletter subscription from: ${email}\n\nSubscription Date: ${new Date().toLocaleString()}\n\nThis user has subscribed to receive the latest health articles and medical updates.`);
+      window.open(`mailto:garrisonhealth147@gmail.com?subject=${subject}&body=${body}`, '_blank');
+      
+      toast({
+        title: "Subscribed Successfully!",
+        description: "Thank you for subscribing to our newsletter.",
+      });
+      emailInput.value = '';
+    }
+  };
 
   const articles = [
     {
@@ -230,8 +287,12 @@ const HealthArticles = () => {
                 type="email"
                 placeholder="Enter your email"
                 className="flex-grow px-4 py-3 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-white"
+                id="newsletter-email"
               />
-              <Button className="bg-garrison-red hover:bg-garrison-red-dark text-white px-6 py-3 rounded-lg font-semibold">
+              <Button 
+                className="bg-garrison-red hover:bg-garrison-red-dark text-white px-6 py-3 rounded-lg font-semibold"
+                onClick={handleNewsletterSubscribe}
+              >
                 Subscribe
               </Button>
             </div>

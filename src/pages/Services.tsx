@@ -126,23 +126,6 @@ const Services = () => {
                     </p>
                   </div>
                   
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <Button asChild className="garrison-btn-primary">
-                      <a 
-                        href="https://wa.me/256745101519?text=Hello%20Immaculate,%20I%20would%20like%20to%20schedule%20a%20health%20consultation"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <img src="/lovable-uploads/00e52556-ed3d-4b6a-baa5-494f09fd2008.png" alt="WhatsApp" className="mr-2 h-4 w-4" />
-                        WhatsApp Consultation
-                      </a>
-                    </Button>
-                    <Button asChild className="garrison-btn-outline">
-                      <a href="tel:+256745101519">
-                        Call +256 745 101 519
-                      </a>
-                    </Button>
-                  </div>
                 </div>
                 
                 <div className="lg:order-1 lg:text-center">

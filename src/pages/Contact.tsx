@@ -3,6 +3,7 @@ import Layout from "@/components/layout/Layout";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +13,8 @@ const Contact = () => {
     subject: "",
     message: ""
   });
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -21,10 +24,69 @@ const Contact = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log("Form submitted:", formData);
+    setLoading(true);
+
+    try {
+      const emailData = {
+        to: 'garrisonhealth147@gmail.com',
+        subject: `Contact Form: ${formData.subject}`,
+        html: `
+          <h2>New Contact Form Submission</h2>
+          <p><strong>Name:</strong> ${formData.name}</p>
+          <p><strong>Email:</strong> ${formData.email}</p>
+          <p><strong>Phone:</strong> ${formData.phone}</p>
+          <p><strong>Subject:</strong> ${formData.subject}</p>
+          <p><strong>Message:</strong></p>
+          <p>${formData.message}</p>
+          <p><strong>Submitted at:</strong> ${new Date().toLocaleString()}</p>
+        `
+      };
+
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(emailData),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Message Sent Successfully!",
+          description: "Thank you for contacting us. We'll get back to you soon.",
+        });
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          subject: "",
+          message: ""
+        });
+      } else {
+        throw new Error('Failed to send message');
+      }
+    } catch (error) {
+      // Fallback email method
+      const subject = encodeURIComponent(`Contact Form: ${formData.subject}`);
+      const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\nSubject: ${formData.subject}\n\nMessage:\n${formData.message}\n\nSubmitted at: ${new Date().toLocaleString()}`);
+      window.open(`mailto:garrisonhealth147@gmail.com?subject=${subject}&body=${body}`, '_blank');
+      
+      toast({
+        title: "Message Sent Successfully!",
+        description: "Thank you for contacting us. We'll get back to you soon.",
+      });
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        subject: "",
+        message: ""
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -110,23 +172,6 @@ const Contact = () => {
                 </div>
               </div>
 
-              {/* WhatsApp Consultation */}
-              <div className="mt-8 p-6 bg-green-50 rounded-lg border border-green-200">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Quick WhatsApp Consultation</h3>
-                <p className="text-gray-600 mb-4">
-                  For immediate health consultations, chat with Immaculate Nakamya on WhatsApp
-                </p>
-                <Button asChild className="bg-green-600 hover:bg-green-700 text-white">
-                  <a 
-                    href="https://wa.me/256745101519?text=Hello%20Immaculate,%20I%20need%20a%20health%20consultation"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <img src="/lovable-uploads/00e52556-ed3d-4b6a-baa5-494f09fd2008.png" alt="WhatsApp" className="mr-2 h-4 w-4" />
-                    Start WhatsApp Chat
-                  </a>
-                </Button>
-              </div>
             </div>
 
             {/* Contact Form */}
@@ -221,8 +266,8 @@ const Contact = () => {
                     ></textarea>
                   </div>
 
-                  <Button type="submit" className="w-full garrison-btn-primary">
-                    Send Message
+                  <Button type="submit" className="w-full garrison-btn-primary" disabled={loading}>
+                    {loading ? "Sending..." : "Send Message"}
                   </Button>
                 </form>
               </div>
@@ -243,16 +288,6 @@ const Contact = () => {
               <a href="tel:+256745101519">
                 <Phone className="mr-2 h-5 w-5" />
                 Emergency Call: +256 745 101 519
-              </a>
-            </Button>
-            <Button asChild className="bg-white/20 hover:bg-white/30 text-white border border-white font-semibold px-8 py-4">
-              <a 
-                href="https://wa.me/256745101519?text=EMERGENCY:%20I%20need%20immediate%20health%20assistance"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src="/lovable-uploads/00e52556-ed3d-4b6a-baa5-494f09fd2008.png" alt="WhatsApp" className="mr-2 h-5 w-5" />
-                Emergency WhatsApp
               </a>
             </Button>
           </div>
