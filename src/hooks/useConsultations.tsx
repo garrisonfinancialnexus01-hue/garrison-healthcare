@@ -9,7 +9,7 @@ export interface Consultation {
   contact: string;
   nationalId?: string;
   condition: string;
-  type: "acute" | "chronic";
+  type: "acute" | "chronic" | "obstetrics" | "paediatrics" | "surgical";
   system: string;
   fee: number;
   paid: boolean;

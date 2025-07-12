@@ -1,4 +1,3 @@
-
 export const conditionData = {
   acute: {
     systems: [
@@ -304,6 +303,183 @@ export const conditionData = {
           "Chronic Sepsis",
           "Immunodeficiency",
           "Chronic Fever"
+        ]
+      }
+    ]
+  },
+  obstetrics: {
+    systems: [
+      {
+        name: "Pregnancy Care",
+        diseases: [
+          "Prenatal Check-up",
+          "Morning Sickness",
+          "Gestational Diabetes",
+          "High Blood Pressure in Pregnancy",
+          "Bleeding During Pregnancy",
+          "Pregnancy Complications",
+          "Labor and Delivery Concerns",
+          "Postpartum Care",
+          "Breastfeeding Issues",
+          "Post-delivery Recovery"
+        ]
+      },
+      {
+        name: "Gynaecological Issues",
+        diseases: [
+          "Menstrual Disorders",
+          "Pelvic Pain",
+          "Ovarian Cysts",
+          "Endometriosis",
+          "Fibroids",
+          "Cervical Screening",
+          "Contraception Counseling",
+          "Menopause Management",
+          "Vaginal Infections",
+          "Fertility Issues"
+        ]
+      },
+      {
+        name: "Reproductive Health",
+        diseases: [
+          "Family Planning",
+          "Pre-conception Counseling",
+          "Infertility Consultation",
+          "Sexual Health",
+          "Hormone Therapy",
+          "Breast Health",
+          "Pelvic Inflammatory Disease",
+          "STI Screening",
+          "Emergency Contraception",
+          "Reproductive Surgery Consultation"
+        ]
+      }
+    ]
+  },
+  paediatrics: {
+    systems: [
+      {
+        name: "Growth & Development",
+        diseases: [
+          "Growth Monitoring",
+          "Developmental Delays",
+          "Vaccination Schedule",
+          "Nutritional Assessment",
+          "Failure to Thrive",
+          "Behavioral Issues",
+          "Sleep Problems",
+          "School Performance Issues",
+          "Speech Delays",
+          "Motor Skill Development"
+        ]
+      },
+      {
+        name: "Common Childhood Illnesses",
+        diseases: [
+          "Fever in Children",
+          "Common Cold in Kids",
+          "Ear Infections",
+          "Throat Infections",
+          "Childhood Rashes",
+          "Diarrhea and Vomiting",
+          "Cough in Children",
+          "Allergies in Kids",
+          "Asthma in Children",
+          "Skin Conditions"
+        ]
+      },
+      {
+        name: "Newborn & Infant Care",
+        diseases: [
+          "Newborn Care",
+          "Feeding Problems",
+          "Colic",
+          "Diaper Rash",
+          "Jaundice in Newborns",
+          "Umbilical Cord Care",
+          "Infant Crying",
+          "Sleep Training",
+          "Teething Problems",
+          "Infant Allergies"
+        ]
+      },
+      {
+        name: "Adolescent Health",
+        diseases: [
+          "Puberty Concerns",
+          "Acne Treatment",
+          "Menstrual Issues in Teens",
+          "Growth Spurts",
+          "Mental Health in Teens",
+          "Sports Injuries",
+          "Eating Disorders",
+          "Substance Use Counseling",
+          "Sexual Health Education",
+          "Academic Stress"
+        ]
+      }
+    ]
+  },
+  surgical: {
+    systems: [
+      {
+        name: "General Surgery",
+        diseases: [
+          "Appendicitis",
+          "Hernia Repair",
+          "Gallbladder Surgery",
+          "Thyroid Surgery",
+          "Breast Surgery",
+          "Skin Lesion Removal",
+          "Wound Care",
+          "Abscess Drainage",
+          "Lipoma Removal",
+          "Cyst Removal"
+        ]
+      },
+      {
+        name: "Orthopedic Surgery",
+        diseases: [
+          "Fracture Management",
+          "Joint Replacement",
+          "Sports Injuries",
+          "Spinal Surgery",
+          "Arthroscopy",
+          "Tendon Repair",
+          "Bone Infections",
+          "Deformity Correction",
+          "Trauma Surgery",
+          "Chronic Pain Management"
+        ]
+      },
+      {
+        name: "Urological Surgery",
+        diseases: [
+          "Kidney Stone Surgery",
+          "Prostate Surgery",
+          "Bladder Surgery",
+          "Circumcision",
+          "Varicocele Repair",
+          "Hydrocele Repair",
+          "Urethral Surgery",
+          "Testicular Surgery",
+          "Incontinence Surgery",
+          "Cancer Surgery"
+        ]
+      },
+      {
+        name: "Cardiovascular Surgery",
+        diseases: [
+          "Heart Surgery Consultation",
+          "Bypass Surgery",
+          "Valve Repair",
+          "Angioplasty",
+          "Pacemaker Insertion",
+          "Vascular Surgery",
+          "Varicose Vein Surgery",
+          "Arterial Surgery",
+          "Heart Transplant",
+          "Congenital Heart Surgery"
         ]
       }
     ]

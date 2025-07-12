@@ -1,20 +1,35 @@
+
 import Layout from "@/components/layout/Layout";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Stethoscope, Heart, Banknote, MessageCircle, CheckCircle } from "lucide-react";
+import { Stethoscope, Heart, Banknote, MessageCircle, CheckCircle, Baby, Users, Scissors } from "lucide-react";
 import ConsultationForm from "@/components/consultation/ConsultationForm";
 import { conditionData } from "@/data/consultationData";
 
 const Consultation = () => {
-  const [selectedConditionType, setSelectedConditionType] = useState<"acute" | "chronic" | null>(null);
+  const [selectedConditionType, setSelectedConditionType] = useState<"acute" | "chronic" | "obstetrics" | "paediatrics" | "surgical" | null>(null);
   const [selectedSystem, setSelectedSystem] = useState<string | null>(null);
   const [selectedDisease, setSelectedDisease] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const consultationFee = selectedConditionType === "acute" ? 5000 : 10000;
+  const getConsultationFee = (type: string) => {
+    switch (type) {
+      case "chronic":
+        return 10000;
+      case "acute":
+      case "obstetrics":
+      case "paediatrics":
+      case "surgical":
+        return 5000;
+      default:
+        return 5000;
+    }
+  };
+
+  const consultationFee = selectedConditionType ? getConsultationFee(selectedConditionType) : 5000;
   const currency = "UGX";
 
   const resetSelection = () => {
@@ -32,6 +47,23 @@ const Consultation = () => {
   const handleSuccess = () => {
     setShowForm(false);
     setShowSuccess(true);
+  };
+
+  const getConditionTypeLabel = (type: string) => {
+    switch (type) {
+      case "acute":
+        return "Acute Condition";
+      case "chronic":
+        return "Chronic Condition";
+      case "obstetrics":
+        return "Obstetrics & Gynaecology";
+      case "paediatrics":
+        return "Paediatrics";
+      case "surgical":
+        return "Surgical";
+      default:
+        return type;
+    }
   };
 
   return (
@@ -86,7 +118,7 @@ const Consultation = () => {
                   <p className="text-gray-600">Choose the type of condition you want to consult about</p>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div 
                       className="border-2 border-gray-200 rounded-lg p-6 cursor-pointer hover:border-garrison-teal transition-colors"
                       onClick={() => setSelectedConditionType("acute")}
@@ -116,6 +148,51 @@ const Consultation = () => {
                         Consultation Fee: 10,000 {currency}
                       </div>
                     </div>
+
+                    <div 
+                      className="border-2 border-gray-200 rounded-lg p-6 cursor-pointer hover:border-garrison-teal transition-colors"
+                      onClick={() => setSelectedConditionType("obstetrics")}
+                    >
+                      <div className="flex items-center mb-4">
+                        <div className="w-4 h-4 border-2 border-garrison-teal rounded-full mr-3"></div>
+                        <h3 className="text-lg font-semibold">Obstetrics & Gynaecology</h3>
+                      </div>
+                      <p className="text-gray-600 mb-4">Women's health, pregnancy, and reproductive care</p>
+                      <div className="flex items-center text-garrison-teal font-semibold">
+                        <Banknote className="h-4 w-4 mr-2" />
+                        Consultation Fee: 5,000 {currency}
+                      </div>
+                    </div>
+
+                    <div 
+                      className="border-2 border-gray-200 rounded-lg p-6 cursor-pointer hover:border-garrison-teal transition-colors"
+                      onClick={() => setSelectedConditionType("paediatrics")}
+                    >
+                      <div className="flex items-center mb-4">
+                        <div className="w-4 h-4 border-2 border-garrison-teal rounded-full mr-3"></div>
+                        <h3 className="text-lg font-semibold">Paediatrics</h3>
+                      </div>
+                      <p className="text-gray-600 mb-4">Children's health and development care</p>
+                      <div className="flex items-center text-garrison-teal font-semibold">
+                        <Banknote className="h-4 w-4 mr-2" />
+                        Consultation Fee: 5,000 {currency}
+                      </div>
+                    </div>
+
+                    <div 
+                      className="border-2 border-gray-200 rounded-lg p-6 cursor-pointer hover:border-garrison-teal transition-colors"
+                      onClick={() => setSelectedConditionType("surgical")}
+                    >
+                      <div className="flex items-center mb-4">
+                        <div className="w-4 h-4 border-2 border-garrison-teal rounded-full mr-3"></div>
+                        <h3 className="text-lg font-semibold">Surgical Condition</h3>
+                      </div>
+                      <p className="text-gray-600 mb-4">Surgical procedures and pre/post-operative care</p>
+                      <div className="flex items-center text-garrison-teal font-semibold">
+                        <Banknote className="h-4 w-4 mr-2" />
+                        Consultation Fee: 5,000 {currency}
+                      </div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -128,7 +205,7 @@ const Consultation = () => {
                   <div className="flex items-center justify-between mb-4">
                     <Button variant="outline" onClick={resetSelection}>← Back</Button>
                     <Badge variant="secondary" className="bg-garrison-teal text-white">
-                      {selectedConditionType === "acute" ? "Acute" : "Chronic"} Condition
+                      {getConditionTypeLabel(selectedConditionType)}
                     </Badge>
                   </div>
                   <CardTitle className="text-2xl">Choose the System Involved</CardTitle>
@@ -159,7 +236,7 @@ const Consultation = () => {
                     <Button variant="outline" onClick={() => setSelectedSystem(null)}>← Back</Button>
                     <div className="flex gap-2">
                       <Badge variant="secondary" className="bg-garrison-teal text-white">
-                        {selectedConditionType === "acute" ? "Acute" : "Chronic"}
+                        {getConditionTypeLabel(selectedConditionType!)}
                       </Badge>
                       <Badge variant="outline">{selectedSystem}</Badge>
                     </div>
@@ -168,7 +245,7 @@ const Consultation = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
-                    {conditionData[selectedConditionType].systems
+                    {conditionData[selectedConditionType!].systems
                       .find(s => s.name === selectedSystem)?.diseases.map((disease) => (
                       <Button
                         key={disease}
@@ -192,7 +269,7 @@ const Consultation = () => {
                     <Button variant="outline" onClick={() => setSelectedDisease(null)}>← Back</Button>
                     <div className="flex gap-2">
                       <Badge variant="secondary" className="bg-garrison-teal text-white">
-                        {selectedConditionType === "acute" ? "Acute" : "Chronic"}
+                        {getConditionTypeLabel(selectedConditionType!)}
                       </Badge>
                       <Badge variant="outline">{selectedSystem}</Badge>
                     </div>
@@ -205,7 +282,7 @@ const Consultation = () => {
                     <div className="space-y-2 mb-4">
                       <div className="flex justify-between">
                         <span>Condition Type:</span>
-                        <span className="font-semibold">{selectedConditionType === "acute" ? "Acute" : "Chronic"}</span>
+                        <span className="font-semibold">{getConditionTypeLabel(selectedConditionType!)}</span>
                       </div>
                       <div className="flex justify-between">
                         <span>System:</span>

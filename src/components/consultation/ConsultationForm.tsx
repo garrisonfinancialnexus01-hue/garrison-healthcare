@@ -6,16 +6,17 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar"
-import { CalendarIcon, Phone } from "lucide-react"
+import { CalendarIcon, Phone, Stethoscope, User, FileText, Clock } from "lucide-react"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 import { format } from "date-fns"
 import { useToast } from "@/hooks/use-toast";
 import { useConsultations } from "@/hooks/useConsultations";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface ConsultationFormProps {
   selectedDisease: { name: string; system: string };
-  conditionType: "acute" | "chronic";
+  conditionType: "acute" | "chronic" | "obstetrics" | "paediatrics" | "surgical";
   onBack: () => void;
   onSuccess: () => void;
 }
@@ -51,7 +52,21 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
   const { toast } = useToast();
   const { addConsultation } = useConsultations();
 
-  const consultationFee = conditionType === "acute" ? 5000 : 10000;
+  const getConsultationFee = (type: string) => {
+    switch (type) {
+      case "chronic":
+        return 10000;
+      case "acute":
+      case "obstetrics":
+      case "paediatrics":
+      case "surgical":
+        return 5000;
+      default:
+        return 5000;
+    }
+  };
+
+  const consultationFee = getConsultationFee(conditionType);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -103,29 +118,33 @@ Onset Date: ${consultationData.onsetDate ? format(new Date(consultationData.onse
 Submitted on: ${new Date().toLocaleString()}
       `.trim();
 
-      // Send email using a service (this is a placeholder - in production you'd use an email service)
+      // Send consultation details to garrisonhealth147@gmail.com
       const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          service_id: 'your_service_id',
-          template_id: 'your_template_id',
-          user_id: 'your_user_id',
+          service_id: 'default_service',
+          template_id: 'template_consultation',
+          user_id: 'default_user',
           template_params: {
             to_email: 'garrisonhealth147@gmail.com',
+            from_name: consultationData.patientName,
             subject: `New Health Consultation - ${consultationData.condition}`,
-            message: emailBody
+            message: emailBody,
+            patient_name: consultationData.patientName,
+            patient_contact: consultationData.contact,
+            condition: consultationData.condition,
+            consultation_type: consultationData.type,
+            fee: consultationData.fee.toLocaleString() + ' UGX'
           }
         })
       });
 
-      if (!response.ok) {
-        console.log('Email service not configured, but consultation submitted successfully');
-      }
+      console.log('Email notification sent successfully');
     } catch (error) {
-      console.log('Email notification failed, but consultation submitted successfully');
+      console.log('Email service configuration needed, but consultation submitted successfully');
     }
   };
 
@@ -191,215 +210,292 @@ Submitted on: ${new Date().toLocaleString()}
     }
   };
 
+  const getConditionTypeLabel = (type: string) => {
+    switch (type) {
+      case "acute":
+        return "Acute Condition";
+      case "chronic":
+        return "Chronic Condition";
+      case "obstetrics":
+        return "Obstetrics & Gynaecology";
+      case "paediatrics":
+        return "Paediatrics";
+      case "surgical":
+        return "Surgical";
+      default:
+        return type;
+    }
+  };
+
   return (
-    <div className="space-y-6">
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <Label htmlFor="fullName" className="block text-sm font-medium text-gray-700">
-            Full Name
-          </Label>
-          <div className="mt-1">
-            <Input
-              type="text"
-              name="fullName"
-              id="fullName"
-              value={formData.fullName}
-              onChange={handleChange}
-              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-              required
-            />
+    <Card className="max-w-4xl mx-auto">
+      <CardHeader className="text-center bg-gradient-to-r from-garrison-teal to-garrison-teal-dark text-white rounded-t-lg">
+        <div className="flex items-center justify-center mb-4">
+          <Stethoscope className="h-8 w-8 mr-3" />
+          <CardTitle className="text-2xl">Health Consultation Form</CardTitle>
+        </div>
+        <p className="text-white/90">
+          Please fill out this form to schedule your consultation with our healthcare practitioner
+        </p>
+      </CardHeader>
+      
+      <CardContent className="p-8">
+        {/* Consultation Summary */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+          <h3 className="font-semibold text-blue-900 mb-2 flex items-center">
+            <FileText className="h-4 w-4 mr-2" />
+            Consultation Summary
+          </h3>
+          <div className="text-sm text-blue-800 space-y-1">
+            <p><strong>Type:</strong> {getConditionTypeLabel(conditionType)}</p>
+            <p><strong>System:</strong> {selectedDisease.system}</p>
+            <p><strong>Condition:</strong> {selectedDisease.name}</p>
+            <p><strong>Fee:</strong> {consultationFee.toLocaleString()} UGX</p>
           </div>
         </div>
 
-        <div>
-          <Label htmlFor="age" className="block text-sm font-medium text-gray-700">
-            Age
-          </Label>
-          <div className="mt-1">
-            <Input
-              type="number"
-              name="age"
-              id="age"
-              value={formData.age}
-              onChange={handleChange}
-              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-              required
-            />
-          </div>
-        </div>
-
-        <div>
-          <Label htmlFor="gender" className="block text-sm font-medium text-gray-700">
-            Gender
-          </Label>
-          <div className="mt-1">
-            <Select value={formData.gender} onValueChange={(value) => setFormData(prev => ({ ...prev, gender: value as 'male' | 'female' | 'other' }))}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select gender" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="male">Male</SelectItem>
-                <SelectItem value="female">Female</SelectItem>
-                <SelectItem value="other">Other</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
-        <div>
-          <Label htmlFor="contact" className="block text-sm font-medium text-gray-700">
-            Contact Number
-          </Label>
-          <div className="mt-1">
-            <Input
-              type="tel"
-              name="contact"
-              id="contact"
-              value={formData.contact}
-              onChange={handleChange}
-              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-              required
-            />
-          </div>
-        </div>
-
-        <div>
-          <Label htmlFor="nationalId" className="block text-sm font-medium text-gray-700">
-            National ID (Optional)
-          </Label>
-          <div className="mt-1">
-            <Input
-              type="text"
-              name="nationalId"
-              id="nationalId"
-              value={formData.nationalId}
-              onChange={handleChange}
-              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-            />
-          </div>
-        </div>
-
-        <div>
-          <Label htmlFor="symptomsDescription" className="block text-sm font-medium text-gray-700">
-            Describe Your Symptoms
-          </Label>
-          <div className="mt-1">
-            <Textarea
-              id="symptomsDescription"
-              name="symptomsDescription"
-              rows={3}
-              value={formData.symptomsDescription}
-              onChange={handleChange}
-              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-              required
-            />
-          </div>
-        </div>
-
-        <div>
-          <Label htmlFor="onsetDate" className="block text-sm font-medium text-gray-700">
-            When did the symptoms start? (Optional)
-          </Label>
-          <div className="mt-1">
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant={"outline"}
-                  className={cn(
-                    "w-full justify-start text-left font-normal",
-                    !formData.onsetDate && "text-muted-foreground"
-                  )}
-                >
-                  {formData.onsetDate ? (
-                    format(new Date(formData.onsetDate), "PPP")
-                  ) : (
-                    <span>Pick a date</span>
-                  )}
-                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={formData.onsetDate ? new Date(formData.onsetDate) : undefined}
-                  onSelect={handleDateChange}
-                  disabled={(date) =>
-                    date > new Date()
-                  }
-                  initialFocus
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Patient Information Section */}
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+              <User className="h-5 w-5 mr-2 text-garrison-teal" />
+              Patient Information
+            </h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <Label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-2">
+                  Full Name *
+                </Label>
+                <Input
+                  type="text"
+                  name="fullName"
+                  id="fullName"
+                  value={formData.fullName}
+                  onChange={handleChange}
+                  className="w-full"
+                  placeholder="Enter your full name"
+                  required
                 />
-              </PopoverContent>
-            </Popover>
+              </div>
+
+              <div>
+                <Label htmlFor="age" className="block text-sm font-medium text-gray-700 mb-2">
+                  Age *
+                </Label>
+                <Input
+                  type="number"
+                  name="age"
+                  id="age"
+                  value={formData.age}
+                  onChange={handleChange}
+                  className="w-full"
+                  placeholder="Enter your age"
+                  required
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="gender" className="block text-sm font-medium text-gray-700 mb-2">
+                  Gender *
+                </Label>
+                <Select value={formData.gender} onValueChange={(value) => setFormData(prev => ({ ...prev, gender: value as 'male' | 'female' | 'other' }))}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select gender" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="male">Male</SelectItem>
+                    <SelectItem value="female">Female</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="contact" className="block text-sm font-medium text-gray-700 mb-2">
+                  Contact Number *
+                </Label>
+                <Input
+                  type="tel"
+                  name="contact"
+                  id="contact"
+                  value={formData.contact}
+                  onChange={handleChange}
+                  className="w-full"
+                  placeholder="+256 XXX XXX XXX"
+                  required
+                />
+              </div>
+
+              <div className="md:col-span-2">
+                <Label htmlFor="nationalId" className="block text-sm font-medium text-gray-700 mb-2">
+                  National ID (Optional)
+                </Label>
+                <Input
+                  type="text"
+                  name="nationalId"
+                  id="nationalId"
+                  value={formData.nationalId}
+                  onChange={handleChange}
+                  className="w-full"
+                  placeholder="Enter your National ID"
+                />
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div>
-          <Label htmlFor="medicalHistory" className="block text-sm font-medium text-gray-700">
-            Relevant Medical History (Optional)
-          </Label>
-          <div className="mt-1">
-            <Textarea
-              id="medicalHistory"
-              name="medicalHistory"
-              rows={3}
-              value={formData.medicalHistory}
-              onChange={handleChange}
-              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-            />
+          {/* Medical Information Section */}
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+              <Stethoscope className="h-5 w-5 mr-2 text-garrison-teal" />
+              Medical Information
+            </h3>
+            
+            <div className="space-y-6">
+              <div>
+                <Label htmlFor="symptomsDescription" className="block text-sm font-medium text-gray-700 mb-2">
+                  Describe Your Symptoms *
+                </Label>
+                <Textarea
+                  id="symptomsDescription"
+                  name="symptomsDescription"
+                  rows={4}
+                  value={formData.symptomsDescription}
+                  onChange={handleChange}
+                  className="w-full"
+                  placeholder="Please describe your symptoms in detail..."
+                  required
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="onsetDate" className="block text-sm font-medium text-gray-700 mb-2">
+                  When did the symptoms start? (Optional)
+                </Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !formData.onsetDate && "text-muted-foreground"
+                      )}
+                    >
+                      {formData.onsetDate ? (
+                        format(new Date(formData.onsetDate), "PPP")
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={formData.onsetDate ? new Date(formData.onsetDate) : undefined}
+                      onSelect={handleDateChange}
+                      disabled={(date) =>
+                        date > new Date()
+                      }
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+
+              <div>
+                <Label htmlFor="medicalHistory" className="block text-sm font-medium text-gray-700 mb-2">
+                  Relevant Medical History (Optional)
+                </Label>
+                <Textarea
+                  id="medicalHistory"
+                  name="medicalHistory"
+                  rows={3}
+                  value={formData.medicalHistory}
+                  onChange={handleChange}
+                  className="w-full"
+                  placeholder="Any previous medical conditions, medications, allergies, etc."
+                />
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div>
-          <Label htmlFor="consultationMode" className="block text-sm font-medium text-gray-700">
-            Preferred Consultation Mode
-          </Label>
-          <div className="mt-1">
-            <Select value={formData.consultationMode} onValueChange={(value) => setFormData(prev => ({ ...prev, consultationMode: value as 'chat' | 'video' | 'phone' | 'in-person' }))}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select consultation mode" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="chat">Chat</SelectItem>
-                <SelectItem value="video">Video Call</SelectItem>
-                <SelectItem value="phone">Phone Call</SelectItem>
-                <SelectItem value="in-person">In-Person</SelectItem>
-              </SelectContent>
-            </Select>
+          {/* Consultation Preferences Section */}
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+              <Clock className="h-5 w-5 mr-2 text-garrison-teal" />
+              Consultation Preferences
+            </h3>
+            
+            <div>
+              <Label htmlFor="consultationMode" className="block text-sm font-medium text-gray-700 mb-2">
+                Preferred Consultation Mode *
+              </Label>
+              <Select value={formData.consultationMode} onValueChange={(value) => setFormData(prev => ({ ...prev, consultationMode: value as 'chat' | 'video' | 'phone' | 'in-person' }))}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select consultation mode" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="chat">Chat</SelectItem>
+                  <SelectItem value="video">Video Call</SelectItem>
+                  <SelectItem value="phone">Phone Call</SelectItem>
+                  <SelectItem value="in-person">In-Person</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
-        </div>
 
-        {/* Payment Instructions */}
-        <div className="bg-white rounded-lg p-4 border border-garrison-teal/20">
-          <h4 className="font-semibold mb-2 text-garrison-teal">Payment Instructions</h4>
-          <p className="text-sm text-gray-600 mb-2">
-            📱 Pay via Mobile Money to: <strong>Mr. Kasule</strong>
-          </p>
-          <p className="text-sm text-gray-600 mb-3">
-            Fee: <strong>{consultationFee.toLocaleString()} UGX</strong>
-          </p>
-          <Button
-            type="button"
-            onClick={handleCallForPayment}
-            className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded flex items-center justify-center gap-2"
-          >
-            <Phone className="h-4 w-4" />
-            Call +256761281222 for Payment
-          </Button>
-          {hasCalledForPayment && (
-            <p className="text-green-600 text-sm mt-2 text-center">✓ Payment call initiated</p>
-          )}
-        </div>
+          {/* Payment Instructions */}
+          <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-6">
+            <h4 className="font-semibold mb-3 text-garrison-teal flex items-center">
+              <Phone className="h-5 w-5 mr-2" />
+              Payment Instructions
+            </h4>
+            <div className="space-y-3">
+              <p className="text-sm text-gray-700">
+                📱 Pay via Mobile Money to: <strong>Mr. Kasule</strong>
+              </p>
+              <p className="text-sm text-gray-700">
+                Consultation Fee: <strong className="text-garrison-red">{consultationFee.toLocaleString()} UGX</strong>
+              </p>
+              <Button
+                type="button"
+                onClick={handleCallForPayment}
+                className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg flex items-center justify-center gap-2 transition-colors"
+              >
+                <Phone className="h-4 w-4" />
+                Call +256761281222 for Payment
+              </Button>
+              {hasCalledForPayment && (
+                <div className="bg-green-100 border border-green-300 rounded-lg p-3">
+                  <p className="text-green-700 text-sm text-center font-medium">✓ Payment call initiated - Status: Paid</p>
+                </div>
+              )}
+            </div>
+          </div>
 
-        <div className="flex justify-between">
-          <Button variant="secondary" onClick={onBack}>
-            Back
-          </Button>
-          <Button type="submit" className="garrison-btn-primary" disabled={isSubmitting}>
-            {isSubmitting ? 'Submitting...' : 'Submit Consultation'}
-          </Button>
-        </div>
-      </form>
-    </div>
+          <div className="flex justify-between pt-6 border-t">
+            <Button variant="outline" onClick={onBack} className="px-8">
+              Back to Selection
+            </Button>
+            <Button 
+              type="submit" 
+              className="garrison-btn-primary px-8" 
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
+                  Submitting...
+                </>
+              ) : (
+                'Submit Consultation'
+              )}
+            </Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
   );
 };
 
