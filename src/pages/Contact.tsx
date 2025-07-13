@@ -4,6 +4,7 @@ import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -29,50 +30,19 @@ const Contact = () => {
     setLoading(true);
 
     try {
-      const emailData = {
-        to: 'garrisonhealth147@gmail.com',
-        subject: `Contact Form: ${formData.subject}`,
-        html: `
-          <h2>New Contact Form Submission</h2>
-          <p><strong>Name:</strong> ${formData.name}</p>
-          <p><strong>Email:</strong> ${formData.email}</p>
-          <p><strong>Phone:</strong> ${formData.phone}</p>
-          <p><strong>Subject:</strong> ${formData.subject}</p>
-          <p><strong>Message:</strong></p>
-          <p>${formData.message}</p>
-          <p><strong>Submitted at:</strong> ${new Date().toLocaleString()}</p>
-        `
-      };
-
-      const response = await fetch('/api/send-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(emailData),
+      const { data, error } = await supabase.functions.invoke('send-contact-email', {
+        body: {
+          type: 'contact',
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          subject: formData.subject,
+          message: formData.message
+        }
       });
 
-      if (response.ok) {
-        toast({
-          title: "Message Sent Successfully!",
-          description: "Thank you for contacting us. We'll get back to you soon.",
-        });
-        setFormData({
-          name: "",
-          email: "",
-          phone: "",
-          subject: "",
-          message: ""
-        });
-      } else {
-        throw new Error('Failed to send message');
-      }
-    } catch (error) {
-      // Fallback email method
-      const subject = encodeURIComponent(`Contact Form: ${formData.subject}`);
-      const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\nSubject: ${formData.subject}\n\nMessage:\n${formData.message}\n\nSubmitted at: ${new Date().toLocaleString()}`);
-      window.open(`mailto:garrisonhealth147@gmail.com?subject=${subject}&body=${body}`, '_blank');
-      
+      if (error) throw error;
+
       toast({
         title: "Message Sent Successfully!",
         description: "Thank you for contacting us. We'll get back to you soon.",
@@ -83,6 +53,13 @@ const Contact = () => {
         phone: "",
         subject: "",
         message: ""
+      });
+    } catch (error) {
+      console.error('Contact form error:', error);
+      toast({
+        title: "Message Error",
+        description: "There was an error sending your message. Please try again.",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);

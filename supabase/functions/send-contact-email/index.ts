@@ -2,13 +2,11 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { Resend } from 'https://esm.sh/resend@0.16.0'
 
-// Initialize Resend with API key from environment variable
 const resendApiKey = Deno.env.get('RESEND_API_KEY');
 if (!resendApiKey) {
   console.error("RESEND_API_KEY environment variable is not set");
 }
 
-// Initialize Resend client
 const resend = new Resend(resendApiKey);
 
 console.log("Edge function initialized, Resend API key available:", !!resendApiKey);
@@ -27,37 +25,11 @@ serve(async (req) => {
       });
     }
     
-    // Parse request body
     const requestBody = await req.json();
-    const { to, subject, content, from_email, from_name } = requestBody;
+    const { type, ...data } = requestBody;
     
-    console.log("Received email request:", { 
-      to, 
-      subject, 
-      from_email,
-      from_name,
-      contentLength: content?.length,
-      requestBody 
-    });
+    console.log("Received email request:", { type, data });
 
-    // Validation
-    if (!to || !subject || !content) {
-      return new Response(
-        JSON.stringify({ 
-          error: "Missing required fields: to, subject, or content",
-          providedFields: { to: !!to, subject: !!subject, content: !!content }
-        }),
-        { 
-          status: 400, 
-          headers: { 
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*" 
-          } 
-        }
-      );
-    }
-
-    // Validate that the API key is available
     if (!resendApiKey) {
       return new Response(
         JSON.stringify({ error: "Email service configuration is missing. Please contact the administrator." }),
@@ -71,52 +43,102 @@ serve(async (req) => {
       );
     }
 
-    // Configure email with improved options
-    const emailOptions = {
-      from: from_email && from_name 
-        ? `${from_name} <contact@garrisonhealth.com>` 
-        : 'Garrison Health Contact <contact@garrisonhealth.com>',
-      to: [to],
-      subject: subject,
-      text: content,
-      reply_to: from_email || undefined,
-    };
+    let emailOptions;
+
+    // Handle different email types
+    switch (type) {
+      case 'consultation':
+        emailOptions = {
+          from: 'Garrison Health <contact@garrisonhealth147.com>',
+          to: ['garrisonhealth147@gmail.com'],
+          subject: `New Health Consultation - ${data.condition}`,
+          html: `
+            <h2>New Health Consultation Submission</h2>
+            <hr>
+            <h3>Patient Details:</h3>
+            <p><strong>Name:</strong> ${data.patientName}</p>
+            <p><strong>Age:</strong> ${data.age}</p>
+            <p><strong>Gender:</strong> ${data.gender}</p>
+            <p><strong>Contact:</strong> ${data.contact}</p>
+            <p><strong>National ID:</strong> ${data.nationalId || 'Not provided'}</p>
+            
+            <h3>Consultation Details:</h3>
+            <p><strong>Condition:</strong> ${data.condition}</p>
+            <p><strong>Type:</strong> ${data.type}</p>
+            <p><strong>System:</strong> ${data.system}</p>
+            <p><strong>Fee:</strong> ${data.fee.toLocaleString()} UGX</p>
+            <p><strong>Preferred Mode:</strong> ${data.consultationMode}</p>
+            <p><strong>Payment Status:</strong> ${data.paid ? 'Paid' : 'Unpaid'}</p>
+            
+            <h3>Medical Information:</h3>
+            <p><strong>Symptoms:</strong><br>${data.symptomsDescription}</p>
+            <p><strong>Medical History:</strong><br>${data.medicalHistory || 'None provided'}</p>
+            <p><strong>Onset Date:</strong> ${data.onsetDate || 'Not specified'}</p>
+            
+            <hr>
+            <p><strong>Submitted on:</strong> ${new Date().toLocaleString()}</p>
+          `,
+        };
+        break;
+
+      case 'newsletter':
+        emailOptions = {
+          from: 'Garrison Health <contact@garrisonhealth147.com>',
+          to: ['garrisonhealth147@gmail.com'],
+          subject: 'New Newsletter Subscription',
+          html: `
+            <h2>New Newsletter Subscription</h2>
+            <p><strong>Email:</strong> ${data.email}</p>
+            <p><strong>Subscription Date:</strong> ${new Date().toLocaleString()}</p>
+            <p>This user has subscribed to receive the latest health articles and medical updates.</p>
+          `,
+        };
+        break;
+
+      case 'contact':
+        emailOptions = {
+          from: 'Garrison Health <contact@garrisonhealth147.com>',
+          to: ['garrisonhealth147@gmail.com'],
+          subject: `Contact Form: ${data.subject}`,
+          html: `
+            <h2>New Contact Form Submission</h2>
+            <hr>
+            <p><strong>Name:</strong> ${data.name}</p>
+            <p><strong>Email:</strong> ${data.email}</p>
+            <p><strong>Phone:</strong> ${data.phone || 'Not provided'}</p>
+            <p><strong>Subject:</strong> ${data.subject}</p>
+            
+            <h3>Message:</h3>
+            <p>${data.message}</p>
+            
+            <hr>
+            <p><strong>Submitted at:</strong> ${new Date().toLocaleString()}</p>
+          `,
+        };
+        break;
+
+      default:
+        return new Response(
+          JSON.stringify({ error: "Invalid email type" }),
+          { 
+            status: 400, 
+            headers: { 
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*" 
+            } 
+          }
+        );
+    }
 
     console.log("Sending email with options:", emailOptions);
 
-    // Send email with retry logic
-    let attempts = 0;
-    let lastError = null;
-    let data = null;
-    
-    while (attempts < 3) {
-      try {
-        data = await resend.emails.send(emailOptions);
-        console.log(`Email sent successfully on attempt ${attempts + 1}:`, data);
-        break; // Success - exit the retry loop
-      } catch (error) {
-        lastError = error;
-        console.error(`Email sending failed on attempt ${attempts + 1}:`, error);
-        attempts++;
-        
-        if (attempts < 3) {
-          // Wait before retrying (exponential backoff)
-          const waitTime = Math.pow(2, attempts) * 500; // 1s, 2s, 4s
-          console.log(`Waiting ${waitTime}ms before retry...`);
-          await new Promise(resolve => setTimeout(resolve, waitTime));
-        }
-      }
-    }
-    
-    if (lastError && !data) {
-      throw lastError; // Re-throw the last error if all attempts failed
-    }
+    const data_result = await resend.emails.send(emailOptions);
+    console.log("Email sent successfully:", data_result);
 
     return new Response(
       JSON.stringify({ 
         message: "Email sent successfully", 
-        data,
-        attempts 
+        data: data_result
       }),
       { 
         headers: { 

@@ -3,10 +3,12 @@ import { Search, Calendar, User, ArrowRight, BookOpen, Tag } from "lucide-react"
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const HealthArticles = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [isSubscribing, setIsSubscribing] = useState(false);
   const { toast } = useToast();
 
   const handleNewsletterSubscribe = async () => {
@@ -22,46 +24,32 @@ const HealthArticles = () => {
       return;
     }
 
-    try {
-      const emailData = {
-        to: 'garrisonhealth147@gmail.com',
-        subject: 'Newsletter Subscription',
-        html: `
-          <h2>New Newsletter Subscription</h2>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Subscription Date:</strong> ${new Date().toLocaleString()}</p>
-          <p>This user has subscribed to receive the latest health articles and medical updates.</p>
-        `
-      };
+    setIsSubscribing(true);
 
-      const response = await fetch('/api/send-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(emailData),
+    try {
+      const { data, error } = await supabase.functions.invoke('send-contact-email', {
+        body: {
+          type: 'newsletter',
+          email: email
+        }
       });
 
-      if (response.ok) {
-        toast({
-          title: "Subscribed Successfully!",
-          description: "Thank you for subscribing to our newsletter.",
-        });
-        emailInput.value = '';
-      } else {
-        throw new Error('Failed to subscribe');
-      }
-    } catch (error) {
-      // Fallback email method
-      const subject = encodeURIComponent('Newsletter Subscription');
-      const body = encodeURIComponent(`New newsletter subscription from: ${email}\n\nSubscription Date: ${new Date().toLocaleString()}\n\nThis user has subscribed to receive the latest health articles and medical updates.`);
-      window.open(`mailto:garrisonhealth147@gmail.com?subject=${subject}&body=${body}`, '_blank');
-      
+      if (error) throw error;
+
       toast({
         title: "Subscribed Successfully!",
         description: "Thank you for subscribing to our newsletter.",
       });
       emailInput.value = '';
+    } catch (error) {
+      console.error('Newsletter subscription error:', error);
+      toast({
+        title: "Subscription Error",
+        description: "There was an error subscribing to the newsletter. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubscribing(false);
     }
   };
 
@@ -292,8 +280,9 @@ const HealthArticles = () => {
               <Button 
                 className="bg-garrison-red hover:bg-garrison-red-dark text-white px-6 py-3 rounded-lg font-semibold"
                 onClick={handleNewsletterSubscribe}
+                disabled={isSubscribing}
               >
-                Subscribe
+                {isSubscribing ? "Subscribing..." : "Subscribe"}
               </Button>
             </div>
           </div>

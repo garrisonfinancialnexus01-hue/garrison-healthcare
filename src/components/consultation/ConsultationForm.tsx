@@ -13,6 +13,7 @@ import { format } from "date-fns"
 import { useToast } from "@/hooks/use-toast";
 import { useConsultations } from "@/hooks/useConsultations";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ConsultationFormProps {
   selectedDisease: { name: string; system: string };
@@ -89,62 +90,31 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
 
   const sendEmailNotification = async (consultationData: any) => {
     try {
-      const emailBody = `
-New Health Consultation Submission
-
-Patient Details:
-- Name: ${consultationData.patientName}
-- Age: ${consultationData.age}
-- Gender: ${consultationData.gender}
-- Contact: ${consultationData.contact}
-- National ID: ${consultationData.nationalId || 'Not provided'}
-
-Consultation Details:
-- Condition: ${consultationData.condition}
-- Type: ${consultationData.type.charAt(0).toUpperCase() + consultationData.type.slice(1)}
-- System: ${consultationData.system}
-- Fee: ${consultationData.fee.toLocaleString()} UGX
-- Preferred Mode: ${consultationData.consultationMode}
-- Payment Status: ${consultationData.paid ? 'Paid' : 'Unpaid'}
-
-Symptoms Description:
-${consultationData.symptomsDescription}
-
-Medical History:
-${consultationData.medicalHistory || 'None provided'}
-
-Onset Date: ${consultationData.onsetDate ? format(new Date(consultationData.onsetDate), 'PPP') : 'Not specified'}
-
-Submitted on: ${new Date().toLocaleString()}
-      `.trim();
-
-      // Send consultation details to garrisonhealth147@gmail.com
-      const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          service_id: 'default_service',
-          template_id: 'template_consultation',
-          user_id: 'default_user',
-          template_params: {
-            to_email: 'garrisonhealth147@gmail.com',
-            from_name: consultationData.patientName,
-            subject: `New Health Consultation - ${consultationData.condition}`,
-            message: emailBody,
-            patient_name: consultationData.patientName,
-            patient_contact: consultationData.contact,
-            condition: consultationData.condition,
-            consultation_type: consultationData.type,
-            fee: consultationData.fee.toLocaleString() + ' UGX'
-          }
-        })
+      const { data, error } = await supabase.functions.invoke('send-contact-email', {
+        body: {
+          type: 'consultation',
+          patientName: consultationData.patientName,
+          age: consultationData.age,
+          gender: consultationData.gender,
+          contact: consultationData.contact,
+          nationalId: consultationData.nationalId,
+          condition: consultationData.condition,
+          type: consultationData.type,
+          system: consultationData.system,
+          fee: consultationData.fee,
+          paid: consultationData.paid,
+          consultationMode: consultationData.consultationMode,
+          symptomsDescription: consultationData.symptomsDescription,
+          medicalHistory: consultationData.medicalHistory,
+          onsetDate: consultationData.onsetDate
+        }
       });
 
+      if (error) throw error;
       console.log('Email notification sent successfully');
     } catch (error) {
-      console.log('Email service configuration needed, but consultation submitted successfully');
+      console.error('Error sending email notification:', error);
+      // Don't throw error here - consultation should still be processed
     }
   };
 
@@ -182,10 +152,10 @@ Submitted on: ${new Date().toLocaleString()}
         attachments: formData.attachments
       };
 
-      // Add consultation to the system (this will update the doctor dashboard in real-time)
+      // Add consultation to the system
       const newConsultation = addConsultation(consultationData);
 
-      // Send email notification automatically
+      // Send email notification
       await sendEmailNotification(consultationData);
 
       toast({
