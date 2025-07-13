@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -99,7 +98,7 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
           contact: consultationData.contact,
           nationalId: consultationData.nationalId,
           condition: consultationData.condition,
-          type: consultationData.type,
+          conditionType: consultationData.conditionType,
           system: consultationData.system,
           fee: consultationData.fee,
           paid: consultationData.paid,
@@ -141,7 +140,7 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
         contact: formData.contact,
         nationalId: formData.nationalId,
         condition: selectedDisease.name,
-        type: conditionType,
+        conditionType: conditionType,
         system: selectedDisease.system,
         fee: consultationFee,
         paid: hasCalledForPayment,
