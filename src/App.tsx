@@ -10,7 +10,7 @@ import Services from "./pages/Services";
 import HealthArticles from "./pages/HealthArticles";
 import Contact from "./pages/Contact";
 import Consultation from "./pages/Consultation";
-import DoctorDashboard from "./pages/DoctorDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,7 +28,7 @@ const App = () => (
           <Route path="/health-articles" element={<HealthArticles />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/consultation" element={<Consultation />} />
-          <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
