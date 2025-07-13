@@ -4,6 +4,7 @@ import HealthCard from "@/components/ui/HealthCard";
 import { Link } from "react-router-dom";
 import { ArrowRight, Search, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import NewsletterForm from "@/components/newsletter/NewsletterForm";
 
 // Mock health articles data - keeping only diabetes, malaria, and hypertension
 const healthArticles = [
@@ -217,18 +218,7 @@ const Articles = () => {
           <p className="text-lg text-muted-foreground mb-8 max-w-3xl mx-auto">
             Subscribe to receive the latest health articles, tips, and resources directly in your inbox.
           </p>
-          <div className="max-w-md mx-auto">
-            <div className="flex">
-              <input
-                type="email"
-                placeholder="Enter your email address"
-                className="flex-grow px-4 py-3 rounded-l-md focus:outline-none"
-              />
-              <Button className="health-btn-primary rounded-l-none px-6">
-                Subscribe
-              </Button>
-            </div>
-          </div>
+          <NewsletterForm />
         </div>
       </section>
     </Layout>

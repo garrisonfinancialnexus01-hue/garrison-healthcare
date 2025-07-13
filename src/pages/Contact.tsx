@@ -1,71 +1,9 @@
 
 import Layout from "@/components/layout/Layout";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import ContactForm from "@/components/contact/ContactForm";
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    subject: "",
-    message: ""
-  });
-  const [loading, setLoading] = useState(false);
-  const { toast } = useToast();
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      const { data, error } = await supabase.functions.invoke('send-contact-email', {
-        body: {
-          type: 'contact',
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          subject: formData.subject,
-          message: formData.message
-        }
-      });
-
-      if (error) throw error;
-
-      toast({
-        title: "Message Sent Successfully!",
-        description: "Thank you for contacting us. We'll get back to you soon.",
-      });
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        subject: "",
-        message: ""
-      });
-    } catch (error) {
-      console.error('Contact form error:', error);
-      toast({
-        title: "Message Error",
-        description: "There was an error sending your message. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <Layout>
       {/* Hero Section */}
@@ -148,105 +86,13 @@ const Contact = () => {
                   </div>
                 </div>
               </div>
-
             </div>
 
             {/* Contact Form */}
             <div>
               <div className="garrison-card p-8">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Send Us a Message</h2>
-                
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                        Full Name *
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        required
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-garrison-teal focus:border-transparent"
-                        placeholder="Your full name"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                        Phone Number
-                      </label>
-                      <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-garrison-teal focus:border-transparent"
-                        placeholder="+256 XXX XXX XXX"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                      Email Address *
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      required
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-garrison-teal focus:border-transparent"
-                      placeholder="your.email@example.com"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
-                      Subject *
-                    </label>
-                    <select
-                      id="subject"
-                      name="subject"
-                      required
-                      value={formData.subject}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-garrison-teal focus:border-transparent"
-                    >
-                      <option value="">Select a subject</option>
-                      <option value="consultation">Health Consultation</option>
-                      <option value="information">Medical Information Request</option>
-                      <option value="appointment">Appointment Booking</option>
-                      <option value="feedback">Feedback or Suggestion</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                      Message *
-                    </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      required
-                      rows={5}
-                      value={formData.message}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-garrison-teal focus:border-transparent resize-vertical"
-                      placeholder="Please describe your inquiry or health concern..."
-                    ></textarea>
-                  </div>
-
-                  <Button type="submit" className="w-full garrison-btn-primary" disabled={loading}>
-                    {loading ? "Sending..." : "Send Message"}
-                  </Button>
-                </form>
+                <ContactForm />
               </div>
             </div>
           </div>
@@ -261,12 +107,12 @@ const Contact = () => {
             For urgent health concerns or emergencies, contact us immediately
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild className="bg-white text-garrison-red hover:bg-gray-100 font-semibold px-8 py-4">
-              <a href="tel:+256745101519">
+            <button className="bg-white text-garrison-red hover:bg-gray-100 font-semibold px-8 py-4 rounded transition-colors">
+              <a href="tel:+256745101519" className="flex items-center">
                 <Phone className="mr-2 h-5 w-5" />
                 Emergency Call: +256 745 101 519
               </a>
-            </Button>
+            </button>
           </div>
         </div>
       </section>

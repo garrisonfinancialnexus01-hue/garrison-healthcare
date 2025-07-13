@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useSupabaseClient } from "@/hooks/useSupabaseClient";
+import { supabase } from "@/integrations/supabase/client";
 
 interface FormData {
   name: string;
@@ -24,7 +24,6 @@ const ContactForm = () => {
     message: ""
   });
   const [loading, setLoading] = useState(false);
-  const supabase = useSupabaseClient();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -33,43 +32,30 @@ const ContactForm = () => {
 
   const sendEmail = async (): Promise<boolean> => {
     try {
-      if (!supabase) {
-        console.log("Supabase client not available, using mailto fallback");
-        throw new Error("Email service unavailable");
-      }
-      
-      console.log("Sending email via Supabase function");
+      console.log("Sending contact email via Supabase function");
       
       const { data, error } = await supabase.functions.invoke('send-contact-email', {
         body: {
-          to: 'garrisonhealth147@gmail.com',
-          subject: `Contact Form: ${formData.subject}`,
-          content: `
-            Name: ${formData.name}
-            Email: ${formData.email}
-            Phone: ${formData.phone || 'Not provided'}
-            
-            Message:
-            ${formData.message}
-          `,
-          from_email: formData.email,
-          from_name: formData.name
+          type: 'contact',
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || 'Not provided',
+          subject: formData.subject,
+          message: formData.message
         }
       });
 
       console.log("Email sending response:", { data, error });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Supabase function error:", error);
+        throw error;
+      }
+      
       return true;
     } catch (error) {
       console.error("Email sending failed:", error);
-      
-      // Use mailto fallback immediately instead of retrying
-      const mailtoLink = `mailto:garrisonhealth147@gmail.com?subject=Contact Form: ${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\n\nMessage:\n${formData.message}`)}`;
-      window.open(mailtoLink);
-      
-      // We still return true since we've provided an alternative method
-      return true;
+      throw error;
     }
   };
 

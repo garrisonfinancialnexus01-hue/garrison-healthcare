@@ -90,6 +90,8 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
 
   const sendEmailNotification = async (consultationData: any) => {
     try {
+      console.log("Sending consultation email notification");
+      
       const { data, error } = await supabase.functions.invoke('send-contact-email', {
         body: {
           type: 'consultation',
@@ -97,23 +99,29 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
           age: consultationData.age,
           gender: consultationData.gender,
           contact: consultationData.contact,
-          nationalId: consultationData.nationalId,
+          nationalId: consultationData.nationalId || 'Not provided',
           condition: consultationData.condition,
-          conditionType: consultationData.type,
+          type: consultationData.type,
           system: consultationData.system,
           fee: consultationData.fee,
           paid: consultationData.paid,
           consultationMode: consultationData.consultationMode,
           symptomsDescription: consultationData.symptomsDescription,
-          medicalHistory: consultationData.medicalHistory,
-          onsetDate: consultationData.onsetDate
+          medicalHistory: consultationData.medicalHistory || 'Not provided',
+          onsetDate: consultationData.onsetDate ? format(consultationData.onsetDate, 'PPP') : 'Not specified'
         }
       });
 
-      if (error) throw error;
-      console.log('Email notification sent successfully');
+      console.log("Consultation email response:", { data, error });
+
+      if (error) {
+        console.error("Consultation email error:", error);
+        throw error;
+      }
+      
+      console.log('Consultation email notification sent successfully');
     } catch (error) {
-      console.error('Error sending email notification:', error);
+      console.error('Error sending consultation email notification:', error);
       // Don't throw error here - consultation should still be processed
     }
   };
