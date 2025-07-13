@@ -109,7 +109,7 @@ const AdminDashboard = () => {
   };
 
   const handlePrintReceipt = useReactToPrint({
-    content: () => receiptRef.current,
+    contentRef: receiptRef,
     documentTitle: `Receipt-${selectedPatient?.number || 'Unknown'}`,
   });
 
