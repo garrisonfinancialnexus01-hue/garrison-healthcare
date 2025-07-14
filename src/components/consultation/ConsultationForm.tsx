@@ -101,7 +101,7 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
           contact: consultationData.contact,
           nationalId: consultationData.nationalId || 'Not provided',
           condition: consultationData.condition,
-          type: consultationData.type,
+          conditionType: consultationData.type,
           system: consultationData.system,
           fee: consultationData.fee,
           paid: consultationData.paid,
