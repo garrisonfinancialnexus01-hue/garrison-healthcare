@@ -5,6 +5,7 @@ export interface AdminPatient {
   id: string;
   number: number;
   patientName: string;
+  nationalId: string;
   age: string;
   phoneNumber: string;
   type: "Acute" | "Chronic" | "OBS & GYN" | "Paed" | "Surgical";
@@ -12,6 +13,7 @@ export interface AdminPatient {
   mode: "Chat" | "Video Call" | "Phone Call" | "In-Person";
   status: "Completed" | "Pending" | "In Progress" | "Awaiting Payment";
   symptoms: string;
+  medicalHistory: string;
   diagnosis: string;
   createdAt: Date;
 }
@@ -90,6 +92,7 @@ export const useAdminPatients = () => {
       id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
       number: nextPatientNumber,
       patientName: '',
+      nationalId: '',
       age: '',
       phoneNumber: '',
       type: 'Acute',
@@ -97,6 +100,7 @@ export const useAdminPatients = () => {
       mode: 'Chat',
       status: 'Pending',
       symptoms: '',
+      medicalHistory: '',
       diagnosis: '',
       createdAt: new Date()
     };

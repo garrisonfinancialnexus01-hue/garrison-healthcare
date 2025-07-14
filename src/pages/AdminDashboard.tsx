@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { LogOut, Shield, Plus, Download, Trash2, Edit } from "lucide-react";
+import { LogOut, Shield, Plus, Download, Trash2, Edit, Search } from "lucide-react";
 import AdminLogin from "@/components/auth/AdminLogin";
 import PatientReceipt from "@/components/admin/PatientReceipt";
 import { useToast } from "@/hooks/use-toast";
@@ -19,9 +19,26 @@ const AdminDashboard = () => {
   const [adminName, setAdminName] = useState<string>("");
   const [editingStats, setEditingStats] = useState<string | null>(null);
   const [selectedPatient, setSelectedPatient] = useState<AdminPatient | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [filteredPatients, setFilteredPatients] = useState<AdminPatient[]>([]);
   const { toast } = useToast();
   const { patients, stats, addPatient, updatePatient, deletePatient, updateStats } = useAdminPatients();
   const receiptRef = useRef<HTMLDivElement>(null);
+
+  // Filter patients based on search query
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setFilteredPatients(patients);
+    } else {
+      const query = searchQuery.toLowerCase();
+      const filtered = patients.filter(patient => 
+        patient.patientName.toLowerCase().includes(query) ||
+        patient.number.toString().includes(query) ||
+        patient.nationalId.toLowerCase().includes(query)
+      );
+      setFilteredPatients(filtered);
+    }
+  }, [patients, searchQuery]);
 
   // Check for existing session on component mount
   useEffect(() => {
@@ -216,15 +233,26 @@ const AdminDashboard = () => {
           ))}
         </div>
 
-        {/* Patient Consultations Table */}
+        {/* Patient Search and Consultations Table */}
         <Card className="mb-8">
           <CardHeader>
             <div className="flex justify-between items-center">
               <CardTitle>Patient Consultations</CardTitle>
-              <Button onClick={handleAddPatient} className="garrison-btn-primary">
-                <Plus className="h-4 w-4 mr-2" />
-                Add Patient
-              </Button>
+              <div className="flex gap-4 items-center">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Input
+                    placeholder="Search by name, ID, or receipt number..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10 w-64"
+                  />
+                </div>
+                <Button onClick={handleAddPatient} className="garrison-btn-primary">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Patient
+                </Button>
+              </div>
             </div>
           </CardHeader>
           <CardContent>
@@ -239,16 +267,22 @@ const AdminDashboard = () => {
                     <TableHead>Mode</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Patient's Symptoms</TableHead>
-                    <TableHead>Possible Diagnosis</TableHead>
+                    <TableHead>Medical History</TableHead>
+                    <TableHead>Recommendations</TableHead>
                     <TableHead>Actions</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {patients.map((patient) => (
+                  {filteredPatients.map((patient) => (
                     <TableRow key={patient.id}>
                       <TableCell>{patient.number}</TableCell>
                       <TableCell>
                         <div className="space-y-2">
+                          <Input
+                            placeholder="National ID"
+                            value={patient.nationalId}
+                            onChange={(e) => updatePatient(patient.id, { nationalId: e.target.value })}
+                          />
                           <Input
                             placeholder="Patient Name"
                             value={patient.patientName}
@@ -338,7 +372,14 @@ const AdminDashboard = () => {
                       </TableCell>
                       <TableCell>
                         <Input
-                          placeholder="Possible diagnosis"
+                          placeholder="Medical history (optional)"
+                          value={patient.medicalHistory}
+                          onChange={(e) => updatePatient(patient.id, { medicalHistory: e.target.value })}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <Input
+                          placeholder="Recommendations"
                           value={patient.diagnosis}
                           onChange={(e) => updatePatient(patient.id, { diagnosis: e.target.value })}
                         />
