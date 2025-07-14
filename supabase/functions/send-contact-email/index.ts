@@ -49,7 +49,7 @@ serve(async (req) => {
     switch (type) {
       case 'consultation':
         emailOptions = {
-          from: 'Garrison Health <contact@garrisonhealth147.com>',
+          from: 'Garrison Health <onboarding@resend.dev>',
           to: ['garrisonhealth147@gmail.com'],
           subject: `New Health Consultation - ${data.condition}`,
           html: `
@@ -83,7 +83,7 @@ serve(async (req) => {
 
       case 'newsletter':
         emailOptions = {
-          from: 'Garrison Health <contact@garrisonhealth147.com>',
+          from: 'Garrison Health <onboarding@resend.dev>',
           to: ['garrisonhealth147@gmail.com'],
           subject: 'New Newsletter Subscription',
           html: `
@@ -97,7 +97,7 @@ serve(async (req) => {
 
       case 'contact':
         emailOptions = {
-          from: 'Garrison Health <contact@garrisonhealth147.com>',
+          from: 'Garrison Health <onboarding@resend.dev>',
           to: ['garrisonhealth147@gmail.com'],
           subject: `Contact Form: ${data.subject}`,
           html: `
