@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -184,11 +183,6 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
 
       // Send email notification
       await sendEmailNotification(consultationData);
-
-      toast({
-        title: "Consultation Submitted Successfully!",
-        description: "Your consultation request has been submitted and our team has been notified.",
-      });
 
       // Redirect to success page after a short delay
       setTimeout(() => {

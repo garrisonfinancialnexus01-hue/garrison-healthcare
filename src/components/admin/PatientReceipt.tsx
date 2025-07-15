@@ -20,34 +20,41 @@ const PatientReceipt = forwardRef<HTMLDivElement, PatientReceiptProps>(
         style={{ width: '210mm', minHeight: '297mm' }} // A4 size
       >
         {/* Header */}
-        <div className="text-center mb-8 border-b-2 border-garrison-teal pb-6">
+        <div className="text-center mb-8 pb-6" style={{ borderBottom: '2px solid #058789' }}>
           <img 
             src="/lovable-uploads/53ec9fcd-ff23-422f-9d2a-8e2fb54e60e1.png" 
             alt="Garrison Health Logo" 
             className="h-24 mx-auto mb-4"
           />
-          <h1 className="text-3xl font-bold text-garrison-teal">GARRISON HEALTH</h1>
-          <p className="text-lg text-garrison-coral mt-2">Professional Healthcare Services</p>
-          <p className="text-sm text-garrison-teal/70 mt-1 font-semibold">Your health, Our priority</p>
+          <h1 className="text-3xl font-bold" style={{ color: '#058789' }}>GARRISON HEALTH</h1>
+          <div className="mt-3 space-y-1">
+            <p className="text-sm font-medium" style={{ color: '#058789' }}>
+              Tel: +256745101519 or +256761281222
+            </p>
+            <p className="text-sm font-semibold" style={{ color: '#E03F3E' }}>Your health, Our priority</p>
+          </div>
         </div>
 
         {/* Receipt Header */}
-        <div className="mb-8 bg-gradient-to-r from-garrison-teal/10 to-garrison-coral/10 p-6 rounded-lg border border-garrison-teal/20">
+        <div className="mb-8 p-6 rounded-lg" style={{ 
+          background: 'linear-gradient(to right, rgba(5, 135, 137, 0.1), rgba(224, 63, 62, 0.1))', 
+          border: '1px solid rgba(5, 135, 137, 0.2)' 
+        }}>
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold text-garrison-teal">CONSULTATION RECEIPT</h2>
-            <div className="text-right bg-white p-3 rounded-lg border border-garrison-coral/30">
-              <p className="text-sm text-garrison-teal">Receipt No.</p>
-              <p className="text-lg font-semibold text-garrison-coral">{receiptNumber}</p>
+            <h2 className="text-2xl font-bold" style={{ color: '#058789' }}>CONSULTATION RECEIPT</h2>
+            <div className="text-right bg-white p-3 rounded-lg" style={{ border: '1px solid rgba(224, 63, 62, 0.3)' }}>
+              <p className="text-sm" style={{ color: '#058789' }}>Receipt No.</p>
+              <p className="text-lg font-semibold" style={{ color: '#E03F3E' }}>{receiptNumber}</p>
             </div>
           </div>
           
           <div className="grid grid-cols-2 gap-6">
             <div>
-              <p className="text-sm text-garrison-teal font-medium">Date:</p>
+              <p className="text-sm font-medium" style={{ color: '#058789' }}>Date:</p>
               <p className="font-semibold text-gray-800">{currentDate}</p>
             </div>
             <div>
-              <p className="text-sm text-garrison-teal font-medium">Time:</p>
+              <p className="text-sm font-medium" style={{ color: '#058789' }}>Time:</p>
               <p className="font-semibold text-gray-800">{currentTime}</p>
             </div>
           </div>
@@ -55,81 +62,103 @@ const PatientReceipt = forwardRef<HTMLDivElement, PatientReceiptProps>(
 
         {/* Patient Information */}
         <div className="mb-8">
-          <h3 className="text-xl font-semibold text-garrison-teal mb-4 border-b-2 border-garrison-coral/50 pb-2">
+          <h3 className="text-xl font-semibold mb-4 pb-2" style={{ 
+            color: '#058789', 
+            borderBottom: '2px solid rgba(224, 63, 62, 0.5)' 
+          }}>
             PATIENT INFORMATION
           </h3>
           <div className="grid grid-cols-2 gap-6">
             <div>
-              <p className="text-sm text-garrison-teal font-medium">Patient Name:</p>
+              <p className="text-sm font-medium" style={{ color: '#058789' }}>Patient Name:</p>
               <p className="font-semibold text-lg text-gray-800">{patient.patientName || 'N/A'}</p>
             </div>
             <div>
-              <p className="text-sm text-garrison-teal font-medium">National ID:</p>
+              <p className="text-sm font-medium" style={{ color: '#058789' }}>National ID:</p>
               <p className="font-semibold text-gray-800">{patient.nationalId || 'N/A'}</p>
             </div>
             <div>
-              <p className="text-sm text-garrison-teal font-medium">Age:</p>
+              <p className="text-sm font-medium" style={{ color: '#058789' }}>Age:</p>
               <p className="font-semibold text-gray-800">{patient.age || 'N/A'}</p>
             </div>
             <div>
-              <p className="text-sm text-garrison-teal font-medium">Phone Number:</p>
+              <p className="text-sm font-medium" style={{ color: '#058789' }}>Phone Number:</p>
               <p className="font-semibold text-gray-800">{patient.phoneNumber || 'N/A'}</p>
             </div>
             <div>
-              <p className="text-sm text-garrison-teal font-medium">Patient ID:</p>
-              <p className="font-semibold text-garrison-coral">#{patient.number.toString().padStart(4, '0')}</p>
+              <p className="text-sm font-medium" style={{ color: '#058789' }}>Patient ID:</p>
+              <p className="font-semibold" style={{ color: '#E03F3E' }}>#{patient.number.toString().padStart(4, '0')}</p>
             </div>
           </div>
         </div>
 
         {/* Consultation Details */}
         <div className="mb-8">
-          <h3 className="text-xl font-semibold text-garrison-teal mb-4 border-b-2 border-garrison-coral/50 pb-2">
+          <h3 className="text-xl font-semibold mb-4 pb-2" style={{ 
+            color: '#058789', 
+            borderBottom: '2px solid rgba(224, 63, 62, 0.5)' 
+          }}>
             CONSULTATION DETAILS
           </h3>
           <div className="grid grid-cols-2 gap-6">
             <div>
-              <p className="text-sm text-garrison-teal font-medium">Consultation Type:</p>
+              <p className="text-sm font-medium" style={{ color: '#058789' }}>Consultation Type:</p>
               <p className="font-semibold text-gray-800">{patient.type}</p>
             </div>
             <div>
-              <p className="text-sm text-garrison-teal font-medium">Consultation Mode:</p>
+              <p className="text-sm font-medium" style={{ color: '#058789' }}>Consultation Mode:</p>
               <p className="font-semibold text-gray-800">{patient.mode}</p>
             </div>
             <div>
-              <p className="text-sm text-garrison-teal font-medium">Status:</p>
+              <p className="text-sm font-medium" style={{ color: '#058789' }}>Status:</p>
               <p className="font-semibold text-gray-800">{patient.status}</p>
             </div>
             <div>
-              <p className="text-sm text-garrison-teal font-medium">Fee:</p>
-              <p className="font-semibold text-lg text-garrison-coral bg-garrison-coral/10 px-3 py-1 rounded-lg border border-garrison-coral/30">{patient.fee}</p>
+              <p className="text-sm font-medium" style={{ color: '#058789' }}>Fee:</p>
+              <p className="font-semibold text-lg px-3 py-1 rounded-lg" style={{ 
+                color: '#E03F3E', 
+                backgroundColor: 'rgba(224, 63, 62, 0.1)', 
+                border: '1px solid rgba(224, 63, 62, 0.3)' 
+              }}>{patient.fee}</p>
             </div>
           </div>
         </div>
 
         {/* Medical Information */}
         <div className="mb-8">
-          <h3 className="text-xl font-semibold text-garrison-teal mb-4 border-b-2 border-garrison-coral/50 pb-2">
+          <h3 className="text-xl font-semibold mb-4 pb-2" style={{ 
+            color: '#058789', 
+            borderBottom: '2px solid rgba(224, 63, 62, 0.5)' 
+          }}>
             MEDICAL INFORMATION
           </h3>
           <div className="space-y-4">
             <div>
-              <p className="text-sm text-garrison-teal font-medium mb-2">Patient's Symptoms:</p>
-              <p className="bg-garrison-teal/5 p-3 rounded-lg border border-garrison-teal/20 min-h-[60px] text-gray-800">
+              <p className="text-sm font-medium mb-2" style={{ color: '#058789' }}>Patient's Symptoms:</p>
+              <p className="p-3 rounded-lg min-h-[60px] text-gray-800" style={{ 
+                backgroundColor: 'rgba(5, 135, 137, 0.05)', 
+                border: '1px solid rgba(5, 135, 137, 0.2)' 
+              }}>
                 {patient.symptoms || 'No symptoms recorded'}
               </p>
             </div>
             {patient.medicalHistory && (
               <div>
-                <p className="text-sm text-garrison-teal font-medium mb-2">Medical History:</p>
-                <p className="bg-garrison-coral/5 p-3 rounded-lg border border-garrison-coral/20 min-h-[60px] text-gray-800">
+                <p className="text-sm font-medium mb-2" style={{ color: '#058789' }}>Medical History:</p>
+                <p className="p-3 rounded-lg min-h-[60px] text-gray-800" style={{ 
+                  backgroundColor: 'rgba(224, 63, 62, 0.05)', 
+                  border: '1px solid rgba(224, 63, 62, 0.2)' 
+                }}>
                   {patient.medicalHistory}
                 </p>
               </div>
             )}
             <div>
-              <p className="text-sm text-garrison-teal font-medium mb-2">Recommendations:</p>
-              <p className="bg-gradient-to-r from-garrison-teal/5 to-garrison-coral/5 p-3 rounded-lg border border-garrison-teal/20 min-h-[60px] text-gray-800">
+              <p className="text-sm font-medium mb-2" style={{ color: '#058789' }}>Recommendations:</p>
+              <p className="p-3 rounded-lg min-h-[60px] text-gray-800" style={{ 
+                background: 'linear-gradient(to right, rgba(5, 135, 137, 0.05), rgba(224, 63, 62, 0.05))', 
+                border: '1px solid rgba(5, 135, 137, 0.2)' 
+              }}>
                 {patient.diagnosis || 'No recommendations recorded'}
               </p>
             </div>
@@ -137,19 +166,21 @@ const PatientReceipt = forwardRef<HTMLDivElement, PatientReceiptProps>(
         </div>
 
         {/* Footer */}
-        <div className="mt-12 pt-6 border-t-2 border-gradient-to-r from-garrison-teal to-garrison-coral">
-          <div className="text-center bg-gradient-to-r from-garrison-teal/5 to-garrison-coral/5 p-4 rounded-lg">
-            <p className="text-sm text-garrison-teal mb-2 font-medium">
+        <div className="mt-12 pt-6" style={{ borderTop: '2px solid #058789' }}>
+          <div className="text-center p-4 rounded-lg" style={{ 
+            background: 'linear-gradient(to right, rgba(5, 135, 137, 0.05), rgba(224, 63, 62, 0.05))' 
+          }}>
+            <p className="text-sm mb-2 font-medium" style={{ color: '#058789' }}>
               Thank you for choosing Garrison Health for your healthcare needs
             </p>
-            <p className="text-xs text-garrison-teal/70">
+            <p className="text-xs" style={{ color: 'rgba(5, 135, 137, 0.7)' }}>
               This is a computer-generated receipt and does not require a signature
             </p>
-            <div className="mt-4 pt-4 border-t border-garrison-coral/30">
-              <p className="text-xs text-garrison-teal/60">
+            <div className="mt-4 pt-4" style={{ borderTop: '1px solid rgba(224, 63, 62, 0.3)' }}>
+              <p className="text-xs" style={{ color: 'rgba(5, 135, 137, 0.6)' }}>
                 Generated on {currentDate} at {currentTime} | Receipt #{receiptNumber}
               </p>
-              <p className="text-xs text-garrison-teal/60 mt-1">
+              <p className="text-xs mt-1" style={{ color: 'rgba(5, 135, 137, 0.6)' }}>
                 Patient: {patient.patientName} | ID: #{patient.number.toString().padStart(4, '0')}
               </p>
             </div>
