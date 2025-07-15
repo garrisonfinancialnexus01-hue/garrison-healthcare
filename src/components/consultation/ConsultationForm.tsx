@@ -90,39 +90,58 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
 
   const sendEmailNotification = async (consultationData: any) => {
     try {
-      console.log("Sending consultation email notification");
+      console.log("Sending consultation email notification with data:", consultationData);
+      
+      const emailPayload = {
+        type: 'consultation',
+        patientName: consultationData.patientName,
+        age: consultationData.age,
+        gender: consultationData.gender,
+        contact: consultationData.contact,
+        nationalId: consultationData.nationalId || 'Not provided',
+        condition: consultationData.condition,
+        conditionType: consultationData.type,
+        system: consultationData.system,
+        fee: consultationData.fee,
+        paid: consultationData.paid,
+        consultationMode: consultationData.consultationMode,
+        symptomsDescription: consultationData.symptomsDescription,
+        medicalHistory: consultationData.medicalHistory || 'Not provided',
+        onsetDate: consultationData.onsetDate ? format(consultationData.onsetDate, 'PPP') : 'Not specified'
+      };
+
+      console.log("Email payload:", emailPayload);
       
       const { data, error } = await supabase.functions.invoke('send-contact-email', {
-        body: {
-          type: 'consultation',
-          patientName: consultationData.patientName,
-          age: consultationData.age,
-          gender: consultationData.gender,
-          contact: consultationData.contact,
-          nationalId: consultationData.nationalId || 'Not provided',
-          condition: consultationData.condition,
-          conditionType: consultationData.type,
-          system: consultationData.system,
-          fee: consultationData.fee,
-          paid: consultationData.paid,
-          consultationMode: consultationData.consultationMode,
-          symptomsDescription: consultationData.symptomsDescription,
-          medicalHistory: consultationData.medicalHistory || 'Not provided',
-          onsetDate: consultationData.onsetDate ? format(consultationData.onsetDate, 'PPP') : 'Not specified'
-        }
+        body: emailPayload
       });
 
-      console.log("Consultation email response:", { data, error });
+      console.log("Raw email response:", { data, error });
 
       if (error) {
-        console.error("Consultation email error:", error);
-        throw error;
+        console.error("Email service error:", error);
+        toast({
+          title: "Email Warning",
+          description: "Consultation saved but email notification failed. Please contact us directly.",
+          variant: "destructive",
+        });
+        return;
       }
       
-      console.log('Consultation email notification sent successfully');
+      console.log('Consultation email notification sent successfully:', data);
+      
+      toast({
+        title: "Email Sent",
+        description: "Consultation details have been emailed to our team.",
+      });
+      
     } catch (error) {
-      console.error('Error sending consultation email notification:', error);
-      // Don't throw error here - consultation should still be processed
+      console.error('Critical error sending consultation email:', error);
+      toast({
+        title: "Email Error",
+        description: "Failed to send email notification. Please contact us directly at garrisonhealth147@gmail.com",
+        variant: "destructive",
+      });
     }
   };
 
