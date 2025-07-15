@@ -51,32 +51,83 @@ serve(async (req) => {
         emailOptions = {
           from: 'Garrison Health <onboarding@resend.dev>',
           to: ['garrisonhealth147@gmail.com'],
-          subject: `New Health Consultation - ${data.condition}`,
+          subject: `🏥 New Health Consultation Request - ${data.condition}`,
           html: `
-            <h2>New Health Consultation Submission</h2>
-            <hr>
-            <h3>Patient Details:</h3>
-            <p><strong>Name:</strong> ${data.patientName}</p>
-            <p><strong>Age:</strong> ${data.age}</p>
-            <p><strong>Gender:</strong> ${data.gender}</p>
-            <p><strong>Contact:</strong> ${data.contact}</p>
-            <p><strong>National ID:</strong> ${data.nationalId || 'Not provided'}</p>
-            
-            <h3>Consultation Details:</h3>
-            <p><strong>Condition:</strong> ${data.condition}</p>
-            <p><strong>Type:</strong> ${data.type}</p>
-            <p><strong>System:</strong> ${data.system}</p>
-            <p><strong>Fee:</strong> ${data.fee.toLocaleString()} UGX</p>
-            <p><strong>Preferred Mode:</strong> ${data.consultationMode}</p>
-            <p><strong>Payment Status:</strong> ${data.paid ? 'Paid' : 'Unpaid'}</p>
-            
-            <h3>Medical Information:</h3>
-            <p><strong>Symptoms:</strong><br>${data.symptomsDescription}</p>
-            <p><strong>Medical History:</strong><br>${data.medicalHistory || 'None provided'}</p>
-            <p><strong>Onset Date:</strong> ${data.onsetDate || 'Not specified'}</p>
-            
-            <hr>
-            <p><strong>Submitted on:</strong> ${new Date().toLocaleString()}</p>
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+              <div style="background: linear-gradient(135deg, #00a99d 0%, #00796b 100%); color: white; padding: 20px; text-align: center;">
+                <h2 style="margin: 0; font-size: 24px;">🏥 New Health Consultation Request</h2>
+                <p style="margin: 10px 0 0 0; opacity: 0.9;">Garrison Health Center</p>
+              </div>
+              
+              <div style="padding: 20px;">
+                <div style="background-color: #f8f9fa; border-left: 4px solid #00a99d; padding: 15px; margin-bottom: 20px;">
+                  <h3 style="color: #00796b; margin: 0 0 15px 0;">👤 Patient Information</h3>
+                  <table style="width: 100%; border-collapse: collapse;">
+                    <tr><td style="padding: 5px 0; font-weight: bold; width: 30%;">Full Name:</td><td style="padding: 5px 0;">${data.patientName}</td></tr>
+                    <tr><td style="padding: 5px 0; font-weight: bold;">Age:</td><td style="padding: 5px 0;">${data.age} years</td></tr>
+                    <tr><td style="padding: 5px 0; font-weight: bold;">Gender:</td><td style="padding: 5px 0;">${data.gender.charAt(0).toUpperCase() + data.gender.slice(1)}</td></tr>
+                    <tr><td style="padding: 5px 0; font-weight: bold;">Contact:</td><td style="padding: 5px 0;">${data.contact}</td></tr>
+                    <tr><td style="padding: 5px 0; font-weight: bold;">National ID:</td><td style="padding: 5px 0;">${data.nationalId || 'Not provided'}</td></tr>
+                  </table>
+                </div>
+
+                <div style="background-color: #f8f9fa; border-left: 4px solid #00a99d; padding: 15px; margin-bottom: 20px;">
+                  <h3 style="color: #00796b; margin: 0 0 15px 0;">🩺 Consultation Details</h3>
+                  <table style="width: 100%; border-collapse: collapse;">
+                    <tr><td style="padding: 5px 0; font-weight: bold; width: 30%;">Condition:</td><td style="padding: 5px 0;">${data.condition}</td></tr>
+                    <tr><td style="padding: 5px 0; font-weight: bold;">Category:</td><td style="padding: 5px 0;">${data.conditionType.charAt(0).toUpperCase() + data.conditionType.slice(1)}</td></tr>
+                    <tr><td style="padding: 5px 0; font-weight: bold;">System:</td><td style="padding: 5px 0;">${data.system}</td></tr>
+                    <tr><td style="padding: 5px 0; font-weight: bold;">Consultation Fee:</td><td style="padding: 5px 0; color: #d32f2f; font-weight: bold;">${data.fee ? data.fee.toLocaleString() : 'N/A'} UGX</td></tr>
+                    <tr><td style="padding: 5px 0; font-weight: bold;">Preferred Mode:</td><td style="padding: 5px 0;">${data.consultationMode.charAt(0).toUpperCase() + data.consultationMode.slice(1)}</td></tr>
+                    <tr><td style="padding: 5px 0; font-weight: bold;">Payment Status:</td><td style="padding: 5px 0; color: ${data.paid ? '#4caf50' : '#ff9800'}; font-weight: bold;">${data.paid ? '✅ Paid' : '⏳ Pending'}</td></tr>
+                  </table>
+                </div>
+
+                <div style="background-color: #f8f9fa; border-left: 4px solid #00a99d; padding: 15px; margin-bottom: 20px;">
+                  <h3 style="color: #00796b; margin: 0 0 15px 0;">📋 Medical Information</h3>
+                  <div style="margin-bottom: 15px;">
+                    <strong style="color: #555;">Patient's Symptoms:</strong>
+                    <div style="background-color: white; border: 1px solid #ddd; border-radius: 4px; padding: 10px; margin-top: 5px; line-height: 1.5;">
+                      ${data.symptomsDescription || 'No symptoms described'}
+                    </div>
+                  </div>
+                  
+                  <div style="margin-bottom: 15px;">
+                    <strong style="color: #555;">Medical History:</strong>
+                    <div style="background-color: white; border: 1px solid #ddd; border-radius: 4px; padding: 10px; margin-top: 5px; line-height: 1.5;">
+                      ${data.medicalHistory || 'No medical history provided'}
+                    </div>
+                  </div>
+                  
+                  <table style="width: 100%; border-collapse: collapse;">
+                    <tr><td style="padding: 5px 0; font-weight: bold; width: 30%;">Symptom Onset:</td><td style="padding: 5px 0;">${data.onsetDate || 'Not specified'}</td></tr>
+                  </table>
+                </div>
+
+                <div style="background-color: #e3f2fd; border: 1px solid #2196f3; border-radius: 4px; padding: 15px; text-align: center;">
+                  <p style="margin: 0; color: #1976d2;">
+                    <strong>📅 Submitted:</strong> ${new Date().toLocaleString('en-GB', { 
+                      timeZone: 'Africa/Kampala',
+                      year: 'numeric',
+                      month: 'long', 
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: true
+                    })}
+                  </p>
+                </div>
+
+                <div style="margin-top: 20px; padding: 15px; background-color: #fff3e0; border-radius: 4px; border-left: 4px solid #ff9800;">
+                  <p style="margin: 0; color: #f57c00; font-weight: bold;">⚡ Action Required:</p>
+                  <p style="margin: 5px 0 0 0; color: #ef6c00;">Please review this consultation request and contact the patient to schedule their appointment.</p>
+                </div>
+              </div>
+              
+              <div style="background-color: #f5f5f5; padding: 15px; text-align: center; color: #666; font-size: 12px;">
+                <p style="margin: 0;">Garrison Health Center - "Your health, Our priority"</p>
+              </div>
+            </div>
           `,
         };
         break;
