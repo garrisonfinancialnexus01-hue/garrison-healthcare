@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Stethoscope, Heart, Banknote, MessageCircle, CheckCircle, Baby, Users, Scissors } from "lucide-react";
+import { Stethoscope, Heart, Banknote, MessageCircle, CheckCircle } from "lucide-react";
 import ConsultationForm from "@/components/consultation/ConsultationForm";
 import { conditionData } from "@/data/consultationData";
 

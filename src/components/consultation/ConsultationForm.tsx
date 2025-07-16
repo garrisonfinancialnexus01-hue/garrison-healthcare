@@ -90,8 +90,8 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
 
   const sendEmailNotification = async (consultationData: any) => {
     try {
-      console.log("Starting email notification process...");
-      console.log("Consultation data to send:", consultationData);
+      console.log("📧 Starting email notification process...");
+      console.log("📋 Consultation data to send:", consultationData);
       
       const emailPayload = {
         type: 'consultation',
@@ -111,7 +111,7 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
         onsetDate: consultationData.onsetDate ? format(new Date(consultationData.onsetDate), 'PPP') : ''
       };
 
-      console.log("Email payload prepared:", emailPayload);
+      console.log("📤 Email payload prepared:", emailPayload);
       
       const { data, error } = await supabase.functions.invoke('send-contact-email', {
         body: emailPayload,
@@ -120,40 +120,41 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
         }
       });
 
-      console.log("Supabase function response:", { data, error });
+      console.log("📨 Supabase function response:", { data, error });
 
       if (error) {
-        console.error("Supabase function error:", error);
-        throw new Error(error.message || 'Failed to send email notification');
+        console.error("❌ Supabase function error:", error);
+        throw new Error(`Function Error: ${error.message || 'Failed to send email notification'}`);
       }
 
       if (data?.error) {
-        console.error("Email service error:", data.error);
-        throw new Error(data.error);
+        console.error("❌ Email service error:", data.error);
+        throw new Error(`Email Service Error: ${data.error}`);
       }
       
-      console.log('Email notification sent successfully:', data);
+      console.log('✅ Email notification sent successfully:', data);
       
       toast({
-        title: "✅ Email Sent Successfully",
-        description: "Your consultation request has been emailed to our medical team. They will contact you soon.",
+        title: "✅ Consultation Submitted Successfully!",
+        description: "Your consultation request has been sent to our medical team. They will contact you soon via your preferred consultation mode.",
         duration: 5000,
       });
+
+      return true;
       
     } catch (error) {
-      console.error('Email notification failed:', error);
+      console.error('💥 Email notification failed:', error);
       
-      // Show specific error message to user
       const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
       
       toast({
         title: "❌ Email Delivery Failed",
-        description: `Failed to send email notification: ${errorMessage}. Please contact us directly at garrisonhealth147@gmail.com or call +256745101519`,
+        description: `Failed to send email notification: ${errorMessage}. Please contact us directly at garrisonhealth147@gmail.com or call +256745101519. Your consultation has been saved locally.`,
         variant: "destructive",
-        duration: 8000,
+        duration: 10000,
       });
       
-      throw error; // Re-throw to handle in main submission flow
+      throw error;
     }
   };
 
@@ -165,6 +166,7 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
         title: "Missing Information",
         description: "Please fill in all required fields (Name, Age, Contact, and Symptoms).",
         variant: "destructive",
+        duration: 5000,
       });
       return;
     }
@@ -172,9 +174,9 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
     setIsSubmitting(true);
 
     try {
-      console.log("Starting consultation submission process...");
+      console.log("🚀 Starting consultation submission process...");
       
-      // Create consultation data
+      // Create consultation data with all the information
       const consultationData = {
         patientName: formData.fullName,
         age: parseInt(formData.age),
@@ -193,32 +195,27 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
         attachments: formData.attachments
       };
 
-      console.log("Consultation data prepared:", consultationData);
+      console.log("📊 Complete consultation data prepared:", consultationData);
 
       // Add consultation to the local system first
       addConsultation(consultationData);
-      console.log("Consultation added to local system");
+      console.log("💾 Consultation saved to local system");
 
       // Send email notification
-      await sendEmailNotification(consultationData);
+      const emailSent = await sendEmailNotification(consultationData);
       
-      // Show success message and redirect
-      toast({
-        title: "🎉 Consultation Submitted Successfully",
-        description: "Your consultation has been submitted and our medical team has been notified. Thank you!",
-        duration: 5000,
-      });
-
-      // Redirect to success page after a short delay
-      setTimeout(() => {
-        onSuccess();
-      }, 2000);
+      if (emailSent) {
+        // Only redirect to success page if email was sent successfully
+        setTimeout(() => {
+          onSuccess();
+        }, 2000);
+      }
 
     } catch (error) {
-      console.error('Error during consultation submission:', error);
+      console.error('💥 Error during consultation submission:', error);
       
-      // Don't show additional error toast here since sendEmailNotification already shows one
-      // The consultation is still saved locally even if email fails
+      // Consultation is still saved locally even if email fails
+      // User will see the error toast from sendEmailNotification
       
     } finally {
       setIsSubmitting(false);
@@ -481,11 +478,6 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
                 <Phone className="h-4 w-4" />
                 Call +256761281222 for Payment
               </Button>
-              {hasCalledForPayment && (
-                <div className="bg-green-100 border border-green-300 rounded-lg p-3">
-                  <p className="text-green-700 text-sm text-center font-medium">✓ Payment call initiated - Status: Paid</p>
-                </div>
-              )}
             </div>
           </div>
 
