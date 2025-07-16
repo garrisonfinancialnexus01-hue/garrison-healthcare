@@ -88,13 +88,11 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
     window.location.href = `tel:${phoneNumber}`;
   };
 
-  const sendEmailNotification = async (consultationData: any) => {
+  const sendConsultationEmail = async (consultationData: any) => {
     try {
-      console.log("📧 Starting email notification process...");
-      console.log("📋 Consultation data to send:", consultationData);
+      console.log("📧 Starting new email notification process...");
       
-      const emailPayload = {
-        type: 'consultation',
+      const emailData = {
         patientName: consultationData.patientName,
         age: consultationData.age,
         gender: consultationData.gender,
@@ -111,43 +109,40 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
         onsetDate: consultationData.onsetDate ? format(new Date(consultationData.onsetDate), 'PPP') : ''
       };
 
-      console.log("📤 Email payload prepared:", emailPayload);
+      console.log("📤 Sending consultation email data:", emailData);
       
-      // Send as JavaScript object, NOT JSON string - Supabase handles the JSON conversion
-      const { data, error } = await supabase.functions.invoke('send-contact-email', {
-        body: emailPayload
+      const { data, error } = await supabase.functions.invoke('consultation-email', {
+        body: emailData
       });
 
-      console.log("📨 Supabase function response:", { data, error });
-
       if (error) {
-        console.error("❌ Supabase function error:", error);
-        throw new Error(`Function Error: ${error.message || 'Failed to send email notification'}`);
+        console.error("❌ Email function error:", error);
+        throw new Error(`Email delivery failed: ${error.message}`);
       }
 
       if (data?.error) {
         console.error("❌ Email service error:", data.error);
-        throw new Error(`Email Service Error: ${data.error}`);
+        throw new Error(`Email service error: ${data.error}`);
       }
       
-      console.log('✅ Email notification sent successfully:', data);
+      console.log('✅ Consultation email sent successfully:', data);
       
       toast({
         title: "✅ Consultation Submitted Successfully!",
-        description: "Your consultation request has been sent to our medical team. They will contact you soon via your preferred consultation mode.",
+        description: "Your consultation request has been sent to our medical team. They will contact you soon.",
         duration: 5000,
       });
 
       return true;
       
     } catch (error) {
-      console.error('💥 Email notification failed:', error);
+      console.error('💥 Email delivery failed:', error);
       
       const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
       
       toast({
-        title: "❌ Email Delivery Failed",
-        description: `Failed to send email notification: ${errorMessage}. Please contact us directly at garrisonhealth147@gmail.com or call +256745101519. Your consultation has been saved locally.`,
+        title: "❌ Submission Failed",
+        description: `Failed to send consultation: ${errorMessage}. Please contact us directly at garrisonhealth147@gmail.com or call +256745101519.`,
         variant: "destructive",
         duration: 10000,
       });
@@ -172,9 +167,8 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
     setIsSubmitting(true);
 
     try {
-      console.log("🚀 Starting consultation submission process...");
+      console.log("🚀 Starting consultation submission...");
       
-      // Create consultation data with all the information
       const consultationData = {
         patientName: formData.fullName,
         age: parseInt(formData.age),
@@ -193,28 +187,22 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
         attachments: formData.attachments
       };
 
-      console.log("📊 Complete consultation data prepared:", consultationData);
+      console.log("📊 Consultation data prepared:", consultationData);
 
-      // Add consultation to the local system first
+      // Save consultation locally first
       addConsultation(consultationData);
-      console.log("💾 Consultation saved to local system");
+      console.log("💾 Consultation saved locally");
 
       // Send email notification
-      const emailSent = await sendEmailNotification(consultationData);
+      await sendConsultationEmail(consultationData);
       
-      if (emailSent) {
-        // Only redirect to success page if email was sent successfully
-        setTimeout(() => {
-          onSuccess();
-        }, 2000);
-      }
+      // Redirect to success page
+      setTimeout(() => {
+        onSuccess();
+      }, 2000);
 
     } catch (error) {
       console.error('💥 Error during consultation submission:', error);
-      
-      // Consultation is still saved locally even if email fails
-      // User will see the error toast from sendEmailNotification
-      
     } finally {
       setIsSubmitting(false);
     }
