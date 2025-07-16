@@ -1,17 +1,5 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { Resend } from 'https://esm.sh/resend@0.16.0'
-
-const resendApiKey = Deno.env.get('RESEND_API_KEY');
-console.log("🚀 Edge function starting, checking API key...");
-
-if (!resendApiKey) {
-  console.error("🚨 CRITICAL: RESEND_API_KEY environment variable is not set");
-} else {
-  console.log("✅ RESEND_API_KEY is available");
-}
-
-const resend = new Resend(resendApiKey);
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -46,9 +34,11 @@ serve(async (req) => {
       );
     }
 
-    // Check API key before processing
+    const resendApiKey = Deno.env.get('RESEND_API_KEY');
+    console.log("🚀 Edge function starting, checking API key...");
+
     if (!resendApiKey) {
-      console.error("🚨 API key missing - cannot send email");
+      console.error("🚨 CRITICAL: RESEND_API_KEY environment variable is not set");
       return new Response(
         JSON.stringify({ 
           error: "Email service configuration is missing. RESEND_API_KEY not configured.",
@@ -62,9 +52,11 @@ serve(async (req) => {
           } 
         }
       );
+    } else {
+      console.log("✅ RESEND_API_KEY is available");
     }
     
-    // Parse request body - Supabase functions.invoke sends JSON automatically
+    // Parse request body
     let requestBody;
     try {
       requestBody = await req.json();
@@ -89,101 +81,93 @@ serve(async (req) => {
     const { type, ...data } = requestBody;
     console.log("🔄 Processing email request:", { type, hasData: !!data });
 
-    let emailOptions;
+    let emailPayload;
 
     // Handle different email types
     switch (type) {
-      case 'consultation':
-        console.log("🏥 Preparing consultation email with data:", {
-          patientName: data.patientName,
-          condition: data.condition,
-          email: "garrisonhealth147@gmail.com"
-        });
-        
-        const getConditionTypeLabel = (type: string) => {
-          switch (type) {
-            case "acute":
-              return "Acute Condition";
-            case "chronic":
-              return "Chronic Condition";
-            case "obstetrics":
-              return "Obstetrics & Gynaecology";
-            case "paediatrics":
-              return "Paediatrics";
-            case "surgical":
-              return "Surgical";
-            default:
-              return type;
-          }
-        };
-        
-        emailOptions = {
+      case 'newsletter':
+        console.log("📧 Preparing newsletter subscription email");
+        emailPayload = {
           from: 'Garrison Health <onboarding@resend.dev>',
           to: ['garrisonhealth147@gmail.com'],
-          subject: `🏥 New Health Consultation Request - ${data.condition}`,
+          subject: '📧 New Newsletter Subscription - Garrison Health',
           html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff;">
               <div style="background: linear-gradient(135deg, #058789 0%, #E03F3E 100%); color: white; padding: 20px; text-align: center;">
-                <h2 style="margin: 0; font-size: 24px;">🏥 New Health Consultation Request</h2>
+                <h2 style="margin: 0; font-size: 24px;">📧 New Newsletter Subscription</h2>
                 <p style="margin: 10px 0 0 0; opacity: 0.9;">Garrison Health Center</p>
               </div>
               
               <div style="padding: 20px;">
-                <!-- Consultation Summary Section -->
                 <div style="background-color: #e3f2fd; border-left: 4px solid #058789; padding: 15px; margin-bottom: 20px;">
-                  <h3 style="color: #058789; margin: 0 0 15px 0;">📋 Consultation Summary</h3>
+                  <h3 style="color: #058789; margin: 0 0 15px 0;">📋 Subscription Details</h3>
                   <table style="width: 100%; border-collapse: collapse;">
-                    <tr><td style="padding: 8px 0; font-weight: bold; width: 30%; color: #333;">Type:</td><td style="padding: 8px 0; color: #555;">${getConditionTypeLabel(data.conditionType)}</td></tr>
-                    <tr><td style="padding: 8px 0; font-weight: bold; color: #333;">System:</td><td style="padding: 8px 0; color: #555;">${data.system || 'Not specified'}</td></tr>
-                    <tr><td style="padding: 8px 0; font-weight: bold; color: #333;">Condition:</td><td style="padding: 8px 0; color: #555;">${data.condition || 'Not specified'}</td></tr>
-                    <tr><td style="padding: 8px 0; font-weight: bold; color: #333;">Consultation Fee:</td><td style="padding: 8px 0; color: #E03F3E; font-weight: bold;">${data.fee ? data.fee.toLocaleString() : 'N/A'} UGX</td></tr>
+                    <tr><td style="padding: 8px 0; font-weight: bold; width: 30%; color: #333;">Email Address:</td><td style="padding: 8px 0; color: #555;">${data.email}</td></tr>
+                    <tr><td style="padding: 8px 0; font-weight: bold; color: #333;">Subscription Date:</td><td style="padding: 8px 0; color: #555;">${new Date().toLocaleString('en-GB', { 
+                      timeZone: 'Africa/Kampala',
+                      year: 'numeric',
+                      month: 'long', 
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: true
+                    })}</td></tr>
                   </table>
                 </div>
 
-                <!-- Patient Information Section -->
-                <div style="background-color: #f8f9fa; border-left: 4px solid #058789; padding: 15px; margin-bottom: 20px;">
-                  <h3 style="color: #058789; margin: 0 0 15px 0;">👤 Patient Information</h3>
-                  <table style="width: 100%; border-collapse: collapse;">
-                    <tr><td style="padding: 8px 0; font-weight: bold; width: 30%; color: #333;">Full Name:</td><td style="padding: 8px 0; color: #555;">${data.patientName || 'Not provided'}</td></tr>
-                    <tr><td style="padding: 8px 0; font-weight: bold; color: #333;">Age:</td><td style="padding: 8px 0; color: #555;">${data.age || 'Not provided'} years</td></tr>
-                    <tr><td style="padding: 8px 0; font-weight: bold; color: #333;">Gender:</td><td style="padding: 8px 0; color: #555;">${data.gender ? data.gender.charAt(0).toUpperCase() + data.gender.slice(1) : 'Not provided'}</td></tr>
-                    <tr><td style="padding: 8px 0; font-weight: bold; color: #333;">Contact:</td><td style="padding: 8px 0; color: #555;">${data.contact || 'Not provided'}</td></tr>
-                    <tr><td style="padding: 8px 0; font-weight: bold; color: #333;">National ID:</td><td style="padding: 8px 0; color: #555;">${data.nationalId || 'Not provided'}</td></tr>
-                  </table>
-                </div>
-
-                <!-- Consultation Details Section -->
                 <div style="background-color: #f8f9fa; border-left: 4px solid #E03F3E; padding: 15px; margin-bottom: 20px;">
-                  <h3 style="color: #E03F3E; margin: 0 0 15px 0;">🩺 Consultation Details</h3>
+                  <p style="margin: 0; color: #333; line-height: 1.6;">
+                    <strong>📬 Newsletter Subscription:</strong><br>
+                    This user has subscribed to receive the latest health articles, medical updates, and health tips from Garrison Health Center.
+                  </p>
+                </div>
+
+                <div style="margin-top: 20px; padding: 15px; background-color: #fff3e0; border-radius: 8px; border-left: 4px solid #E03F3E;">
+                  <p style="margin: 0; color: #E03F3E; font-weight: bold;">⚡ Action Required:</p>
+                  <p style="margin: 8px 0 0 0; color: #333;">Please add this email to your newsletter mailing list and consider sending a welcome email to the new subscriber.</p>
+                </div>
+              </div>
+              
+              <div style="background-color: #f5f5f5; padding: 20px; text-align: center; color: #666; font-size: 14px;">
+                <p style="margin: 0 0 5px 0;">Garrison Health Center</p>
+                <p style="margin: 0; font-style: italic;">"Your health, Our priority"</p>
+              </div>
+            </div>
+          `,
+        };
+        break;
+
+      case 'contact':
+        console.log("📞 Preparing contact form email");
+        emailPayload = {
+          from: 'Garrison Health <onboarding@resend.dev>',
+          to: ['garrisonhealth147@gmail.com'],
+          subject: `📞 Contact Form Message: ${data.subject}`,
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+              <div style="background: linear-gradient(135deg, #058789 0%, #E03F3E 100%); color: white; padding: 20px; text-align: center;">
+                <h2 style="margin: 0; font-size: 24px;">📞 New Contact Form Submission</h2>
+                <p style="margin: 10px 0 0 0; opacity: 0.9;">Garrison Health Center</p>
+              </div>
+              
+              <div style="padding: 20px;">
+                <div style="background-color: #e3f2fd; border-left: 4px solid #058789; padding: 15px; margin-bottom: 20px;">
+                  <h3 style="color: #058789; margin: 0 0 15px 0;">👤 Contact Information</h3>
                   <table style="width: 100%; border-collapse: collapse;">
-                    <tr><td style="padding: 8px 0; font-weight: bold; width: 30%; color: #333;">Preferred Mode:</td><td style="padding: 8px 0; color: #555;">${data.consultationMode ? data.consultationMode.charAt(0).toUpperCase() + data.consultationMode.slice(1) : 'Not specified'}</td></tr>
-                    <tr><td style="padding: 8px 0; font-weight: bold; color: #333;">Payment Status:</td><td style="padding: 8px 0; color: ${data.paid ? '#4caf50' : '#ff9800'}; font-weight: bold;">${data.paid ? '✅ Paid' : '⏳ Pending'}</td></tr>
+                    <tr><td style="padding: 8px 0; font-weight: bold; width: 30%; color: #333;">Full Name:</td><td style="padding: 8px 0; color: #555;">${data.name}</td></tr>
+                    <tr><td style="padding: 8px 0; font-weight: bold; color: #333;">Email Address:</td><td style="padding: 8px 0; color: #555;">${data.email}</td></tr>
+                    <tr><td style="padding: 8px 0; font-weight: bold; color: #333;">Phone Number:</td><td style="padding: 8px 0; color: #555;">${data.phone || 'Not provided'}</td></tr>
+                    <tr><td style="padding: 8px 0; font-weight: bold; color: #333;">Subject:</td><td style="padding: 8px 0; color: #555;">${data.subject}</td></tr>
                   </table>
                 </div>
 
-                <!-- Medical Information Section -->
-                <div style="background-color: #f8f9fa; border-left: 4px solid #058789; padding: 15px; margin-bottom: 20px;">
-                  <h3 style="color: #058789; margin: 0 0 15px 0;">📋 Medical Information</h3>
-                  <div style="margin-bottom: 15px;">
-                    <strong style="color: #333;">Patient's Symptoms:</strong>
-                    <div style="background-color: white; border: 1px solid #ddd; border-radius: 4px; padding: 12px; margin-top: 8px; line-height: 1.5; color: #555;">
-                      ${data.symptomsDescription || 'No symptoms described'}
-                    </div>
+                <div style="background-color: #f8f9fa; border-left: 4px solid #E03F3E; padding: 15px; margin-bottom: 20px;">
+                  <h3 style="color: #E03F3E; margin: 0 0 15px 0;">💬 Message Content</h3>
+                  <div style="background-color: white; border: 1px solid #ddd; border-radius: 4px; padding: 15px; line-height: 1.6; color: #555;">
+                    ${data.message.replace(/\n/g, '<br>')}
                   </div>
-                  
-                  <div style="margin-bottom: 15px;">
-                    <strong style="color: #333;">Medical History:</strong>
-                    <div style="background-color: white; border: 1px solid #ddd; border-radius: 4px; padding: 12px; margin-top: 8px; line-height: 1.5; color: #555;">
-                      ${data.medicalHistory || 'No medical history provided'}
-                    </div>
-                  </div>
-                  
-                  <table style="width: 100%; border-collapse: collapse;">
-                    <tr><td style="padding: 8px 0; font-weight: bold; width: 30%; color: #333;">Symptom Onset:</td><td style="padding: 8px 0; color: #555;">${data.onsetDate || 'Not specified'}</td></tr>
-                  </table>
                 </div>
 
-                <!-- Submission Details -->
                 <div style="background-color: #e3f2fd; border: 1px solid #058789; border-radius: 8px; padding: 20px; text-align: center;">
                   <p style="margin: 0; color: #058789; font-size: 16px;">
                     <strong>📅 Submitted:</strong> ${new Date().toLocaleString('en-GB', { 
@@ -198,11 +182,10 @@ serve(async (req) => {
                   </p>
                 </div>
 
-                <!-- Action Required -->
                 <div style="margin-top: 20px; padding: 15px; background-color: #fff3e0; border-radius: 8px; border-left: 4px solid #E03F3E;">
                   <p style="margin: 0; color: #E03F3E; font-weight: bold;">⚡ Action Required:</p>
-                  <p style="margin: 8px 0 0 0; color: #333;">Please review this consultation request and contact the patient to schedule their appointment.</p>
-                  <p style="margin: 8px 0 0 0; color: #666; font-size: 14px;">Contact: Tel: +256745101519 or +256761281222</p>
+                  <p style="margin: 8px 0 0 0; color: #333;">Please review this message and respond to the customer at their provided email address.</p>
+                  <p style="margin: 8px 0 0 0; color: #666; font-size: 14px;">Contact them at: ${data.email}${data.phone ? ` or ${data.phone}` : ''}</p>
                 </div>
               </div>
               
@@ -210,48 +193,6 @@ serve(async (req) => {
                 <p style="margin: 0 0 5px 0;">Garrison Health Center</p>
                 <p style="margin: 0; font-style: italic;">"Your health, Our priority"</p>
               </div>
-            </div>
-          `,
-        };
-        break;
-
-      case 'newsletter':
-        emailOptions = {
-          from: 'Garrison Health <onboarding@resend.dev>',
-          to: ['garrisonhealth147@gmail.com'],
-          subject: '📧 New Newsletter Subscription',
-          html: `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-              <h2 style="color: #058789;">📧 New Newsletter Subscription</h2>
-              <p><strong>Email:</strong> ${data.email}</p>
-              <p><strong>Subscription Date:</strong> ${new Date().toLocaleString()}</p>
-              <p>This user has subscribed to receive the latest health articles and medical updates.</p>
-            </div>
-          `,
-        };
-        break;
-
-      case 'contact':
-        emailOptions = {
-          from: 'Garrison Health <onboarding@resend.dev>',
-          to: ['garrisonhealth147@gmail.com'],
-          subject: `📞 Contact Form: ${data.subject}`,
-          html: `
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-              <h2 style="color: #058789;">📞 New Contact Form Submission</h2>
-              <hr style="border: 1px solid #ddd;">
-              <p><strong>Name:</strong> ${data.name}</p>
-              <p><strong>Email:</strong> ${data.email}</p>
-              <p><strong>Phone:</strong> ${data.phone || 'Not provided'}</p>
-              <p><strong>Subject:</strong> ${data.subject}</p>
-              
-              <h3>Message:</h3>
-              <div style="background-color: #f9f9f9; padding: 15px; border-radius: 5px;">
-                ${data.message}
-              </div>
-              
-              <hr style="border: 1px solid #ddd; margin-top: 20px;">
-              <p><strong>Submitted at:</strong> ${new Date().toLocaleString()}</p>
             </div>
           `,
         };
@@ -271,19 +212,28 @@ serve(async (req) => {
         );
     }
 
-    console.log("📤 Attempting to send email to:", emailOptions.to);
-    console.log("📧 Email subject:", emailOptions.subject);
+    console.log("📤 Sending email via Resend API...");
+    console.log("📧 Email subject:", emailPayload.subject);
 
     try {
-      const emailResult = await resend.emails.send(emailOptions);
-      console.log("✅ Email sent successfully:", emailResult);
+      const response = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${resendApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(emailPayload),
+      });
 
-      if (emailResult.error) {
-        console.error("❌ Resend API returned an error:", emailResult.error);
+      const responseData = await response.json();
+      console.log("📧 Resend API response:", responseData);
+
+      if (!response.ok) {
+        console.error("❌ Resend API error:", responseData);
         return new Response(
           JSON.stringify({ 
             error: "Failed to send email",
-            details: emailResult.error,
+            details: responseData,
             status: 'resend_api_error'
           }),
           { 
@@ -296,11 +246,13 @@ serve(async (req) => {
         );
       }
 
+      console.log("✅ Email sent successfully!");
+
       return new Response(
         JSON.stringify({ 
           success: true,
           message: "Email sent successfully", 
-          data: emailResult
+          data: responseData
         }),
         { 
           status: 200,
@@ -314,22 +266,11 @@ serve(async (req) => {
     } catch (emailError) {
       console.error("💥 Failed to send email via Resend:", emailError);
       
-      // More detailed error information
-      const errorDetails = {
-        message: emailError.message || "Unknown email service error",
-        name: emailError.name || "EmailError",
-        status: emailError.status || 'unknown',
-        cause: emailError.cause || 'network_or_api_error'
-      };
-      
-      console.error("🔍 Detailed error info:", errorDetails);
-      
       return new Response(
         JSON.stringify({ 
           error: "Email delivery failed",
-          details: errorDetails.message,
-          status: 'email_send_failed',
-          errorInfo: errorDetails
+          details: emailError.message || "Unknown email service error",
+          status: 'email_send_failed'
         }),
         { 
           status: 500, 
@@ -348,7 +289,6 @@ serve(async (req) => {
       JSON.stringify({ 
         error: "Internal server error",
         details: error.message || "Unknown error occurred",
-        stack: error.stack,
         status: 'internal_server_error'
       }),
       { 
