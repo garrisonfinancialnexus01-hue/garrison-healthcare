@@ -90,7 +90,7 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
 
   const sendConsultationEmail = async (consultationData: any) => {
     try {
-      console.log("📧 Starting new email notification process...");
+      console.log("📧 Starting consultation email delivery...");
       
       const emailData = {
         patientName: consultationData.patientName,
@@ -109,14 +109,14 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
         onsetDate: consultationData.onsetDate ? format(new Date(consultationData.onsetDate), 'PPP') : ''
       };
 
-      console.log("📤 Sending consultation email data:", emailData);
+      console.log("📤 Invoking consultation-email function with data:", emailData);
       
       const { data, error } = await supabase.functions.invoke('consultation-email', {
         body: emailData
       });
 
       if (error) {
-        console.error("❌ Email function error:", error);
+        console.error("❌ Supabase function error:", error);
         throw new Error(`Email delivery failed: ${error.message}`);
       }
 
@@ -193,7 +193,7 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
       addConsultation(consultationData);
       console.log("💾 Consultation saved locally");
 
-      // Send email notification
+      // Send email notification using our new function
       await sendConsultationEmail(consultationData);
       
       // Redirect to success page
