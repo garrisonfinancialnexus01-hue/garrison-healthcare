@@ -1,10 +1,5 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { Resend } from 'https://esm.sh/resend@0.16.0'
-
-const resendApiKey = Deno.env.get('RESEND_API_KEY');
-
-const resend = new Resend(resendApiKey);
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -39,6 +34,8 @@ serve(async (req) => {
       );
     }
 
+    const resendApiKey = Deno.env.get('RESEND_API_KEY');
+    
     // Check API key
     if (!resendApiKey) {
       console.error("🚨 RESEND_API_KEY not found");
@@ -191,24 +188,34 @@ serve(async (req) => {
       </div>
     `;
 
-    // Send email
-    console.log("📤 Sending consultation email...");
+    // Send email using fetch instead of Resend SDK
+    console.log("📤 Sending consultation email via Resend API...");
     
-    const emailResult = await resend.emails.send({
+    const emailPayload = {
       from: 'Garrison Health <onboarding@resend.dev>',
       to: ['garrisonhealth147@gmail.com'],
       subject: `🏥 New Health Consultation Request - ${consultationData.condition}`,
       html: emailHtml,
+    };
+
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${resendApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(emailPayload),
     });
 
-    console.log("📧 Email sent:", emailResult);
+    const responseData = await response.json();
+    console.log("📧 Resend API response:", responseData);
 
-    if (emailResult.error) {
-      console.error("❌ Resend error:", emailResult.error);
+    if (!response.ok) {
+      console.error("❌ Resend API error:", responseData);
       return new Response(
         JSON.stringify({ 
           error: "Failed to send email",
-          details: emailResult.error
+          details: responseData
         }),
         { 
           status: 500, 
@@ -220,11 +227,13 @@ serve(async (req) => {
       );
     }
 
+    console.log("✅ Email sent successfully!");
+
     return new Response(
       JSON.stringify({ 
         success: true,
         message: "Consultation email sent successfully",
-        emailId: emailResult.data?.id
+        emailId: responseData.id
       }),
       { 
         status: 200,
