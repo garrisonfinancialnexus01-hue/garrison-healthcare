@@ -113,8 +113,9 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
 
       console.log("📤 Email payload prepared:", emailPayload);
       
+      // Ensure we're sending a proper JSON body
       const { data, error } = await supabase.functions.invoke('send-contact-email', {
-        body: emailPayload,
+        body: JSON.stringify(emailPayload),
         headers: {
           'Content-Type': 'application/json',
         }
