@@ -8,7 +8,7 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
-  console.log(`📨 Received ${req.method} request to send-contact-email function`);
+  console.log(`📨 Contact email function called with method: ${req.method}`);
   
   try {
     // Handle CORS preflight requests
@@ -35,14 +35,13 @@ serve(async (req) => {
     }
 
     const resendApiKey = Deno.env.get('RESEND_API_KEY');
-    console.log("🚀 Edge function starting, checking API key...");
+    console.log("🔑 Checking RESEND_API_KEY availability...");
 
     if (!resendApiKey) {
-      console.error("🚨 CRITICAL: RESEND_API_KEY environment variable is not set");
+      console.error("🚨 RESEND_API_KEY not found in environment");
       return new Response(
         JSON.stringify({ 
-          error: "Email service configuration is missing. RESEND_API_KEY not configured.",
-          details: "Please contact the administrator to configure the email service."
+          error: "Email service not configured",
         }),
         { 
           status: 500, 
@@ -52,15 +51,18 @@ serve(async (req) => {
           } 
         }
       );
-    } else {
-      console.log("✅ RESEND_API_KEY is available");
     }
+    
+    console.log("✅ RESEND_API_KEY found");
     
     // Parse request body
     let requestBody;
     try {
       requestBody = await req.json();
-      console.log("📋 Request body parsed successfully:", { type: requestBody.type });
+      console.log("📋 Request body parsed successfully:", { 
+        type: requestBody.type,
+        hasData: !!requestBody
+      });
     } catch (parseError) {
       console.error("❌ Failed to parse request body:", parseError);
       return new Response(
@@ -79,7 +81,7 @@ serve(async (req) => {
     }
     
     const { type, ...data } = requestBody;
-    console.log("🔄 Processing email request:", { type, hasData: !!data });
+    console.log("🔄 Processing email request:", { type, dataKeys: Object.keys(data) });
 
     let emailPayload;
 
@@ -138,7 +140,7 @@ serve(async (req) => {
         break;
 
       case 'contact':
-        console.log("📞 Preparing contact form email");
+        console.log("📞 Preparing contact form email for:", data.name);
         emailPayload = {
           from: 'Garrison Health <onboarding@resend.dev>',
           to: ['garrisonhealth147@gmail.com'],
@@ -213,64 +215,43 @@ serve(async (req) => {
     }
 
     console.log("📤 Sending email via Resend API...");
-    console.log("📧 Email subject:", emailPayload.subject);
+    console.log("📧 Email details:", {
+      to: emailPayload.to,
+      subject: emailPayload.subject,
+      from: emailPayload.from
+    });
 
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${resendApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(emailPayload),
+    });
+
+    const responseText = await response.text();
+    console.log("📧 Resend API raw response:", responseText);
+    
+    let responseData;
     try {
-      const response = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${resendApiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(emailPayload),
+      responseData = JSON.parse(responseText);
+    } catch (e) {
+      console.error("❌ Failed to parse Resend response:", e);
+      responseData = { error: "Invalid response from email service", raw: responseText };
+    }
+
+    if (!response.ok) {
+      console.error("❌ Resend API error:", {
+        status: response.status,
+        statusText: response.statusText,
+        data: responseData
       });
-
-      const responseData = await response.json();
-      console.log("📧 Resend API response:", responseData);
-
-      if (!response.ok) {
-        console.error("❌ Resend API error:", responseData);
-        return new Response(
-          JSON.stringify({ 
-            error: "Failed to send email",
-            details: responseData,
-            status: 'resend_api_error'
-          }),
-          { 
-            status: 500, 
-            headers: { 
-              "Content-Type": "application/json",
-              ...corsHeaders 
-            } 
-          }
-        );
-      }
-
-      console.log("✅ Email sent successfully!");
-
       return new Response(
         JSON.stringify({ 
-          success: true,
-          message: "Email sent successfully", 
-          data: responseData
-        }),
-        { 
-          status: 200,
-          headers: { 
-            "Content-Type": "application/json",
-            ...corsHeaders 
-          } 
-        }
-      );
-
-    } catch (emailError) {
-      console.error("💥 Failed to send email via Resend:", emailError);
-      
-      return new Response(
-        JSON.stringify({ 
-          error: "Email delivery failed",
-          details: emailError.message || "Unknown email service error",
-          status: 'email_send_failed'
+          error: "Failed to send email",
+          details: responseData,
+          status: response.status
         }),
         { 
           status: 500, 
@@ -282,14 +263,30 @@ serve(async (req) => {
       );
     }
 
+    console.log("✅ Email sent successfully! Email ID:", responseData.id);
+
+    return new Response(
+      JSON.stringify({ 
+        success: true,
+        message: "Email sent successfully", 
+        emailId: responseData.id
+      }),
+      { 
+        status: 200,
+        headers: { 
+          "Content-Type": "application/json",
+          ...corsHeaders 
+        } 
+      }
+    );
+
   } catch (error) {
     console.error("💥 Critical error in send-contact-email function:", error);
     
     return new Response(
       JSON.stringify({ 
         error: "Internal server error",
-        details: error.message || "Unknown error occurred",
-        status: 'internal_server_error'
+        details: error.message
       }),
       { 
         status: 500, 

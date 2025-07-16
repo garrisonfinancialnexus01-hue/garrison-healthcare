@@ -8,7 +8,7 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
-  console.log(`📨 New consultation email request received`);
+  console.log(`📨 Consultation email function called with method: ${req.method}`);
   
   try {
     // Handle CORS preflight requests
@@ -35,10 +35,10 @@ serve(async (req) => {
     }
 
     const resendApiKey = Deno.env.get('RESEND_API_KEY');
+    console.log("🔑 Checking RESEND_API_KEY availability...");
     
-    // Check API key
     if (!resendApiKey) {
-      console.error("🚨 RESEND_API_KEY not found");
+      console.error("🚨 RESEND_API_KEY not found in environment");
       return new Response(
         JSON.stringify({ 
           error: "Email service not configured",
@@ -53,13 +53,16 @@ serve(async (req) => {
       );
     }
     
+    console.log("✅ RESEND_API_KEY found");
+    
     // Parse request body
     let consultationData;
     try {
       consultationData = await req.json();
       console.log("📋 Consultation data received:", { 
         patientName: consultationData.patientName,
-        condition: consultationData.condition 
+        condition: consultationData.condition,
+        email: consultationData.email || 'No email provided'
       });
     } catch (parseError) {
       console.error("❌ Failed to parse request body:", parseError);
@@ -188,15 +191,21 @@ serve(async (req) => {
       </div>
     `;
 
-    // Send email using fetch instead of Resend SDK
-    console.log("📤 Sending consultation email via Resend API...");
+    console.log("📧 Preparing to send consultation email...");
     
     const emailPayload = {
       from: 'Garrison Health <onboarding@resend.dev>',
       to: ['garrisonhealth147@gmail.com'],
-      subject: `🏥 New Health Consultation Request - ${consultationData.condition}`,
+      subject: `🏥 New Health Consultation Request - ${consultationData.condition || 'Medical Consultation'}`,
       html: emailHtml,
     };
+
+    console.log("📤 Sending email via Resend API...");
+    console.log("📧 Email details:", {
+      to: emailPayload.to,
+      subject: emailPayload.subject,
+      from: emailPayload.from
+    });
 
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -207,15 +216,28 @@ serve(async (req) => {
       body: JSON.stringify(emailPayload),
     });
 
-    const responseData = await response.json();
-    console.log("📧 Resend API response:", responseData);
+    const responseText = await response.text();
+    console.log("📧 Resend API raw response:", responseText);
+    
+    let responseData;
+    try {
+      responseData = JSON.parse(responseText);
+    } catch (e) {
+      console.error("❌ Failed to parse Resend response:", e);
+      responseData = { error: "Invalid response from email service", raw: responseText };
+    }
 
     if (!response.ok) {
-      console.error("❌ Resend API error:", responseData);
+      console.error("❌ Resend API error:", {
+        status: response.status,
+        statusText: response.statusText,
+        data: responseData
+      });
       return new Response(
         JSON.stringify({ 
-          error: "Failed to send email",
-          details: responseData
+          error: "Failed to send consultation email",
+          details: responseData,
+          status: response.status
         }),
         { 
           status: 500, 
@@ -227,7 +249,7 @@ serve(async (req) => {
       );
     }
 
-    console.log("✅ Email sent successfully!");
+    console.log("✅ Consultation email sent successfully! Email ID:", responseData.id);
 
     return new Response(
       JSON.stringify({ 
@@ -245,7 +267,7 @@ serve(async (req) => {
     );
 
   } catch (error) {
-    console.error("💥 Critical error:", error);
+    console.error("💥 Critical error in consultation email function:", error);
     
     return new Response(
       JSON.stringify({ 
