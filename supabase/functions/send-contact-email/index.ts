@@ -64,27 +64,17 @@ serve(async (req) => {
       );
     }
     
-    // Enhanced request body parsing with better error handling
+    // Parse request body - Supabase functions.invoke sends JSON automatically
     let requestBody;
-    let rawBody = "";
     try {
-      rawBody = await req.text();
-      console.log("📄 Raw request body:", rawBody);
-      
-      if (!rawBody || rawBody.trim() === "") {
-        throw new Error("Empty request body");
-      }
-      
-      requestBody = JSON.parse(rawBody);
+      requestBody = await req.json();
       console.log("📋 Request body parsed successfully:", { type: requestBody.type });
     } catch (parseError) {
       console.error("❌ Failed to parse request body:", parseError);
-      console.error("📄 Raw body received:", rawBody);
       return new Response(
         JSON.stringify({ 
           error: "Invalid JSON in request body",
-          details: parseError.message,
-          rawBody: rawBody.substring(0, 100) // First 100 chars for debugging
+          details: parseError.message
         }),
         { 
           status: 400, 

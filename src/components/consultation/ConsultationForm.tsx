@@ -113,12 +113,9 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
 
       console.log("📤 Email payload prepared:", emailPayload);
       
-      // Ensure we're sending a proper JSON body
+      // Send as JavaScript object, NOT JSON string - Supabase handles the JSON conversion
       const { data, error } = await supabase.functions.invoke('send-contact-email', {
-        body: JSON.stringify(emailPayload),
-        headers: {
-          'Content-Type': 'application/json',
-        }
+        body: emailPayload
       });
 
       console.log("📨 Supabase function response:", { data, error });
