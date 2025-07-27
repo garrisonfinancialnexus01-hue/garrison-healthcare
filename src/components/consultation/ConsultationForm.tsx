@@ -94,19 +94,15 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
       
       const emailData = {
         patientName: consultationData.patientName,
+        nationalId: consultationData.nationalId || 'Not provided',
         age: consultationData.age,
-        gender: consultationData.gender,
-        contact: consultationData.contact,
-        nationalId: consultationData.nationalId || '',
-        condition: consultationData.condition,
-        conditionType: consultationData.type,
-        system: consultationData.system,
-        fee: consultationData.fee,
-        paid: consultationData.paid,
+        phoneNumber: consultationData.contact,
+        symptoms: consultationData.symptomsDescription,
+        medicalHistory: consultationData.medicalHistory || 'Not provided',
+        disease: consultationData.condition,
         consultationMode: consultationData.consultationMode,
-        symptomsDescription: consultationData.symptomsDescription,
-        medicalHistory: consultationData.medicalHistory || '',
-        onsetDate: consultationData.onsetDate ? format(new Date(consultationData.onsetDate), 'PPP') : ''
+        conditionType: consultationData.type,
+        fee: `${consultationData.fee.toLocaleString()} UGX`
       };
 
       console.log("📤 Invoking consultation-email function with data:", emailData);
@@ -228,6 +224,17 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
   return (
     <Card className="max-w-4xl mx-auto">
       <CardHeader className="text-center bg-gradient-to-r from-garrison-teal to-garrison-teal-dark text-white rounded-t-lg">
+        <div className="flex items-center justify-center mb-6">
+          <img 
+            src="/lovable-uploads/b1e9c9e4-ef8d-4272-9df2-cd827031729b.png" 
+            alt="Garrison Healthcare Logo" 
+            className="h-20 w-20 mr-4"
+          />
+          <div>
+            <CardTitle className="text-2xl font-bold">GARRISON HEALTHCARE</CardTitle>
+            <p className="text-white/90 text-sm">Your health, Our priority</p>
+          </div>
+        </div>
         <div className="flex items-center justify-center mb-4">
           <Stethoscope className="h-8 w-8 mr-3" />
           <CardTitle className="text-2xl">Health Consultation Form</CardTitle>

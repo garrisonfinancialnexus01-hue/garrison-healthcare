@@ -32,7 +32,7 @@ const ContactForm = () => {
 
   const sendEmail = async (): Promise<boolean> => {
     try {
-      console.log("Sending contact email via Supabase function");
+      console.log("Sending contact email to garrisonhealth147@gmail.com via Supabase function");
       
       const { data, error } = await supabase.functions.invoke('send-contact-email', {
         body: {
@@ -74,7 +74,7 @@ const ContactForm = () => {
       if (success) {
         toast({
           title: "Message sent successfully",
-          description: "Thanks for reaching out! We'll get back to you soon.",
+          description: "Thanks for reaching out! We'll get back to you soon at garrisonhealth147@gmail.com.",
           variant: "default",
         });
         resetForm();
@@ -84,7 +84,7 @@ const ContactForm = () => {
       
       toast({
         title: "Unable to send message",
-        description: "Please try again or contact us directly via email or phone.",
+        description: "Please try again or contact us directly at garrisonhealth147@gmail.com or phone +256745101519.",
         variant: "destructive",
       });
     } finally {

@@ -25,7 +25,7 @@ const NewsletterForm = () => {
     setLoading(true);
 
     try {
-      console.log("Sending newsletter subscription email");
+      console.log("Sending newsletter subscription email to garrisonhealth147@gmail.com");
       
       const { data, error } = await supabase.functions.invoke('send-contact-email', {
         body: {
@@ -43,7 +43,7 @@ const NewsletterForm = () => {
 
       toast({
         title: "Successfully Subscribed!",
-        description: "Thank you for subscribing to our newsletter.",
+        description: "Thank you for subscribing to our newsletter. We'll keep you updated with the latest health information.",
         variant: "default",
       });
       
@@ -52,7 +52,7 @@ const NewsletterForm = () => {
       console.error("Newsletter subscription failed:", error);
       toast({
         title: "Subscription Failed",
-        description: "Please try again later or contact us directly.",
+        description: "Please try again later or contact us directly at garrisonhealth147@gmail.com.",
         variant: "destructive",
       });
     } finally {
