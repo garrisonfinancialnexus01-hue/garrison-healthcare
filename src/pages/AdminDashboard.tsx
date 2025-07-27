@@ -9,9 +9,11 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { LogOut, Shield, Plus, Download, Trash2, Edit, Search } from "lucide-react";
 import AdminLogin from "@/components/auth/AdminLogin";
 import PatientReceipt from "@/components/admin/PatientReceipt";
+import DiseaseImageManager from "@/components/admin/DiseaseImageManager";
 import { useToast } from "@/hooks/use-toast";
 import { useAdminPatients, AdminPatient } from "@/hooks/useAdminPatients";
 import { useReactToPrint } from 'react-to-print';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const AdminDashboard = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -21,6 +23,7 @@ const AdminDashboard = () => {
   const [selectedPatient, setSelectedPatient] = useState<AdminPatient | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [filteredPatients, setFilteredPatients] = useState<AdminPatient[]>([]);
+  const [isReceiptDialogOpen, setIsReceiptDialogOpen] = useState(false);
   const { toast } = useToast();
   const { patients, stats, addPatient, updatePatient, deletePatient, updateStats } = useAdminPatients();
   const receiptRef = useRef<HTMLDivElement>(null);
@@ -130,6 +133,11 @@ const AdminDashboard = () => {
     documentTitle: `Receipt-${selectedPatient?.number || 'Unknown'}`,
   });
 
+  const handleReceiptClick = (patient: AdminPatient) => {
+    setSelectedPatient(patient);
+    setIsReceiptDialogOpen(true);
+  };
+
   if (!isLoggedIn) {
     return <AdminLogin onLogin={handleLogin} />;
   }
@@ -161,6 +169,11 @@ const AdminDashboard = () => {
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Disease Image Manager Section */}
+        <div className="mb-8">
+          <DiseaseImageManager />
+        </div>
+
         {/* Editable Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {[
@@ -389,7 +402,7 @@ const AdminDashboard = () => {
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => setSelectedPatient(patient)}
+                            onClick={() => handleReceiptClick(patient)}
                           >
                             Receipt
                           </Button>
@@ -410,27 +423,27 @@ const AdminDashboard = () => {
           </CardContent>
         </Card>
 
-        {/* Receipt Section */}
-        {selectedPatient && (
-          <Card className="mb-8">
-            <CardHeader>
+        {/* Receipt Dialog */}
+        <Dialog open={isReceiptDialogOpen} onOpenChange={setIsReceiptDialogOpen}>
+          <DialogContent className="max-w-4xl">
+            <DialogHeader>
               <div className="flex justify-between items-center">
-                <CardTitle>Patient Receipt</CardTitle>
+                <DialogTitle>Patient Receipt</DialogTitle>
                 <Button onClick={handlePrintReceipt} className="garrison-btn-primary">
                   <Download className="h-4 w-4 mr-2" />
                   Download Receipt
                 </Button>
               </div>
-            </CardHeader>
-            <CardContent>
+            </DialogHeader>
+            {selectedPatient && (
               <PatientReceipt 
                 ref={receiptRef}
                 patient={selectedPatient} 
                 receiptNumber={generateReceiptNumber()}
               />
-            </CardContent>
-          </Card>
-        )}
+            )}
+          </DialogContent>
+        </Dialog>
       </div>
     </Layout>
   );
