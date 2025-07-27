@@ -6,29 +6,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
 import { useAdminPatients } from "@/hooks/useAdminPatients";
-import { AdminLogin } from "@/components/auth/AdminLogin";
-import { PatientReceipt } from "@/components/admin/PatientReceipt";
+import AdminLogin from "@/components/auth/AdminLogin";
+import PatientReceipt from "@/components/admin/PatientReceipt";
 import UpdateInfo from "@/components/admin/UpdateInfo";
 import { User, Phone, Calendar, FileText, DollarSign, Settings, Image } from "lucide-react";
 
 const AdminDashboard = () => {
-  const { user, logout } = useAuth();
-  const { patients, loading } = useAdminPatients();
+  const { isAuthenticated, logout } = useAuth();
+  const { patients } = useAdminPatients();
   const [selectedPatient, setSelectedPatient] = useState<any>(null);
 
-  if (!user) {
+  if (!isAuthenticated) {
     return <AdminLogin />;
-  }
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-garrison-teal mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading dashboard...</p>
-        </div>
-      </div>
-    );
   }
 
   return (
@@ -82,28 +71,28 @@ const AdminDashboard = () => {
                         <div className="flex items-center justify-between">
                           <div className="flex-1">
                             <div className="flex items-center gap-4 mb-2">
-                              <h3 className="font-semibold text-lg">{patient.patientName}</h3>
+                              <h3 className="font-semibold text-lg">{patient.name}</h3>
                               <Badge variant="outline">{patient.age} years</Badge>
                             </div>
                             
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600">
                               <div className="flex items-center gap-2">
                                 <Phone className="h-4 w-4" />
-                                <span>{patient.contact}</span>
+                                <span>{patient.phone}</span>
                               </div>
                               <div className="flex items-center gap-2">
                                 <FileText className="h-4 w-4" />
-                                <span>{patient.condition}</span>
+                                <span>{patient.symptoms}</span>
                               </div>
                               <div className="flex items-center gap-2">
                                 <DollarSign className="h-4 w-4" />
-                                <span>{patient.fee?.toLocaleString()} UGX</span>
+                                <span>{patient.consultationFee?.toLocaleString()} UGX</span>
                               </div>
                             </div>
                             
                             <div className="flex items-center gap-2 mt-2 text-sm text-gray-500">
                               <Calendar className="h-4 w-4" />
-                              <span>{new Date(patient.created_at).toLocaleDateString()}</span>
+                              <span>{new Date(patient.createdAt).toLocaleDateString()}</span>
                             </div>
                           </div>
                           
