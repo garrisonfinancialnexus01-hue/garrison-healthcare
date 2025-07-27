@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Upload, Trash2, Edit, Image as ImageIcon, Plus } from 'lucide-react';
 import { useDiseaseImages } from '@/hooks/useDiseaseImages';
+import { useToast } from '@/hooks/use-toast';
 
 const DiseaseImageManager = () => {
   const { images, loading, uploadImage, deleteImage, updateImage } = useDiseaseImages();
@@ -19,27 +20,76 @@ const DiseaseImageManager = () => {
   const [editDescription, setEditDescription] = useState('');
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        toast({
+          title: "Invalid File Type",
+          description: "Please select an image file (PNG, JPG, JPEG, etc.)",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      // Validate file size (5MB limit)
+      if (file.size > 5 * 1024 * 1024) {
+        toast({
+          title: "File Too Large",
+          description: "Please select an image smaller than 5MB",
+          variant: "destructive",
+        });
+        return;
+      }
+      
       setSelectedFile(file);
+      console.log('File selected:', file.name, file.size, file.type);
     }
   };
 
   const handleUpload = async () => {
-    if (!selectedFile || !uploadTitle.trim()) return;
+    if (!selectedFile || !uploadTitle.trim()) {
+      toast({
+        title: "Missing Information",
+        description: "Please select an image and enter a title",
+        variant: "destructive",
+      });
+      return;
+    }
 
-    await uploadImage(selectedFile, uploadTitle, uploadDescription);
-    
-    // Reset form
-    setSelectedFile(null);
-    setUploadTitle('');
-    setUploadDescription('');
-    setIsUploadDialogOpen(false);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+    setIsUploading(true);
+    console.log('Starting upload process...');
+
+    try {
+      await uploadImage(selectedFile, uploadTitle.trim(), uploadDescription.trim());
+      
+      // Reset form only on successful upload
+      setSelectedFile(null);
+      setUploadTitle('');
+      setUploadDescription('');
+      setIsUploadDialogOpen(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      
+      toast({
+        title: "Success",
+        description: "Disease image uploaded successfully",
+      });
+    } catch (error) {
+      console.error('Upload failed:', error);
+      toast({
+        title: "Upload Failed",
+        description: "Failed to upload image. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -51,20 +101,35 @@ const DiseaseImageManager = () => {
   };
 
   const handleUpdate = async () => {
-    if (!editingImage || !editTitle.trim()) return;
+    if (!editingImage || !editTitle.trim()) {
+      toast({
+        title: "Missing Information",
+        description: "Please enter a title",
+        variant: "destructive",
+      });
+      return;
+    }
 
-    await updateImage(editingImage.id, editTitle, editDescription);
-    
-    // Reset form
-    setEditingImage(null);
-    setEditTitle('');
-    setEditDescription('');
-    setIsEditDialogOpen(false);
+    try {
+      await updateImage(editingImage.id, editTitle.trim(), editDescription.trim());
+      
+      // Reset form
+      setEditingImage(null);
+      setEditTitle('');
+      setEditDescription('');
+      setIsEditDialogOpen(false);
+    } catch (error) {
+      console.error('Update failed:', error);
+    }
   };
 
   const handleDelete = async (id: string, imageUrl: string) => {
     if (window.confirm('Are you sure you want to delete this image?')) {
-      await deleteImage(id, imageUrl);
+      try {
+        await deleteImage(id, imageUrl);
+      } catch (error) {
+        console.error('Delete failed:', error);
+      }
     }
   };
 
@@ -112,15 +177,22 @@ const DiseaseImageManager = () => {
                     accept="image/*"
                     onChange={handleFileSelect}
                     ref={fileInputRef}
+                    className="cursor-pointer"
                   />
+                  {selectedFile && (
+                    <p className="text-sm text-gray-600 mt-1">
+                      Selected: {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
+                    </p>
+                  )}
                 </div>
                 <div>
-                  <Label htmlFor="upload-title">Title</Label>
+                  <Label htmlFor="upload-title">Title *</Label>
                   <Input
                     id="upload-title"
                     placeholder="Enter disease name or title"
                     value={uploadTitle}
                     onChange={(e) => setUploadTitle(e.target.value)}
+                    required
                   />
                 </div>
                 <div>
@@ -130,15 +202,25 @@ const DiseaseImageManager = () => {
                     placeholder="Enter description or additional information"
                     value={uploadDescription}
                     onChange={(e) => setUploadDescription(e.target.value)}
+                    rows={3}
                   />
                 </div>
                 <Button 
                   onClick={handleUpload}
-                  disabled={!selectedFile || !uploadTitle.trim()}
+                  disabled={!selectedFile || !uploadTitle.trim() || isUploading}
                   className="w-full garrison-btn-primary"
                 >
-                  <Upload className="h-4 w-4 mr-2" />
-                  Upload Image
+                  {isUploading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Uploading...
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="h-4 w-4 mr-2" />
+                      Upload Image
+                    </>
+                  )}
                 </Button>
               </div>
             </DialogContent>
@@ -161,6 +243,10 @@ const DiseaseImageManager = () => {
                     src={image.image_url}
                     alt={image.title}
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      console.error('Image failed to load:', image.image_url);
+                      e.currentTarget.src = '/placeholder.svg';
+                    }}
                   />
                 </div>
                 <CardContent className="p-4">
@@ -200,11 +286,12 @@ const DiseaseImageManager = () => {
             </DialogHeader>
             <div className="space-y-4">
               <div>
-                <Label htmlFor="edit-title">Title</Label>
+                <Label htmlFor="edit-title">Title *</Label>
                 <Input
                   id="edit-title"
                   value={editTitle}
                   onChange={(e) => setEditTitle(e.target.value)}
+                  required
                 />
               </div>
               <div>
@@ -213,6 +300,7 @@ const DiseaseImageManager = () => {
                   id="edit-description"
                   value={editDescription}
                   onChange={(e) => setEditDescription(e.target.value)}
+                  rows={3}
                 />
               </div>
               <Button 
