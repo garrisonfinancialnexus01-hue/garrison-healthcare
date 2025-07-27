@@ -13,7 +13,7 @@ import UpdateInfo from "@/components/admin/UpdateInfo";
 import { User, Phone, Calendar, FileText, DollarSign, Settings, Image } from "lucide-react";
 
 const AdminDashboard = () => {
-  const { isAuthenticated, login, logout } = useAuth();
+  const { isAuthenticated, login, logout, name } = useAuth();
   const { patients } = useAdminPatients();
   const [selectedPatient, setSelectedPatient] = useState<any>(null);
 
@@ -26,10 +26,20 @@ const AdminDashboard = () => {
       <div className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
-            <Button onClick={logout} variant="outline">
-              Logout
-            </Button>
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
+              {name && (
+                <p className="text-sm text-gray-600 mt-1">Welcome back, {name}</p>
+              )}
+            </div>
+            <div className="flex items-center gap-4">
+              {name && (
+                <span className="text-sm text-gray-600">Logged in as: {name}</span>
+              )}
+              <Button onClick={logout} variant="outline">
+                Logout
+              </Button>
+            </div>
           </div>
         </div>
       </div>
