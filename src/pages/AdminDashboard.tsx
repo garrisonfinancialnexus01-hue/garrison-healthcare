@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useAuth } from "@/hooks/useAuth";
 import { useAdminPatients } from "@/hooks/useAdminPatients";
 import AdminLogin from "@/components/auth/AdminLogin";
@@ -12,12 +13,12 @@ import UpdateInfo from "@/components/admin/UpdateInfo";
 import { User, Phone, Calendar, FileText, DollarSign, Settings, Image } from "lucide-react";
 
 const AdminDashboard = () => {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, login, logout } = useAuth();
   const { patients } = useAdminPatients();
   const [selectedPatient, setSelectedPatient] = useState<any>(null);
 
   if (!isAuthenticated) {
-    return <AdminLogin />;
+    return <AdminLogin onLogin={login} />;
   }
 
   return (
@@ -71,14 +72,14 @@ const AdminDashboard = () => {
                         <div className="flex items-center justify-between">
                           <div className="flex-1">
                             <div className="flex items-center gap-4 mb-2">
-                              <h3 className="font-semibold text-lg">{patient.name}</h3>
+                              <h3 className="font-semibold text-lg">{patient.patientName}</h3>
                               <Badge variant="outline">{patient.age} years</Badge>
                             </div>
                             
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600">
                               <div className="flex items-center gap-2">
                                 <Phone className="h-4 w-4" />
-                                <span>{patient.phone}</span>
+                                <span>{patient.phoneNumber}</span>
                               </div>
                               <div className="flex items-center gap-2">
                                 <FileText className="h-4 w-4" />
@@ -86,7 +87,7 @@ const AdminDashboard = () => {
                               </div>
                               <div className="flex items-center gap-2">
                                 <DollarSign className="h-4 w-4" />
-                                <span>{patient.consultationFee?.toLocaleString()} UGX</span>
+                                <span>{patient.fee}</span>
                               </div>
                             </div>
                             
@@ -118,12 +119,19 @@ const AdminDashboard = () => {
         </Tabs>
       </div>
 
-      {selectedPatient && (
-        <PatientReceipt
-          patient={selectedPatient}
-          onClose={() => setSelectedPatient(null)}
-        />
-      )}
+      <Dialog open={!!selectedPatient} onOpenChange={() => setSelectedPatient(null)}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Patient Receipt</DialogTitle>
+          </DialogHeader>
+          {selectedPatient && (
+            <PatientReceipt
+              patient={selectedPatient}
+              receiptNumber={`GH-${selectedPatient.number.toString().padStart(4, '0')}`}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
