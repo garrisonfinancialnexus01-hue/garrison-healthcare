@@ -1,37 +1,11 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Menu, X, Phone, ChevronDown } from "lucide-react";
+import { Menu, X, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const services = [
-    {
-      title: "Information about Diseases",
-      description: "Access comprehensive information about various health conditions",
-      href: "/services#diseases"
-    },
-    {
-      title: "Health Consultations",
-      description: "Get professional health advice from our qualified practitioners",
-      href: "/services#consultations"
-    },
-    {
-      title: "Health Education",
-      description: "Weekly updated health education materials",
-      href: "/services#education"
-    }
-  ];
 
   return (
     <header className="sticky top-0 bg-white/95 backdrop-blur-sm shadow-sm z-50 border-b border-gray-100">
@@ -52,42 +26,16 @@ const Navbar = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex space-x-8">
             <Link to="/" className="text-gray-700 hover:text-garrison-teal font-medium transition-colors">
               Home
             </Link>
             <Link to="/about" className="text-gray-700 hover:text-garrison-teal font-medium transition-colors">
               About
             </Link>
-            
-            {/* Services Dropdown */}
-            <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-gray-700 hover:text-garrison-teal font-medium transition-colors bg-transparent">
-                    Services
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="grid w-[400px] gap-3 p-4 bg-white">
-                      {services.map((service) => (
-                        <NavigationMenuLink asChild key={service.title}>
-                          <Link
-                            to={service.href}
-                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                          >
-                            <div className="text-sm font-medium leading-none">{service.title}</div>
-                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                              {service.description}
-                            </p>
-                          </Link>
-                        </NavigationMenuLink>
-                      ))}
-                    </div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
-            
+            <Link to="/services" className="text-gray-700 hover:text-garrison-teal font-medium transition-colors">
+              Services
+            </Link>
             <Link to="/health-articles" className="text-gray-700 hover:text-garrison-teal font-medium transition-colors">
               Health Articles
             </Link>
@@ -126,24 +74,9 @@ const Navbar = () => {
               <Link to="/about" className="text-gray-700 hover:text-garrison-teal font-medium py-2" onClick={() => setIsMenuOpen(false)}>
                 About
               </Link>
-              
-              {/* Mobile Services Dropdown */}
-              <div className="py-2">
-                <div className="text-gray-700 font-medium mb-2">Services</div>
-                <div className="ml-4 space-y-2">
-                  {services.map((service) => (
-                    <Link
-                      key={service.title}
-                      to={service.href}
-                      className="block text-gray-600 hover:text-garrison-teal py-1"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      {service.title}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-              
+              <Link to="/services" className="text-gray-700 hover:text-garrison-teal font-medium py-2" onClick={() => setIsMenuOpen(false)}>
+                Services
+              </Link>
               <Link to="/health-articles" className="text-gray-700 hover:text-garrison-teal font-medium py-2" onClick={() => setIsMenuOpen(false)}>
                 Health Articles
               </Link>
