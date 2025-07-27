@@ -14,12 +14,12 @@ const Navbar = () => {
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-3">
               <img 
-                src="/lovable-uploads/469e8eca-bd74-4a95-bbd5-ad3ca0a46078.png" 
-                alt="Garrison Health Logo" 
+                src="/lovable-uploads/dc785631-58ca-4c7e-9b23-7135677f219b.png" 
+                alt="Garrison Healthcare Logo" 
                 className="w-12 h-12 object-contain"
               />
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Garrison Health</h1>
+                <h1 className="text-2xl font-bold text-gray-900">Garrison Healthcare</h1>
                 <p className="text-sm text-garrison-red italic">Your health, Our priority</p>
               </div>
             </Link>

@@ -11,12 +11,12 @@ const Footer = () => {
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
               <img 
-                src="/lovable-uploads/469e8eca-bd74-4a95-bbd5-ad3ca0a46078.png" 
-                alt="Garrison Health Logo" 
+                src="/lovable-uploads/dc785631-58ca-4c7e-9b23-7135677f219b.png" 
+                alt="Garrison Healthcare Logo" 
                 className="w-12 h-12 object-contain"
               />
               <div>
-                <h3 className="text-xl font-bold">Garrison Health</h3>
+                <h3 className="text-xl font-bold">Garrison Healthcare</h3>
                 <p className="text-sm text-garrison-red italic">Your health, Our priority</p>
               </div>
             </div>
@@ -73,7 +73,7 @@ const Footer = () => {
         <div className="mt-8 pt-8 border-t border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
-              © {new Date().getFullYear()} Garrison Health. All rights reserved.
+              © {new Date().getFullYear()} Garrison Healthcare. All rights reserved.
             </p>
             <div className="flex items-center mt-4 md:mt-0">
               <Heart className="h-4 w-4 text-garrison-red mr-2" />
