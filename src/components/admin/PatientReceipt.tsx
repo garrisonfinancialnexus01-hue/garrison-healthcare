@@ -22,7 +22,7 @@ const PatientReceipt = forwardRef<HTMLDivElement, PatientReceiptProps>(
         {/* Header */}
         <div className="text-center mb-8 pb-6" style={{ borderBottom: '2px solid #058789' }}>
           <img 
-            src="/lovable-uploads/dc785631-58ca-4c7e-9b23-7135677f219b.png" 
+            src="/lovable-uploads/15493dd0-712c-488a-abae-d3afb022d31f.png" 
             alt="Garrison Healthcare Logo" 
             className="h-24 mx-auto mb-4"
           />

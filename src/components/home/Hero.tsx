@@ -54,8 +54,8 @@ const Hero = () => {
             <div className="inline-block p-8 bg-white/10 backdrop-blur-sm rounded-2xl">
               <div className="w-64 h-64 bg-white/20 rounded-full flex items-center justify-center overflow-hidden">
                 <img 
-                  src="/lovable-uploads/469e8eca-bd74-4a95-bbd5-ad3ca0a46078.png" 
-                  alt="Garrison Health Logo" 
+                  src="/lovable-uploads/15493dd0-712c-488a-abae-d3afb022d31f.png" 
+                  alt="Garrison Healthcare Logo" 
                   className="w-48 h-48 object-contain"
                 />
               </div>

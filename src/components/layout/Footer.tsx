@@ -11,7 +11,7 @@ const Footer = () => {
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-3 mb-4">
               <img 
-                src="/lovable-uploads/dc785631-58ca-4c7e-9b23-7135677f219b.png" 
+                src="/lovable-uploads/15493dd0-712c-488a-abae-d3afb022d31f.png" 
                 alt="Garrison Healthcare Logo" 
                 className="w-12 h-12 object-contain"
               />

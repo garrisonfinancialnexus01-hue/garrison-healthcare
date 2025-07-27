@@ -8,7 +8,7 @@ const About = () => {
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-garrison-teal to-garrison-teal-dark text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">About Garrison Health</h1>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">About Garrison Healthcare</h1>
           <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto">
             Dedicated to improving healthcare accessibility and education in Uganda
           </p>
@@ -22,7 +22,7 @@ const About = () => {
             <div>
               <h2 className="text-3xl font-bold text-gray-900 mb-6">Our Story</h2>
               <p className="text-lg text-gray-600 mb-6">
-                Garrison Health was founded with a simple yet powerful vision: to make quality healthcare 
+                Garrison Healthcare was founded with a simple yet powerful vision: to make quality healthcare 
                 information and services accessible to everyone in Uganda. We recognized the critical need 
                 for reliable health education and professional medical guidance in our communities.
               </p>
@@ -59,7 +59,7 @@ const About = () => {
             <div className="w-48 h-48 mx-auto mb-8 rounded-full overflow-hidden shadow-lg">
               <img 
                 src="/lovable-uploads/25724637-5073-42f9-9696-2632e5d22ce5.png" 
-                alt="Isiah Kasule - Founder & CEO of Garrison Health" 
+                alt="Isiah Kasule - Founder & CEO of Garrison Healthcare" 
                 className="w-full h-full object-cover"
               />
             </div>
@@ -68,14 +68,14 @@ const About = () => {
             <p className="text-lg text-garrison-teal font-semibold mb-6">Founder & CEO</p>
             
             <p className="text-lg text-gray-600 mb-6">
-              Isiah Kasule is a visionary healthcare advocate and the driving force behind Garrison Health. 
+              Isiah Kasule is a visionary healthcare advocate and the driving force behind Garrison Healthcare. 
               With a deep commitment to improving healthcare accessibility in Uganda, Isiah founded the 
               organization to address the critical gaps in health education and medical services.
             </p>
             
             <p className="text-lg text-gray-600">
               His passion for community health and dedication to empowering individuals through knowledge 
-              has shaped Garrison Health's mission to be a trusted partner in everyone's health journey.
+              has shaped Garrison Healthcare's mission to be a trusted partner in everyone's health journey.
             </p>
           </div>
         </div>
