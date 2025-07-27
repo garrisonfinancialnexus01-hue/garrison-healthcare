@@ -111,28 +111,13 @@ const Services = () => {
                       </Button>
                     </div>
                   </div>
-                  
-                  {/* Consultant Profile */}
-                  <div className="bg-gray-50 rounded-lg p-6 mb-6">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">Meet Your Health Consultant</h3>
-                    <h4 className="text-lg font-medium text-garrison-teal mb-3">Immaculate Nakamya</h4>
-                    <p className="text-gray-600 mb-4">
-                      Health Practitioner at Garrison Health with extensive experience in primary healthcare, 
-                      preventive medicine, and patient education. Dedicated to providing compassionate, 
-                      evidence-based healthcare guidance.
-                    </p>
-                    <p className="text-sm text-gray-700 italic mb-4">
-                      "Consult Immaculate Nakamya, a health practitioner at Garrison Health."
-                    </p>
-                  </div>
-                  
                 </div>
                 
                 <div className="lg:order-1 lg:text-center">
                   <div className="w-64 h-64 mx-auto rounded-lg overflow-hidden shadow-lg">
                     <img 
                       src="/lovable-uploads/0f7260d9-52be-4b86-baed-073721b4feee.png" 
-                      alt="Immaculate Nakamya - Health Practitioner at Garrison Health" 
+                      alt="Immaculate Nakamya - Health Practitioner at Garrison Healthcare" 
                       className="w-full h-full object-cover"
                     />
                   </div>

@@ -22,11 +22,11 @@ const PatientReceipt = forwardRef<HTMLDivElement, PatientReceiptProps>(
         {/* Header */}
         <div className="text-center mb-8 pb-6" style={{ borderBottom: '2px solid #058789' }}>
           <img 
-            src="/lovable-uploads/53ec9fcd-ff23-422f-9d2a-8e2fb54e60e1.png" 
-            alt="Garrison Health Logo" 
+            src="/lovable-uploads/dc785631-58ca-4c7e-9b23-7135677f219b.png" 
+            alt="Garrison Healthcare Logo" 
             className="h-24 mx-auto mb-4"
           />
-          <h1 className="text-3xl font-bold" style={{ color: '#058789' }}>GARRISON HEALTH</h1>
+          <h1 className="text-3xl font-bold" style={{ color: '#058789' }}>GARRISON HEALTHCARE</h1>
           <div className="mt-3 space-y-1">
             <p className="text-sm font-medium" style={{ color: '#058789' }}>
               Tel: +256745101519 or +256761281222
@@ -171,7 +171,7 @@ const PatientReceipt = forwardRef<HTMLDivElement, PatientReceiptProps>(
             background: 'linear-gradient(to right, rgba(5, 135, 137, 0.05), rgba(224, 63, 62, 0.05))' 
           }}>
             <p className="text-sm mb-2 font-medium" style={{ color: '#058789' }}>
-              Thank you for choosing Garrison Health for your healthcare needs
+              Thank you for choosing Garrison Healthcare for your healthcare needs
             </p>
             <p className="text-xs" style={{ color: 'rgba(5, 135, 137, 0.7)' }}>
               This is a computer-generated receipt and does not require a signature
