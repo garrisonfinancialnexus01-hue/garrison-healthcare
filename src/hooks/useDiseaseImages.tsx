@@ -66,15 +66,6 @@ export const useDiseaseImages = () => {
 
       console.log('Uploading to path:', filePath);
 
-      // Check if bucket exists and is accessible
-      const { data: buckets, error: bucketError } = await supabase.storage.listBuckets();
-      console.log('Available buckets:', buckets);
-      
-      if (bucketError) {
-        console.error('Error checking buckets:', bucketError);
-        throw new Error('Storage service is not available');
-      }
-
       // Upload file to Supabase Storage
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('disease-images')
@@ -106,20 +97,33 @@ export const useDiseaseImages = () => {
         throw new Error('Failed to generate public URL for the uploaded image');
       }
 
-      // Insert record into database
+      // Insert record into database with explicit values
+      console.log('Inserting into database with:', {
+        title: title.trim(),
+        description: description.trim() || null,
+        image_url: publicUrl,
+        display_order: images.length
+      });
+
       const { data: insertData, error: insertError } = await supabase
         .from('disease_images')
-        .insert({
-          title,
-          description: description || null,
+        .insert([{
+          title: title.trim(),
+          description: description.trim() || null,
           image_url: publicUrl,
           display_order: images.length
-        })
+        }])
         .select()
         .single();
 
       if (insertError) {
         console.error('Database insert error:', insertError);
+        console.error('Insert error details:', {
+          message: insertError.message,
+          details: insertError.details,
+          hint: insertError.hint,
+          code: insertError.code
+        });
         
         // Clean up uploaded file if database insert fails
         try {
@@ -211,8 +215,8 @@ export const useDiseaseImages = () => {
       const { error } = await supabase
         .from('disease_images')
         .update({ 
-          title, 
-          description: description || null,
+          title: title.trim(), 
+          description: description.trim() || null,
           updated_at: new Date().toISOString()
         })
         .eq('id', id);
