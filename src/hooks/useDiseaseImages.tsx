@@ -97,22 +97,19 @@ export const useDiseaseImages = () => {
         throw new Error('Failed to generate public URL for the uploaded image');
       }
 
-      // Insert record into database with explicit values
-      console.log('Inserting into database with:', {
+      // Insert record into database
+      const insertData = {
         title: title.trim(),
         description: description.trim() || null,
         image_url: publicUrl,
         display_order: images.length
-      });
+      };
 
-      const { data: insertData, error: insertError } = await supabase
+      console.log('Inserting into database with:', insertData);
+
+      const { data: result, error: insertError } = await supabase
         .from('disease_images')
-        .insert([{
-          title: title.trim(),
-          description: description.trim() || null,
-          image_url: publicUrl,
-          display_order: images.length
-        }])
+        .insert([insertData])
         .select()
         .single();
 
@@ -138,12 +135,12 @@ export const useDiseaseImages = () => {
         throw new Error(`Database error: ${insertError.message}`);
       }
 
-      console.log('Database insert successful:', insertData);
+      console.log('Database insert successful:', result);
 
       // Refresh images
       await fetchImages();
 
-      return insertData;
+      return result;
     } catch (error) {
       console.error('Error uploading image:', error);
       
