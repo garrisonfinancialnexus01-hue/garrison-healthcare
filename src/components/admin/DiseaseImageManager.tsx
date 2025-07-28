@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Upload, Trash2, Edit, Image as ImageIcon, Plus } from 'lucide-react';
+import { Upload, Trash2, Edit, Image as ImageIcon, Plus, X } from 'lucide-react';
 import { useDiseaseImages } from '@/hooks/useDiseaseImages';
 import { useToast } from '@/hooks/use-toast';
 
@@ -15,6 +15,7 @@ const DiseaseImageManager = () => {
   const [uploadTitle, setUploadTitle] = useState('');
   const [uploadDescription, setUploadDescription] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [editingImage, setEditingImage] = useState<any>(null);
   const [editTitle, setEditTitle] = useState('');
   const [editDescription, setEditDescription] = useState('');
@@ -27,6 +28,8 @@ const DiseaseImageManager = () => {
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      console.log('File selected:', file.name, file.size, file.type);
+      
       // Validate file type
       if (!file.type.startsWith('image/')) {
         toast({
@@ -37,18 +40,34 @@ const DiseaseImageManager = () => {
         return;
       }
       
-      // Validate file size (5MB limit)
-      if (file.size > 5 * 1024 * 1024) {
+      // Validate file size (10MB limit)
+      if (file.size > 10 * 1024 * 1024) {
         toast({
           title: "File Too Large",
-          description: "Please select an image smaller than 5MB",
+          description: "Please select an image smaller than 10MB",
           variant: "destructive",
         });
         return;
       }
       
       setSelectedFile(file);
-      console.log('File selected:', file.name, file.size, file.type);
+      
+      // Create preview URL
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+      
+      console.log('Preview URL created:', url);
+    }
+  };
+
+  const clearFileSelection = () => {
+    setSelectedFile(null);
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      setPreviewUrl(null);
+    }
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
   };
 
@@ -63,16 +82,30 @@ const DiseaseImageManager = () => {
     }
 
     setIsUploading(true);
-    console.log('Starting upload process...');
+    console.log('Starting upload process...', {
+      fileName: selectedFile.name,
+      fileSize: selectedFile.size,
+      fileType: selectedFile.type,
+      title: uploadTitle.trim(),
+      description: uploadDescription.trim()
+    });
 
     try {
-      await uploadImage(selectedFile, uploadTitle.trim(), uploadDescription.trim());
+      const result = await uploadImage(selectedFile, uploadTitle.trim(), uploadDescription.trim());
+      console.log('Upload successful:', result);
       
       // Reset form only on successful upload
       setSelectedFile(null);
       setUploadTitle('');
       setUploadDescription('');
       setIsUploadDialogOpen(false);
+      
+      // Clean up preview URL
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+        setPreviewUrl(null);
+      }
+      
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
@@ -85,7 +118,7 @@ const DiseaseImageManager = () => {
       console.error('Upload failed:', error);
       toast({
         title: "Upload Failed",
-        description: "Failed to upload image. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to upload image. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -133,6 +166,13 @@ const DiseaseImageManager = () => {
     }
   };
 
+  const handleDialogClose = () => {
+    setIsUploadDialogOpen(false);
+    clearFileSelection();
+    setUploadTitle('');
+    setUploadDescription('');
+  };
+
   if (loading) {
     return (
       <Card>
@@ -164,7 +204,7 @@ const DiseaseImageManager = () => {
                 Add New Image
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="max-w-2xl">
               <DialogHeader>
                 <DialogTitle>Upload Disease Information Image</DialogTitle>
               </DialogHeader>
@@ -180,9 +220,28 @@ const DiseaseImageManager = () => {
                     className="cursor-pointer"
                   />
                   {selectedFile && (
-                    <p className="text-sm text-gray-600 mt-1">
-                      Selected: {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
-                    </p>
+                    <div className="mt-2 space-y-2">
+                      <p className="text-sm text-gray-600">
+                        Selected: {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
+                      </p>
+                      {previewUrl && (
+                        <div className="relative">
+                          <img
+                            src={previewUrl}
+                            alt="Preview"
+                            className="max-w-full h-48 object-cover rounded-lg border"
+                          />
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            className="absolute top-2 right-2"
+                            onClick={clearFileSelection}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      )}
+                    </div>
                   )}
                 </div>
                 <div>
@@ -205,23 +264,32 @@ const DiseaseImageManager = () => {
                     rows={3}
                   />
                 </div>
-                <Button 
-                  onClick={handleUpload}
-                  disabled={!selectedFile || !uploadTitle.trim() || isUploading}
-                  className="w-full garrison-btn-primary"
-                >
-                  {isUploading ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Uploading...
-                    </>
-                  ) : (
-                    <>
-                      <Upload className="h-4 w-4 mr-2" />
-                      Upload Image
-                    </>
-                  )}
-                </Button>
+                <div className="flex gap-2">
+                  <Button 
+                    onClick={handleUpload}
+                    disabled={!selectedFile || !uploadTitle.trim() || isUploading}
+                    className="flex-1 garrison-btn-primary"
+                  >
+                    {isUploading ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        Uploading...
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="h-4 w-4 mr-2" />
+                        Upload Image
+                      </>
+                    )}
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    onClick={handleDialogClose}
+                    disabled={isUploading}
+                  >
+                    Cancel
+                  </Button>
+                </div>
               </div>
             </DialogContent>
           </Dialog>

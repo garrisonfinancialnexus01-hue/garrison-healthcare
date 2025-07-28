@@ -49,25 +49,47 @@ export const useDiseaseImages = () => {
 
   const uploadImage = async (file: File, title: string, description: string = '') => {
     try {
-      console.log('Starting image upload:', { filename: file.name, title, description });
+      console.log('Starting image upload:', { 
+        filename: file.name, 
+        size: file.size,
+        type: file.type,
+        title, 
+        description 
+      });
       
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
+      // Generate unique filename
+      const fileExt = file.name.split('.').pop()?.toLowerCase();
+      const timestamp = Date.now();
+      const randomString = Math.random().toString(36).substr(2, 9);
+      const fileName = `${timestamp}-${randomString}.${fileExt}`;
       const filePath = `disease-images/${fileName}`;
 
       console.log('Uploading to path:', filePath);
+
+      // Check if bucket exists and is accessible
+      const { data: buckets, error: bucketError } = await supabase.storage.listBuckets();
+      console.log('Available buckets:', buckets);
+      
+      if (bucketError) {
+        console.error('Error checking buckets:', bucketError);
+        throw new Error('Storage service is not available');
+      }
 
       // Upload file to Supabase Storage
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('disease-images')
         .upload(filePath, file, {
           cacheControl: '3600',
-          upsert: false
+          upsert: false,
+          contentType: file.type
         });
 
       if (uploadError) {
-        console.error('Upload error:', uploadError);
-        throw uploadError;
+        console.error('Storage upload error:', uploadError);
+        if (uploadError.message.includes('The resource already exists')) {
+          throw new Error('A file with this name already exists. Please try again.');
+        }
+        throw new Error(`Upload failed: ${uploadError.message}`);
       }
 
       console.log('Upload successful:', uploadData);
@@ -78,6 +100,11 @@ export const useDiseaseImages = () => {
         .getPublicUrl(filePath);
 
       console.log('Public URL:', publicUrl);
+
+      // Verify the URL is accessible
+      if (!publicUrl || publicUrl.includes('undefined')) {
+        throw new Error('Failed to generate public URL for the uploaded image');
+      }
 
       // Insert record into database
       const { data: insertData, error: insertError } = await supabase
@@ -95,11 +122,16 @@ export const useDiseaseImages = () => {
         console.error('Database insert error:', insertError);
         
         // Clean up uploaded file if database insert fails
-        await supabase.storage
-          .from('disease-images')
-          .remove([filePath]);
+        try {
+          await supabase.storage
+            .from('disease-images')
+            .remove([filePath]);
+          console.log('Cleaned up uploaded file after database error');
+        } catch (cleanupError) {
+          console.error('Failed to cleanup uploaded file:', cleanupError);
+        }
         
-        throw insertError;
+        throw new Error(`Database error: ${insertError.message}`);
       }
 
       console.log('Database insert successful:', insertData);
@@ -110,7 +142,13 @@ export const useDiseaseImages = () => {
       return insertData;
     } catch (error) {
       console.error('Error uploading image:', error);
-      throw error;
+      
+      // Re-throw with a user-friendly message
+      if (error instanceof Error) {
+        throw error;
+      } else {
+        throw new Error('An unexpected error occurred while uploading the image');
+      }
     }
   };
 
@@ -125,17 +163,7 @@ export const useDiseaseImages = () => {
 
       console.log('Deleting file at path:', filePath);
 
-      // Delete from storage
-      const { error: storageError } = await supabase.storage
-        .from('disease-images')
-        .remove([filePath]);
-
-      if (storageError) {
-        console.error('Storage delete error:', storageError);
-        // Continue with database deletion even if storage deletion fails
-      }
-
-      // Delete from database
+      // Delete from database first
       const { error: dbError } = await supabase
         .from('disease_images')
         .delete()
@@ -144,6 +172,16 @@ export const useDiseaseImages = () => {
       if (dbError) {
         console.error('Database delete error:', dbError);
         throw dbError;
+      }
+
+      // Then delete from storage
+      const { error: storageError } = await supabase.storage
+        .from('disease-images')
+        .remove([filePath]);
+
+      if (storageError) {
+        console.error('Storage delete error:', storageError);
+        // Don't throw here as the database record is already deleted
       }
 
       console.log('Delete successful');
