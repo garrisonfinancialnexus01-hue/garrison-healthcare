@@ -1,4 +1,3 @@
-
 import Layout from "@/components/layout/Layout";
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
@@ -12,6 +11,7 @@ import PatientReceipt from "@/components/admin/PatientReceipt";
 import { useToast } from "@/hooks/use-toast";
 import { useAdminPatients, AdminPatient } from "@/hooks/useAdminPatients";
 import { useReactToPrint } from 'react-to-print';
+import DiseaseImagesManager from "@/components/admin/DiseaseImagesManager";
 
 const AdminDashboard = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -431,6 +431,9 @@ const AdminDashboard = () => {
             </CardContent>
           </Card>
         )}
+
+        {/* Updates Section - Disease Images Manager */}
+        <DiseaseImagesManager />
       </div>
     </Layout>
   );
