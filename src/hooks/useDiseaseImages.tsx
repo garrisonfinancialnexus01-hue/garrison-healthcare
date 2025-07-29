@@ -42,35 +42,75 @@ export const useDiseaseImages = () => {
   const uploadImage = async (file: File, title: string, description: string) => {
     try {
       setLoading(true);
+      console.log('Starting image upload:', { fileName: file.name, fileSize: file.size, fileType: file.type });
       
+      // Validate file
+      if (!file) {
+        throw new Error('No file selected');
+      }
+
+      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+        throw new Error('File size must be less than 5MB');
+      }
+
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+      if (!allowedTypes.includes(file.type)) {
+        throw new Error('Only JPEG, PNG, GIF, and WebP images are allowed');
+      }
+
       const fileExt = file.name.split('.').pop();
       const fileName = `disease-${Date.now()}.${fileExt}`;
-      const filePath = `${fileName}`;
+      const filePath = fileName;
 
-      const { error: uploadError } = await supabase.storage
+      console.log('Uploading to storage:', { filePath });
+
+      // Upload to Supabase Storage
+      const { data: uploadData, error: uploadError } = await supabase.storage
         .from('disease-images')
-        .upload(filePath, file);
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error('Upload error:', uploadError);
+        throw new Error(`Upload failed: ${uploadError.message}`);
+      }
 
+      console.log('Upload successful:', uploadData);
+
+      // Get public URL
       const { data: { publicUrl } } = supabase.storage
         .from('disease-images')
         .getPublicUrl(filePath);
 
-      const maxOrder = Math.max(...images.map(img => img.display_order), -1);
+      console.log('Public URL:', publicUrl);
+
+      // Calculate display order
+      const maxOrder = images.length > 0 ? Math.max(...images.map(img => img.display_order)) : -1;
       
+      // Insert into database
       const { data, error } = await supabase
         .from('disease_images')
         .insert({
           title,
-          description,
+          description: description || null,
           image_url: publicUrl,
           display_order: maxOrder + 1
         })
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Database insert error:', error);
+        // Clean up uploaded file if database insert fails
+        await supabase.storage
+          .from('disease-images')
+          .remove([filePath]);
+        throw new Error(`Database error: ${error.message}`);
+      }
+
+      console.log('Database insert successful:', data);
 
       await fetchImages();
       toast({
@@ -81,11 +121,13 @@ export const useDiseaseImages = () => {
       return data;
     } catch (error) {
       console.error('Error uploading image:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to upload image';
       toast({
         title: "Error",
-        description: "Failed to upload image",
+        description: errorMessage,
         variant: "destructive"
       });
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -94,15 +136,20 @@ export const useDiseaseImages = () => {
   const deleteImage = async (id: string, imageUrl: string) => {
     try {
       setLoading(true);
+      console.log('Deleting image:', { id, imageUrl });
 
       // Extract file path from URL
       const urlParts = imageUrl.split('/');
       const fileName = urlParts[urlParts.length - 1];
 
-      // Delete from storage
-      await supabase.storage
+      // Delete from storage first
+      const { error: storageError } = await supabase.storage
         .from('disease-images')
         .remove([fileName]);
+
+      if (storageError) {
+        console.error('Storage delete error:', storageError);
+      }
 
       // Delete from database
       const { error } = await supabase

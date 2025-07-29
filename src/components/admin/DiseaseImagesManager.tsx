@@ -6,8 +6,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Upload, Trash2, Eye, Plus } from 'lucide-react';
+import { Upload, Trash2, Eye, Plus, AlertCircle } from 'lucide-react';
 import { useDiseaseImages } from '@/hooks/useDiseaseImages';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const DiseaseImagesManager = () => {
   const { images, loading, uploadImage, deleteImage } = useDiseaseImages();
@@ -17,11 +18,28 @@ const DiseaseImagesManager = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [selectedImagePreview, setSelectedImagePreview] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
+    setUploadError(null);
+    
     if (file) {
+      // Validate file size (5MB limit)
+      if (file.size > 5 * 1024 * 1024) {
+        setUploadError('File size must be less than 5MB');
+        return;
+      }
+
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+      if (!allowedTypes.includes(file.type)) {
+        setUploadError('Only JPEG, PNG, GIF, and WebP images are allowed');
+        return;
+      }
+
       setSelectedFile(file);
       const url = URL.createObjectURL(file);
       setPreviewUrl(url);
@@ -29,24 +47,48 @@ const DiseaseImagesManager = () => {
   };
 
   const handleUpload = async () => {
-    if (!selectedFile || !title.trim()) return;
+    if (!selectedFile || !title.trim()) {
+      setUploadError('Please select a file and enter a title');
+      return;
+    }
 
-    await uploadImage(selectedFile, title, description);
-    
-    // Reset form
-    setTitle('');
-    setDescription('');
-    setSelectedFile(null);
-    setPreviewUrl(null);
-    setIsDialogOpen(false);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+    setIsUploading(true);
+    setUploadError(null);
+
+    try {
+      await uploadImage(selectedFile, title, description);
+      
+      // Reset form
+      setTitle('');
+      setDescription('');
+      setSelectedFile(null);
+      setPreviewUrl(null);
+      setIsDialogOpen(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    } catch (error) {
+      console.error('Upload failed:', error);
+      setUploadError(error instanceof Error ? error.message : 'Upload failed');
+    } finally {
+      setIsUploading(false);
     }
   };
 
   const handleDelete = async (id: string, imageUrl: string) => {
     if (confirm('Are you sure you want to delete this image?')) {
       await deleteImage(id, imageUrl);
+    }
+  };
+
+  const resetForm = () => {
+    setTitle('');
+    setDescription('');
+    setSelectedFile(null);
+    setPreviewUrl(null);
+    setUploadError(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
   };
 
@@ -57,7 +99,10 @@ const DiseaseImagesManager = () => {
           <CardTitle className="text-2xl font-bold text-garrison-teal">
             Updates - Disease Information Images
           </CardTitle>
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <Dialog open={isDialogOpen} onOpenChange={(open) => {
+            setIsDialogOpen(open);
+            if (!open) resetForm();
+          }}>
             <DialogTrigger asChild>
               <Button className="garrison-btn-primary">
                 <Plus className="h-4 w-4 mr-2" />
@@ -69,6 +114,13 @@ const DiseaseImagesManager = () => {
                 <DialogTitle>Upload Disease Information Image</DialogTitle>
               </DialogHeader>
               <div className="space-y-4">
+                {uploadError && (
+                  <Alert variant="destructive">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>{uploadError}</AlertDescription>
+                  </Alert>
+                )}
+                
                 <div>
                   <Label htmlFor="title">Title *</Label>
                   <Input
@@ -78,6 +130,7 @@ const DiseaseImagesManager = () => {
                     placeholder="Enter image title"
                   />
                 </div>
+                
                 <div>
                   <Label htmlFor="description">Description</Label>
                   <Textarea
@@ -88,17 +141,19 @@ const DiseaseImagesManager = () => {
                     rows={3}
                   />
                 </div>
+                
                 <div>
-                  <Label htmlFor="image">Image *</Label>
+                  <Label htmlFor="image">Image * (Max 5MB, JPEG/PNG/GIF/WebP only)</Label>
                   <Input
                     id="image"
                     type="file"
                     ref={fileInputRef}
                     onChange={handleFileSelect}
-                    accept="image/*"
+                    accept="image/jpeg,image/png,image/gif,image/webp"
                     className="cursor-pointer"
                   />
                 </div>
+                
                 {previewUrl && (
                   <div className="border rounded-lg p-4">
                     <Label className="text-sm font-medium text-gray-700 mb-2 block">
@@ -111,20 +166,22 @@ const DiseaseImagesManager = () => {
                     />
                   </div>
                 )}
+                
                 <div className="flex justify-end space-x-2">
                   <Button 
                     variant="outline" 
                     onClick={() => setIsDialogOpen(false)}
+                    disabled={isUploading}
                   >
                     Cancel
                   </Button>
                   <Button 
                     onClick={handleUpload}
-                    disabled={!selectedFile || !title.trim() || loading}
+                    disabled={!selectedFile || !title.trim() || isUploading}
                     className="garrison-btn-primary"
                   >
                     <Upload className="h-4 w-4 mr-2" />
-                    Upload
+                    {isUploading ? 'Uploading...' : 'Upload'}
                   </Button>
                 </div>
               </div>
