@@ -1,72 +1,86 @@
 
-import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-import { User } from '@supabase/supabase-js';
+import { useState, useEffect } from 'react';
 
-interface AuthContextType {
-  user: User | null;
-  loading: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string) => Promise<void>;
-  signOut: () => Promise<void>;
+interface AuthState {
+  isAuthenticated: boolean;
+  token: string | null;
+  email: string | null;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+export const useAuth = () => {
+  const [authState, setAuthState] = useState<AuthState>({
+    isAuthenticated: false,
+    token: null,
+    email: null
+  });
 
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+    const checkAuth = () => {
+      const token = localStorage.getItem('doctor_auth_token');
+      const email = localStorage.getItem('doctor_email');
 
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+      if (token && email) {
+        try {
+          const tokenData = JSON.parse(atob(token));
+          const now = Date.now();
+          const tokenAge = now - tokenData.timestamp;
+          const maxAge = 24 * 60 * 60 * 1000; // 24 hours
 
-    return () => subscription.unsubscribe();
+          if (tokenAge < maxAge && tokenData.email === "garrisonhealth147@gmail.com") {
+            setAuthState({
+              isAuthenticated: true,
+              token,
+              email
+            });
+          } else {
+            // Token expired or invalid
+            localStorage.removeItem('doctor_auth_token');
+            localStorage.removeItem('doctor_email');
+            setAuthState({
+              isAuthenticated: false,
+              token: null,
+              email: null
+            });
+          }
+        } catch (error) {
+          // Invalid token format
+          localStorage.removeItem('doctor_auth_token');
+          localStorage.removeItem('doctor_email');
+          setAuthState({
+            isAuthenticated: false,
+            token: null,
+            email: null
+          });
+        }
+      }
+    };
+
+    checkAuth();
   }, []);
 
-  const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+  const login = (token: string, email: string) => {
+    localStorage.setItem('doctor_auth_token', token);
+    localStorage.setItem('doctor_email', email);
+    setAuthState({
+      isAuthenticated: true,
+      token,
+      email
     });
-    if (error) throw error;
   };
 
-  const signUp = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
+  const logout = () => {
+    localStorage.removeItem('doctor_auth_token');
+    localStorage.removeItem('doctor_email');
+    setAuthState({
+      isAuthenticated: false,
+      token: null,
+      email: null
     });
-    if (error) throw error;
   };
 
-  const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
+  return {
+    ...authState,
+    login,
+    logout
   };
-
-  return (
-    <AuthContext.Provider value={{ user, loading, signIn, signUp, signOut }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
 };
