@@ -32,36 +32,38 @@ const Services = () => {
                   <p className="text-lg text-gray-600 mb-6">
                     Access comprehensive, medically-reviewed information about various health conditions, 
                     their symptoms, causes, treatments, and prevention strategies. Our disease information 
-                    library is regularly updated with the latest medical research and guidelines.
+                    library includes interactive visual guides with detailed overviews.
                   </p>
                   <ul className="space-y-3 mb-8">
                     <li className="flex items-center text-gray-700">
                       <div className="w-2 h-2 bg-garrison-red rounded-full mr-3"></div>
-                      Detailed disease profiles and symptoms
+                      Interactive visual disease guides
                     </li>
                     <li className="flex items-center text-gray-700">
                       <div className="w-2 h-2 bg-garrison-red rounded-full mr-3"></div>
-                      Treatment options and medications
+                      Detailed symptoms and causes breakdown
                     </li>
                     <li className="flex items-center text-gray-700">
                       <div className="w-2 h-2 bg-garrison-red rounded-full mr-3"></div>
-                      Prevention and lifestyle recommendations
+                      Prevention and treatment recommendations
                     </li>
                     <li className="flex items-center text-gray-700">
                       <div className="w-2 h-2 bg-garrison-red rounded-full mr-3"></div>
-                      Visual aids and infographics
+                      Professional medical illustrations
                     </li>
                   </ul>
-                  <Button className="garrison-btn-primary">
-                    Browse Disease Information
+                  <Button asChild className="garrison-btn-primary">
+                    <Link to="/#disease-information">
+                      View Disease Information Gallery
+                    </Link>
                   </Button>
                 </div>
                 <div className="lg:text-center">
-                  <div className="bg-gray-100 rounded-lg p-8 h-64 flex items-center justify-center">
+                  <div className="bg-gradient-to-br from-garrison-teal/10 to-garrison-red/10 rounded-lg p-8 h-64 flex items-center justify-center">
                     <div className="text-center">
                       <FileText className="h-16 w-16 text-garrison-teal mx-auto mb-4" />
-                      <p className="text-gray-600">Disease Information Images</p>
-                      <p className="text-sm text-gray-500">Visual resources coming soon</p>
+                      <p className="text-gray-700 font-semibold">Interactive Disease Gallery</p>
+                      <p className="text-sm text-gray-600">Swipe through comprehensive disease information</p>
                     </div>
                   </div>
                 </div>
