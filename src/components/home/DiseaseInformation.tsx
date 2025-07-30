@@ -25,7 +25,7 @@ const DiseaseInformation = () => {
     queryFn: async () => {
       try {
         const { data, error } = await supabase
-          .from('disease_images' as any)
+          .from('disease_images')
           .select('*')
           .order('display_order', { ascending: true });
         
