@@ -23,13 +23,21 @@ const DiseaseInformation = () => {
   const { data: diseaseImages = [], isLoading } = useQuery({
     queryKey: ['disease-images'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('disease_images')
-        .select('*')
-        .order('display_order', { ascending: true });
-      
-      if (error) throw error;
-      return data as DiseaseImage[];
+      try {
+        const { data, error } = await supabase
+          .from('disease_images' as any)
+          .select('*')
+          .order('display_order', { ascending: true });
+        
+        if (error) {
+          console.warn('Error fetching disease images:', error);
+          return [];
+        }
+        return data as DiseaseImage[];
+      } catch (error) {
+        console.warn('Failed to fetch disease images from database, using defaults:', error);
+        return [];
+      }
     },
   });
 
