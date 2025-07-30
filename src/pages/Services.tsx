@@ -1,216 +1,183 @@
 
 import Layout from "@/components/layout/Layout";
-import { FileText, UserCheck, BookOpen, Calendar, Users } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Heart, Stethoscope, Brain, Pill, Activity, Users, Clock, Shield } from "lucide-react";
+import DiseaseInformation from "@/components/home/DiseaseInformation";
 
 const Services = () => {
+  const services = [
+    {
+      icon: <Stethoscope className="h-8 w-8" />,
+      title: "General Consultation",
+      description: "Comprehensive health assessments and medical consultations with experienced healthcare professionals.",
+      features: ["Health screenings", "Symptom evaluation", "Treatment planning", "Follow-up care"]
+    },
+    {
+      icon: <Heart className="h-8 w-8" />,
+      title: "Chronic Disease Management",
+      description: "Specialized care for diabetes, hypertension, heart disease, and other chronic conditions.",
+      features: ["Diabetes management", "Blood pressure monitoring", "Medication management", "Lifestyle counseling"]
+    },
+    {
+      icon: <Brain className="h-8 w-8" />,
+      title: "Mental Health Support",
+      description: "Professional mental health services including counseling and therapy sessions.",
+      features: ["Stress management", "Anxiety treatment", "Depression support", "Behavioral therapy"]
+    },
+    {
+      icon: <Pill className="h-8 w-8" />,
+      title: "Medication Consultation",
+      description: "Expert guidance on medication management, interactions, and treatment optimization.",
+      features: ["Drug interactions", "Dosage optimization", "Side effect management", "Generic alternatives"]
+    },
+    {
+      icon: <Activity className="h-8 w-8" />,
+      title: "Preventive Care",
+      description: "Proactive healthcare services focused on disease prevention and health maintenance.",
+      features: ["Vaccinations", "Health screenings", "Wellness programs", "Risk assessments"]
+    },
+    {
+      icon: <Users className="h-8 w-8" />,
+      title: "Family Health",
+      description: "Comprehensive healthcare services for the entire family, from pediatrics to geriatrics.",
+      features: ["Pediatric care", "Adult medicine", "Geriatric care", "Family planning"]
+    }
+  ];
+
+  const consultationModes = [
+    {
+      icon: <Clock className="h-6 w-6" />,
+      title: "Video Consultations",
+      description: "Face-to-face consultations from the comfort of your home",
+      availability: "Available 24/7"
+    },
+    {
+      icon: <Shield className="h-6 w-6" />,
+      title: "Phone Consultations",
+      description: "Quick medical advice and follow-up consultations",
+      availability: "Emergency support"
+    },
+    {
+      icon: <Heart className="h-6 w-6" />,
+      title: "Chat Consultations",
+      description: "Text-based consultations for non-urgent medical queries",
+      availability: "Instant responses"
+    }
+  ];
+
   return (
     <Layout>
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-garrison-teal to-garrison-teal-dark text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">Our Services</h1>
-          <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto">
-            Comprehensive healthcare solutions tailored to meet your needs
-          </p>
-        </div>
-      </section>
-
-      {/* Main Services */}
-      <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Information about Diseases */}
-          <div id="diseases" className="mb-20">
-            <div className="garrison-card p-8 md:p-12">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                <div>
-                  <div className="flex items-center mb-6">
-                    <FileText className="h-12 w-12 text-garrison-teal mr-4" />
-                    <h2 className="text-3xl font-bold text-gray-900">Information about Diseases</h2>
-                  </div>
-                  <p className="text-lg text-gray-600 mb-6">
-                    Access comprehensive, medically-reviewed information about various health conditions, 
-                    their symptoms, causes, treatments, and prevention strategies. Our disease information 
-                    library is regularly updated with the latest medical research and guidelines.
-                  </p>
-                  <ul className="space-y-3 mb-8">
-                    <li className="flex items-center text-gray-700">
-                      <div className="w-2 h-2 bg-garrison-red rounded-full mr-3"></div>
-                      Detailed disease profiles and symptoms
-                    </li>
-                    <li className="flex items-center text-gray-700">
-                      <div className="w-2 h-2 bg-garrison-red rounded-full mr-3"></div>
-                      Treatment options and medications
-                    </li>
-                    <li className="flex items-center text-gray-700">
-                      <div className="w-2 h-2 bg-garrison-red rounded-full mr-3"></div>
-                      Prevention and lifestyle recommendations
-                    </li>
-                    <li className="flex items-center text-gray-700">
-                      <div className="w-2 h-2 bg-garrison-red rounded-full mr-3"></div>
-                      Visual aids and infographics
-                    </li>
-                  </ul>
-                  <Button className="garrison-btn-primary">
-                    Browse Disease Information
-                  </Button>
-                </div>
-                <div className="lg:text-center">
-                  <div className="bg-gray-100 rounded-lg p-8 h-64 flex items-center justify-center">
-                    <div className="text-center">
-                      <FileText className="h-16 w-16 text-garrison-teal mx-auto mb-4" />
-                      <p className="text-gray-600">Disease Information Images</p>
-                      <p className="text-sm text-gray-500">Visual resources coming soon</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Health Consultations */}
-          <div id="consultations" className="mb-20">
-            <div className="garrison-card p-8 md:p-12">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                <div className="lg:order-2">
-                  <div className="flex items-center mb-6">
-                    <UserCheck className="h-12 w-12 text-garrison-teal mr-4" />
-                    <h2 className="text-3xl font-bold text-gray-900">Health Consultations</h2>
-                  </div>
-                  <p className="text-lg text-gray-600 mb-6">
-                    Get professional health advice from our qualified practitioners. Our consultation 
-                    services provide personalized medical guidance to help you make informed decisions 
-                    about your health and treatment options.
-                  </p>
-                  
-                  {/* New Professional Consultation System */}
-                  <div className="bg-gradient-to-r from-garrison-teal/10 to-garrison-red/10 rounded-lg p-6 mb-6">
-                    <h3 className="text-xl font-semibold text-garrison-teal mb-3">🩺 Professional Consultation System</h3>
-                    <p className="text-gray-700 mb-4">
-                      Our comprehensive consultation platform allows you to select specific conditions, 
-                      choose consultation modes, and connect directly with healthcare professionals.
-                    </p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                      <div className="bg-white rounded-lg p-4 border border-garrison-teal/20">
-                        <h4 className="font-semibold text-garrison-teal mb-2">Acute Conditions</h4>
-                        <p className="text-sm text-gray-600 mb-2">Short-term conditions requiring immediate attention</p>
-                        <p className="font-bold text-garrison-red">Fee: 5,000 UGX</p>
-                      </div>
-                      <div className="bg-white rounded-lg p-4 border border-garrison-teal/20">
-                        <h4 className="font-semibold text-garrison-teal mb-2">Chronic Conditions</h4>
-                        <p className="text-sm text-gray-600 mb-2">Long-term conditions requiring ongoing management</p>
-                        <p className="font-bold text-garrison-red">Fee: 10,000 UGX</p>
-                      </div>
-                    </div>
-                    <div className="text-center">
-                      <Button asChild className="garrison-btn-primary">
-                        <Link to="/consultation">
-                          Start Professional Consultation
-                        </Link>
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="lg:order-1 lg:text-center">
-                  <div className="w-64 h-64 mx-auto rounded-lg overflow-hidden shadow-lg">
-                    <img 
-                      src="/lovable-uploads/0f7260d9-52be-4b86-baed-073721b4feee.png" 
-                      alt="Immaculate Nakamya - Health Practitioner at Garrison Healthcare" 
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="mt-4 text-center">
-                    <h3 className="text-lg font-semibold text-gray-900">Immaculate Nakamya</h3>
-                    <p className="text-garrison-teal font-medium">Health Practitioner</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Health Education */}
-          <div id="education" className="mb-20">
-            <div className="garrison-card p-8 md:p-12">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                <div>
-                  <div className="flex items-center mb-6">
-                    <BookOpen className="h-12 w-12 text-garrison-teal mr-4" />
-                    <h2 className="text-3xl font-bold text-gray-900">Health Education</h2>
-                  </div>
-                  <p className="text-lg text-gray-600 mb-6">
-                    Stay informed with our weekly health education programs. We provide regularly updated 
-                    educational content covering various health topics, preventive care strategies, and 
-                    wellness tips tailored for the Ugandan context.
-                  </p>
-                  
-                  <div className="bg-garrison-red/10 border-l-4 border-garrison-red p-4 mb-6">
-                    <div className="flex items-center">
-                      <Calendar className="h-5 w-5 text-garrison-red mr-2" />
-                      <span className="font-semibold text-garrison-red">Updated Weekly</span>
-                    </div>
-                    <p className="text-sm text-gray-700 mt-2">
-                      New health education content is published every week to keep you informed 
-                      about the latest health trends and recommendations.
-                    </p>
-                  </div>
-                  
-                  <ul className="space-y-3 mb-8">
-                    <li className="flex items-center text-gray-700">
-                      <div className="w-2 h-2 bg-garrison-red rounded-full mr-3"></div>
-                      Weekly health tips and advice
-                    </li>
-                    <li className="flex items-center text-gray-700">
-                      <div className="w-2 h-2 bg-garrison-red rounded-full mr-3"></div>
-                      Preventive care guidelines
-                    </li>
-                    <li className="flex items-center text-gray-700">
-                      <div className="w-2 h-2 bg-garrison-red rounded-full mr-3"></div>
-                      Seasonal health recommendations
-                    </li>
-                    <li className="flex items-center text-gray-700">
-                      <div className="w-2 h-2 bg-garrison-red rounded-full mr-3"></div>
-                      Community health initiatives
-                    </li>
-                  </ul>
-                  
-                  <Button asChild className="garrison-btn-primary">
-                    <Link to="/health-articles">
-                      View Health Education Content
-                    </Link>
-                  </Button>
-                </div>
-                <div className="lg:text-center">
-                  <div className="bg-gray-100 rounded-lg p-8 h-64 flex items-center justify-center">
-                    <div className="text-center">
-                      <BookOpen className="h-16 w-16 text-garrison-teal mx-auto mb-4" />
-                      <p className="text-gray-600">Weekly Health Education</p>
-                      <p className="text-sm text-gray-500">Updated every week</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div className="text-center">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">
+              Our Healthcare Services
+            </h1>
+            <p className="text-xl text-white/90 max-w-3xl mx-auto mb-8">
+              Comprehensive healthcare solutions designed to meet your medical needs with professional care and convenience.
+            </p>
+            <Button size="lg" variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white hover:text-garrison-teal">
+              Book Consultation
+            </Button>
           </div>
         </div>
       </section>
 
-      {/* Call to Action */}
+      {/* Services Grid */}
       <section className="py-16 bg-gray-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">
-            Ready to Get Started?
-          </h2>
-          <p className="text-lg text-gray-600 mb-8">
-            Contact us today to learn more about our services or schedule a consultation
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-garrison-navy mb-4">
+              Medical Services We Offer
+            </h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              From routine check-ups to specialized treatments, we provide comprehensive healthcare services tailored to your needs.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {services.map((service, index) => (
+              <Card key={index} className="hover:shadow-lg transition-shadow h-full">
+                <CardHeader>
+                  <div className="text-garrison-teal mb-4">{service.icon}</div>
+                  <CardTitle className="text-xl mb-2">{service.title}</CardTitle>
+                  <CardDescription className="text-gray-600">
+                    {service.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2">
+                    {service.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-center text-sm text-gray-600">
+                        <div className="w-1.5 h-1.5 bg-garrison-teal rounded-full mr-3"></div>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Disease Information Section */}
+      <DiseaseInformation />
+
+      {/* Consultation Modes */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-garrison-navy mb-4">
+              Consultation Options
+            </h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Choose the consultation method that works best for you. All options provide the same quality of care.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {consultationModes.map((mode, index) => (
+              <Card key={index} className="text-center hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <div className="mx-auto w-12 h-12 bg-garrison-teal/10 rounded-full flex items-center justify-center text-garrison-teal mb-4">
+                    {mode.icon}
+                  </div>
+                  <CardTitle className="text-xl mb-2">{mode.title}</CardTitle>
+                  <CardDescription className="text-gray-600 mb-4">
+                    {mode.description}
+                  </CardDescription>
+                  <div className="text-sm font-semibold text-garrison-teal">
+                    {mode.availability}
+                  </div>
+                </CardHeader>
+              </Card>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Button size="lg" className="garrison-btn-primary">
+              Schedule Your Consultation
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Emergency Contact */}
+      <section className="py-16 bg-garrison-teal text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-bold mb-4">Need Emergency Care?</h2>
+          <p className="text-xl text-white/90 mb-8">
+            Our medical team is available 24/7 for urgent health concerns
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild className="garrison-btn-primary">
-              <Link to="/contact">Contact Us</Link>
+            <Button size="lg" variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white hover:text-garrison-teal">
+              Call Emergency Line
             </Button>
-            <Button asChild className="garrison-btn-outline">
-              <a href="tel:+256745101519">Call Now</a>
+            <Button size="lg" variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white hover:text-garrison-teal">
+              Start Emergency Chat
             </Button>
           </div>
         </div>
