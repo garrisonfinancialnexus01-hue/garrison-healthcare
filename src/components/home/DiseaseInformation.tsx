@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, Play, Pause } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
@@ -73,6 +73,10 @@ const DiseaseInformation = () => {
     setCurrentSlide(index);
   };
 
+  const toggleAutoPlay = () => {
+    setIsAutoPlaying(!isAutoPlaying);
+  };
+
   const openModal = (image: DiseaseImage) => {
     setSelectedImage(image);
   };
@@ -96,6 +100,28 @@ const DiseaseInformation = () => {
 
         {/* Carousel Container */}
         <div className="relative max-w-5xl mx-auto">
+          {/* Autoplay Control */}
+          <div className="flex justify-center mb-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={toggleAutoPlay}
+              className="bg-white/90 hover:bg-white shadow-lg border-garrison-teal/20"
+            >
+              {isAutoPlaying ? (
+                <>
+                  <Pause className="h-4 w-4 mr-2" />
+                  Pause Autoplay
+                </>
+              ) : (
+                <>
+                  <Play className="h-4 w-4 mr-2" />
+                  Start Autoplay
+                </>
+              )}
+            </Button>
+          </div>
+
           {/* Main Carousel */}
           <div className="relative overflow-hidden rounded-2xl shadow-2xl bg-white">
             <div 
