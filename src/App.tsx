@@ -12,6 +12,7 @@ import Contact from "./pages/Contact";
 import Consultation from "./pages/Consultation";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
+import UnderstandingHypertension from "./pages/articles/UnderstandingHypertension";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/contact" element={<Contact />} />
           <Route path="/consultation" element={<Consultation />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/articles/understanding-hypertension" element={<UnderstandingHypertension />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

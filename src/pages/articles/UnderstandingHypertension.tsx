@@ -10,24 +10,24 @@ const UnderstandingHypertension = () => {
     <Layout>
       <div className="max-w-4xl mx-auto px-4 py-12">
         <div className="mb-8">
-          <Link to="/articles" className="inline-flex items-center text-health-red-dark hover:text-health-red transition-colors">
+          <Link to="/health-articles" className="inline-flex items-center text-garrison-teal hover:text-garrison-teal-dark transition-colors font-medium">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Articles
+            Back to Health Articles
           </Link>
         </div>
         
         <article className="prose prose-lg max-w-none">
           <div className="flex items-center gap-2 text-muted-foreground mb-4">
             <Calendar className="h-4 w-4" />
-            <time>May 3, 2025</time>
+            <time>January 8, 2025</time>
           </div>
           
           <h1 className="text-3xl font-bold mb-6">Understanding High Blood Pressure (Hypertension): A Comprehensive Guide</h1>
           
           <div className="mb-8">
             <img 
-              src="/lovable-uploads/bb0998ab-6564-44be-b0ed-1ba7850bc094.png" 
-              alt="Blood pressure monitor showing high readings" 
+              src="/lovable-uploads/0543f5ea-ee91-405a-af24-f372f15921ae.png" 
+              alt="Blood pressure monitor showing high readings with warning indicators" 
               className="w-full h-auto rounded-lg shadow-md"
             />
           </div>
@@ -215,7 +215,7 @@ const UnderstandingHypertension = () => {
           <div className="overflow-x-auto my-6">
             <table className="w-full border-collapse border border-gray-300">
               <thead>
-                <tr className="bg-health-green-light">
+                <tr className="bg-garrison-teal/10">
                   <th className="border border-gray-300 px-4 py-2 text-left">Category</th>
                   <th className="border border-gray-300 px-4 py-2 text-left">Top number (systolic BP)</th>
                   <th className="border border-gray-300 px-4 py-2 text-left">And/or</th>
@@ -383,12 +383,12 @@ const UnderstandingHypertension = () => {
           
           <p>Be a cautious consumer, and talk with your healthcare provider to learn more.</p>
 
-          <div className="bg-health-green-light p-6 border-l-4 border-health-green my-8 rounded-r-lg">
+          <div className="bg-garrison-teal/10 p-6 border-l-4 border-garrison-teal my-8 rounded-r-lg">
             <div className="flex items-start">
-              <Heart className="h-6 w-6 text-health-green-dark mr-3 mt-1 flex-shrink-0" />
+              <Heart className="h-6 w-6 text-garrison-teal mr-3 mt-1 flex-shrink-0" />
               <div>
-                <h3 className="text-lg font-semibold text-health-green-dark mb-2">A note from Garrison Health</h3>
-                <p className="text-health-green-dark">
+                <h3 className="text-lg font-semibold text-garrison-teal mb-2">A note from Garrison Health</h3>
+                <p className="text-garrison-teal-dark">
                   High blood pressure is a serious but silent condition that can sneak up on you over the years. 
                   Seeing a healthcare provider for regular check-ups can help you learn your numbers. If you don't have access to care, 
                   learn about available community resources (such as wellness fairs) where blood pressure checks are available. 
