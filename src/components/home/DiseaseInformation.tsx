@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, X, Play, Pause } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
@@ -14,7 +14,6 @@ interface DiseaseImage {
 const DiseaseInformation = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedImage, setSelectedImage] = useState<DiseaseImage | null>(null);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
   // Disease information images data
   const diseaseImages: DiseaseImage[] = [
@@ -52,14 +51,12 @@ const DiseaseInformation = () => {
 
   // Autoplay functionality
   useEffect(() => {
-    if (!isAutoPlaying) return;
-
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % diseaseImages.length);
     }, 4000); // Change slide every 4 seconds
 
     return () => clearInterval(interval);
-  }, [isAutoPlaying, diseaseImages.length]);
+  }, [diseaseImages.length]);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % diseaseImages.length);
@@ -71,10 +68,6 @@ const DiseaseInformation = () => {
 
   const goToSlide = (index: number) => {
     setCurrentSlide(index);
-  };
-
-  const toggleAutoPlay = () => {
-    setIsAutoPlaying(!isAutoPlaying);
   };
 
   const openModal = (image: DiseaseImage) => {
@@ -100,28 +93,6 @@ const DiseaseInformation = () => {
 
         {/* Carousel Container */}
         <div className="relative max-w-5xl mx-auto">
-          {/* Autoplay Control */}
-          <div className="flex justify-center mb-4">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={toggleAutoPlay}
-              className="bg-white/90 hover:bg-white shadow-lg border-garrison-teal/20"
-            >
-              {isAutoPlaying ? (
-                <>
-                  <Pause className="h-4 w-4 mr-2" />
-                  Pause Autoplay
-                </>
-              ) : (
-                <>
-                  <Play className="h-4 w-4 mr-2" />
-                  Start Autoplay
-                </>
-              )}
-            </Button>
-          </div>
-
           {/* Main Carousel */}
           <div className="relative overflow-hidden rounded-2xl shadow-2xl bg-white">
             <div 

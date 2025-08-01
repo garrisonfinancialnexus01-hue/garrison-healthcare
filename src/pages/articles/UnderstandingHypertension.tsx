@@ -387,7 +387,7 @@ const UnderstandingHypertension = () => {
             <div className="flex items-start">
               <Heart className="h-6 w-6 text-garrison-teal mr-3 mt-1 flex-shrink-0" />
               <div>
-                <h3 className="text-lg font-semibold text-garrison-teal mb-2">A note from Garrison Health</h3>
+                <h3 className="text-lg font-semibold text-garrison-teal mb-2">A note from Garrison Healthcare</h3>
                 <p className="text-garrison-teal-dark">
                   High blood pressure is a serious but silent condition that can sneak up on you over the years. 
                   Seeing a healthcare provider for regular check-ups can help you learn your numbers. If you don't have access to care, 
