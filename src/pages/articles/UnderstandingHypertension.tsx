@@ -26,7 +26,7 @@ const UnderstandingHypertension = () => {
           
           <div className="mb-8">
             <img 
-              src="/lovable-uploads/191cda90-e826-4e3f-8c1e-13d09dd334e5.png" 
+              src="/lovable-uploads/bb0998ab-6564-44be-b0ed-1ba7850bc094.png" 
               alt="Blood pressure monitor showing high readings" 
               className="w-full h-auto rounded-lg shadow-md"
             />
