@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Layout } from "@/components/layout";
+import Layout from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Calendar, Phone, BookOpen, Heart, Printer, Share2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
