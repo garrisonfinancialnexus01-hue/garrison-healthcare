@@ -34,6 +34,18 @@
   }
   body {
     @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Prevent horizontal scrolling on mobile */
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
   }
 }
 
@@ -43,22 +55,46 @@
   }
   
   .section-title {
-    @apply text-3xl md:text-4xl font-bold text-gray-900 text-center mb-4;
+    @apply text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 text-center mb-4;
   }
   
   .section-subtitle {
-    @apply text-lg text-gray-600 text-center mb-12 max-w-3xl mx-auto;
+    @apply text-base md:text-lg text-gray-600 text-center mb-8 md:mb-12 max-w-3xl mx-auto px-4;
   }
   
   .garrison-btn-primary {
-    @apply bg-[#058789] hover:bg-[#046769] text-white font-semibold py-3 px-6 rounded-lg transition-colors;
+    @apply bg-[#058789] hover:bg-[#046769] text-white font-semibold py-3 px-6 rounded-lg transition-colors text-sm md:text-base;
   }
   
   .garrison-btn-secondary {
-    @apply bg-[#E03F3E] hover:bg-[#c63534] text-white font-semibold py-3 px-6 rounded-lg transition-colors;
+    @apply bg-[#E03F3E] hover:bg-[#c63534] text-white font-semibold py-3 px-6 rounded-lg transition-colors text-sm md:text-base;
   }
   
   .garrison-btn-outline {
-    @apply border-2 border-[#058789] text-[#058789] hover:bg-[#058789] hover:text-white font-semibold py-3 px-6 rounded-lg transition-colors;
+    @apply border-2 border-[#058789] text-[#058789] hover:bg-[#058789] hover:text-white font-semibold py-3 px-6 rounded-lg transition-colors text-sm md:text-base;
+  }
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 768px) {
+  .section-title {
+    @apply text-xl sm:text-2xl;
+  }
+  
+  .section-subtitle {
+    @apply text-sm sm:text-base px-6;
+  }
+  
+  .garrison-btn-primary,
+  .garrison-btn-secondary,
+  .garrison-btn-outline {
+    @apply py-2.5 px-4 text-sm;
+  }
+}
+
+/* Ensure images are responsive */
+@layer utilities {
+  .img-responsive {
+    @apply max-w-full h-auto;
   }
 }
