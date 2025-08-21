@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -244,8 +243,7 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
         </p>
       </CardHeader>
       
-      <CardContent className="p-8">
-        {/* Consultation Summary */}
+      <CardContent className="p-4 md:p-8">
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
           <h3 className="font-semibold text-blue-900 mb-2 flex items-center">
             <FileText className="h-4 w-4 mr-2" />
@@ -260,7 +258,6 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Patient Information Section */}
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
               <User className="h-5 w-5 mr-2 text-garrison-teal" />
@@ -349,7 +346,6 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
             </div>
           </div>
 
-          {/* Medical Information Section */}
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
               <Stethoscope className="h-5 w-5 mr-2 text-garrison-teal" />
@@ -425,7 +421,6 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
             </div>
           </div>
 
-          {/* Consultation Preferences Section */}
           <div className="bg-gray-50 rounded-lg p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
               <Clock className="h-5 w-5 mr-2 text-garrison-teal" />
@@ -450,46 +445,49 @@ const ConsultationForm = ({ selectedDisease, conditionType, onBack, onSuccess }:
             </div>
           </div>
 
-          {/* Payment Instructions */}
-          <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-6">
-            <h4 className="font-semibold mb-3 text-garrison-teal flex items-center">
-              <Phone className="h-5 w-5 mr-2" />
+          <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg p-4 md:p-6">
+            <h4 className="font-semibold mb-3 text-garrison-teal flex items-center text-sm md:text-base">
+              <Phone className="h-4 w-4 md:h-5 md:w-5 mr-2" />
               Payment Instructions
             </h4>
             <div className="space-y-3">
-              <p className="text-sm text-gray-700">
+              <p className="text-xs md:text-sm text-gray-700">
                 📱 Pay via Mobile Money to: <strong>Mr. Kasule</strong>
               </p>
-              <p className="text-sm text-gray-700">
+              <p className="text-xs md:text-sm text-gray-700">
                 Consultation Fee: <strong className="text-garrison-red">{consultationFee.toLocaleString()} UGX</strong>
               </p>
               <Button
                 type="button"
                 onClick={handleCallForPayment}
-                className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg flex items-center justify-center gap-2 transition-colors"
+                className="w-full bg-green-600 hover:bg-green-700 text-white py-2 md:py-3 px-3 md:px-4 rounded-lg flex items-center justify-center gap-2 transition-colors text-xs md:text-sm font-medium"
               >
-                <Phone className="h-4 w-4" />
-                Call +256761281222 for Payment
+                <Phone className="h-3 w-3 md:h-4 md:w-4 flex-shrink-0" />
+                <span className="truncate">Call +256761281222 for Payment</span>
               </Button>
             </div>
           </div>
 
-          <div className="flex justify-between pt-6 border-t">
-            <Button variant="outline" onClick={onBack} className="px-8">
+          <div className="flex flex-col sm:flex-row justify-between gap-3 pt-6 border-t">
+            <Button 
+              variant="outline" 
+              onClick={onBack} 
+              className="w-full sm:w-auto px-4 py-2 text-sm font-medium order-2 sm:order-1"
+            >
               Back to Selection
             </Button>
             <Button 
               type="submit" 
-              className="garrison-btn-primary px-8" 
+              className="w-full sm:w-auto garrison-btn-primary px-4 py-2 text-sm font-medium order-1 sm:order-2" 
               disabled={isSubmitting}
             >
               {isSubmitting ? (
                 <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
-                  Submitting...
+                  <div className="animate-spin rounded-full h-3 w-3 md:h-4 md:w-4 border-2 border-white border-t-transparent mr-2 flex-shrink-0"></div>
+                  <span className="truncate">Submitting...</span>
                 </>
               ) : (
-                'Submit Consultation'
+                <span className="truncate">Submit Consultation</span>
               )}
             </Button>
           </div>
