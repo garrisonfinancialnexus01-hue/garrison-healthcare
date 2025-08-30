@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 
 interface DiseaseImage {
   id: string;
@@ -106,10 +107,13 @@ const DiseaseInformation = () => {
                   onClick={() => openModal(image)}
                 >
                   <div className="relative">
-                    <img
+                    <OptimizedImage
                       src={image.image_url}
                       alt={image.title}
-                      className="w-full h-[500px] md:h-[600px] object-contain bg-white transition-transform duration-300 group-hover:scale-[1.02]"
+                      className="w-full h-[500px] md:h-[600px] bg-white transition-transform duration-300 group-hover:scale-[1.02]"
+                      objectFit="contain"
+                      loading={index === 0 ? "eager" : "lazy"}
+                      priority={index === 0}
                     />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 rounded-lg" />
                     
@@ -170,10 +174,12 @@ const DiseaseInformation = () => {
                 }`}
                 onClick={() => goToSlide(index)}
               >
-                <img
+                <OptimizedImage
                   src={image.image_url}
                   alt={image.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full"
+                  objectFit="cover"
+                  loading="lazy"
                 />
               </button>
             ))}
@@ -194,10 +200,12 @@ const DiseaseInformation = () => {
                   <X className="h-5 w-5" />
                 </Button>
                 <div className="bg-white rounded-lg overflow-hidden shadow-2xl">
-                  <img
+                  <OptimizedImage
                     src={selectedImage.image_url}
                     alt={selectedImage.title}
-                    className="w-full h-auto max-h-[85vh] object-contain"
+                    className="w-full h-auto max-h-[85vh]"
+                    objectFit="contain"
+                    loading="eager"
                   />
                   <div className="p-4 bg-white">
                     <h3 className="text-xl font-bold text-gray-900 mb-2">

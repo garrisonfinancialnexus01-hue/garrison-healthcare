@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, BookOpen, Calendar, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 
 const FeaturedArticles = () => {
   const latestArticles = [
@@ -32,10 +33,12 @@ const FeaturedArticles = () => {
             {latestArticles.map((article) => (
               <Card key={article.id} className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
                 <div className="aspect-video overflow-hidden">
-                  <img 
+                  <OptimizedImage 
                     src={article.image} 
                     alt={article.title}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full hover:scale-105 transition-transform duration-300"
+                    objectFit="cover"
+                    loading="lazy"
                   />
                 </div>
                 <CardHeader>

@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ArrowRight, Shield, Users, Clock } from "lucide-react";
+import OptimizedImage from "@/components/ui/OptimizedImage";
 
 const Hero = () => {
   return (
@@ -53,10 +54,13 @@ const Hero = () => {
           <div className="text-center lg:text-right mt-8 lg:mt-0">
             <div className="inline-block p-4 md:p-8 bg-white/10 backdrop-blur-sm rounded-2xl">
               <div className="w-48 h-48 md:w-64 md:h-64 bg-white/20 rounded-full flex items-center justify-center overflow-hidden mx-auto">
-                <img 
+                <OptimizedImage 
                   src="/lovable-uploads/15493dd0-712c-488a-abae-d3afb022d31f.png" 
                   alt="Garrison Healthcare Logo" 
-                  className="w-36 h-36 md:w-48 md:h-48 object-contain"
+                  className="w-36 h-36 md:w-48 md:h-48"
+                  objectFit="contain"
+                  priority={true}
+                  loading="eager"
                 />
               </div>
             </div>
